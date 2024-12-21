@@ -1,0 +1,170 @@
+.projects-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+}
+
+.logo-img {
+    max-width: 120px;
+}
+
+.search-bar {
+    position: relative;
+    display: flex;
+    align-items: center;
+    max-width: 300px;
+    margin-top: 10px;
+    width: 50vw;
+}
+
+.search-input {
+    width: 70%;
+    border: 1px solid #bbb;
+    border-radius: 20px;
+    outline: none;
+    background: none;
+    color: #444; /* Color de texto */
+    font-size: 16px;
+    padding: 2px;
+}
+div.search-bar{
+    margin-top: 0;
+    justify-content: right;
+    margin-right: 10px;
+}
+
+.search-icon-placeholder {
+    color: #bbb; /* Color del ícono */
+    font-size: 16px;
+    pointer-events: none; /* El ícono no interfiere con la interacción */
+   
+}
+
+.search-icon {
+    font-size: 16px;
+    color: #444;
+}
+
+.section-selector {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 20px;
+    align-items: center;
+}
+
+.section-input-section {
+    width: 50%;
+    border: 1px solid #bbb;
+    width: 40vw;
+    border: 1px solid #bbb;
+    border-radius: 20px;
+    outline: none;
+    background: none;
+    color: #444;
+    font-size: 0.6rem;
+    font-weight: 1000;
+    text-align: center;
+    margin-left: 15px;
+    padding: 4px 0;
+    text-decoration: none;
+    font-family: "Montserrat";
+    appearance: none; /* Remueve la flecha en navegadores compatibles */
+    -webkit-appearance: none; /* Remueve la flecha en WebKit (Safari/Chrome) */
+    -moz-appearance: none; /* Remueve la flecha en Firefox */
+}
+.filter-selector {
+    border: 1px solid #ccc;
+    border-radius: 20px;
+    width: 15vw;
+    background-color: #ffffff;
+    font-size: 0.6rem;
+    font-weight: 1000;
+    color: #333;
+    text-align: center;
+    font-family: "Montserrat";
+
+}
+
+.navbar-projects {
+    display: flex;
+    align-items: center;
+    margin: 0px;
+}
+
+.subcategories {
+    display: block;
+    gap: 5px;
+    padding: 5px 5px;
+}
+
+.subcategory-button {
+    padding: 5px 10px;
+    border: none;
+    background: none;
+    font-size: 12px;
+    cursor: pointer;
+    color: #333;
+    transition: color 0.3s;
+}
+
+.subcategory-button.active {
+    color: #444;
+    font-weight: bold;
+}
+
+.image-grid {
+    display: flex;
+    gap: 5px;
+    padding: 20px;
+}
+
+.column {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.project-image {
+    width: 100%;
+    object-fit: cover;
+    border-radius: 15px;
+}
+
+.divider-line {
+    border: 0;
+    border-top: 1px solid #333;
+    width: 80%;
+    margin: 20px auto;
+}
+
+.contact-section {
+    text-align: left;
+    padding-top: 20px;
+    padding-left: 30px;
+}
+
+.logo-slogan {
+    width: 120px;
+    margin-bottom: 20px;
+}
+
+.contact-details p {
+    font-size: 12px;
+}
+
+.social-icons {
+    display: flex;
+    color: #333;
+    justify-content: left;
+    gap: 5px;
+    margin-top: 15px;
+}
+.social-icon {
+    color: #333;
+}
+.menu-icon-project{
+    font-size: 29px;
+    color: #444;
+}

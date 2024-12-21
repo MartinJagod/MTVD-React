@@ -1,0 +1,64 @@
+.navbar {
+  display: flex;
+  padding: 10px;
+}
+
+.navbar button {
+  background: none; /* Elimina el color de fondo */
+  border: none; /* Elimina los bordes */
+  color: white; /* Color del texto */
+  padding: 10px 20px;
+  margin: 0 5px;
+  cursor: pointer;
+  font-size: 16px; /* Tamaño del texto */
+}
+
+.navbar button:hover {
+  color: #f0f0f0; /* Color al pasar el cursor */
+  text-decoration: underline; /* Subrayado al pasar el cursor */
+}
+
+.navbar button:focus {
+  outline: none; /* Elimina el contorno al enfocarse */
+}
+/* Animación de entrada desde arriba */
+.slide-enter {
+  transform: translateY(-100%);
+  opacity: 0;
+}
+.slide-enter-active {
+  transform: translateY(0);
+  opacity: 1;
+  transition: transform 0.5s ease, opacity 0.5s ease;
+}
+
+/* Animación de salida hacia abajo */
+.slide-exit {
+  transform: translateY(0);
+  opacity: 1;
+}
+.slide-exit-active {
+  transform: translateY(100%);
+  opacity: 0;
+  transition: transform 1.5s ease, opacity 0.5s ease;
+}
+/* Desde la izquierda */
+.slide-left-enter {
+  transform: translateX(-100%);
+  opacity: 0;
+}
+.slide-left-enter-active {
+  transform: translateX(0);
+  opacity: 1;
+  transition: transform 1.5s ease, opacity 0.5s ease;
+}
+
+.slide-left-exit {
+  transform: translateX(0);
+  opacity: 1;
+}
+.slide-left-exit-active {
+  transform: translateX(100%);
+  opacity: 0;
+  transition: transform 1.5s ease, opacity 0.5s ease;
+}
