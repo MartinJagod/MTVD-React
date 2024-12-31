@@ -1,6 +1,9 @@
+/* Navbar Styles */
 .navbar {
   display: flex;
+  justify-content: center;
   padding: 10px;
+  background-color: #333;
 }
 
 .navbar button {
@@ -21,44 +24,58 @@
 .navbar button:focus {
   outline: none; /* Elimina el contorno al enfocarse */
 }
-/* Animación de entrada desde arriba */
+
+/* Animated Menu Styles */
+.menu {
+  background: #444;
+  color: white;
+  padding: 20px;
+  text-align: center;
+}
+
+/* Animaciones */
 .slide-enter {
   transform: translateY(-100%);
   opacity: 0;
 }
+
 .slide-enter-active {
   transform: translateY(0);
   opacity: 1;
   transition: transform 0.5s ease, opacity 0.5s ease;
 }
 
-/* Animación de salida hacia abajo */
 .slide-exit {
   transform: translateY(0);
   opacity: 1;
 }
+
 .slide-exit-active {
   transform: translateY(100%);
   opacity: 0;
-  transition: transform 1.5s ease, opacity 0.5s ease;
-}
-/* Desde la izquierda */
-.slide-left-enter {
-  transform: translateX(-100%);
-  opacity: 0;
-}
-.slide-left-enter-active {
-  transform: translateX(0);
-  opacity: 1;
-  transition: transform 1.5s ease, opacity 0.5s ease;
+  transition: transform 0.5s ease, opacity 0.5s ease;
 }
 
+/* Entrada desde la derecha */
+.slide-left-enter {
+  transform: translateX(100%); /* Comienza fuera de la pantalla, a la derecha */
+  opacity: 0;
+}
+
+.slide-left-enter-active {
+  transform: translateX(0); /* Se mueve al centro */
+  opacity: 1;
+  transition: transform 1s ease, opacity 1s ease; /* Ajusta la duración según el timeout */
+}
+
+/* Salida hacia la izquierda */
 .slide-left-exit {
-  transform: translateX(0);
+  transform: translateX(0); /* Comienza en el centro */
   opacity: 1;
 }
+
 .slide-left-exit-active {
-  transform: translateX(100%);
+  transform: translateX(-100%); /* Se mueve fuera de la pantalla, a la izquierda */
   opacity: 0;
-  transition: transform 1.5s ease, opacity 0.5s ease;
+  transition: transform 1s ease, opacity 1s ease; /* Ajusta la duración según el timeout */
 }

@@ -1,45 +1,53 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import './ProjectsSection.css';
-import logoHorizontal from '../../assets/images/Logo-horizontal-negro.png';
-import logoSlogan from '../../assets/images/logo-slogan.png';
+import Navbar from '../Parcial/Navbar';
+import ContactFooter from '../Parcial/ContactFooter';
 import home1 from '../../assets/images/home1.jpg';
 import home2 from '../../assets/images/home2.jpg';
 import interiorismo1 from '../../assets/images/Felicity.jpeg';
-
 import interiorismo2 from '../../assets/images/Hoppiness.jpg';
 import interiorismo3 from '../../assets/images/interiorismo3.jpg';
 import edward from '../../assets/images/edward.png';
 import branding1 from '../../assets/images/COC.png';
-import { FaSearch, FaLinkedin, FaPinterest, FaYoutube, FaInstagram } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 
 function ProjectsSection() {
+    const [searchParams] = useSearchParams();
     const [searchTerm, setSearchTerm] = useState('');
     const [category, setCategory] = useState('All'); // Categoría seleccionada
     const [section, setSection] = useState('Design'); // Cambiar a 'Architecture' o 'Branding' según la sección
     const sections = ['Design', 'Architecture', 'Branding']; // Opciones disponibles
-
+ //saca el nombre del archivo
+ function getFileName(filePath) {
+    const fullName = filePath.split('/').pop(); // Obtiene el último segmento de la ruta
+    const nameWithoutExtension = fullName.split('.')[0]; // Extrae la parte antes del primer punto
+    return nameWithoutExtension;
+}
     const subcategories = {
         Design: ['Retail', 'Restaurant', 'Office', 'Hotel', 'Mixeduse', 'Residential'],
         Architecture: ['Commercial', 'Office', 'Hotel', 'MixedUse', 'Residential', 'Planning'],
         Branding: ['Design', 'Architecture'],
     };
 
-    const images = [
-        home1,
-        home2,
-        interiorismo1,
-        interiorismo2,
-        interiorismo3,
-        edward,
-        branding1,
-    ];
+    const images = {
+        Design: [home1, home2, interiorismo1],
+        Architecture: [interiorismo2, interiorismo3, edward],
+        Branding: [branding1],
+    };
+
+    useEffect(() => {
+        const sectionFromUrl = searchParams.get('section');
+        if (sectionFromUrl && sections.includes(sectionFromUrl)) {
+            setSection(sectionFromUrl);
+        }
+    }, [searchParams, sections]);
 
     const handleInputChange = (e) => {
         setSearchTerm(e.target.value);
     };
 
-    const filteredImages = images.filter((image, index) =>
+    const filteredImages = images[section].filter((image, index) =>
         searchTerm === '' ? true : `Image ${index + 1}`.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
@@ -47,37 +55,13 @@ function ProjectsSection() {
         <div className="projects-section">
             {/* Header */}
             <header className="projects-header">
-                <div>
-                    <Link to="/">
-                        <img src={logoHorizontal} alt="Logo Horizontal" className="logo-img" />
-                    </Link>
-                </div>
-                <div className='navbar-projects'>
-
-                    <div className="search-bar">
-                        <FaSearch
-                            style={{
-                                position: 'absolute',
-                                left: '58px',
-                                top: '49%',
-                                transform: 'translateY(-50%)',
-                                color: '#bbb',
-                            }}
-                        />
-                        <input
-                            type="text"
-                            className="search-input"
-                            placeholder="" // El placeholder se deja vacío
-                            value={searchTerm}
-                            onChange={handleInputChange}
-                        />
-                    </div>
-                    <span className="menu-icon-project">☰</span>
+                <div className="logo">
+                    <Navbar />
                 </div>
             </header>
 
             {/* Section Selector */}
-            <div className="section-selector">
+            <div className="section-selector" style={{ marginTop: '50px' }}>
                 <select
                     className="section-input-section"
                     value={section}
@@ -89,9 +73,7 @@ function ProjectsSection() {
                         </option>
                     ))}
                 </select>
-                <Link to="/projectsHome"
-                    className="filter-selector"
-                >
+                <Link to="/projectsHome" className="filter-selector">
                     All
                 </Link>
             </div>
@@ -113,58 +95,41 @@ function ProjectsSection() {
             <div className="image-grid">
                 <div className="column">
                     {filteredImages.filter((_, index) => index % 2 === 0).map((image, index) => (
+                        <div className="image-wrapper">
+
                         <img
                             key={index}
                             src={image}
                             alt={`Project ${index + 1}`}
                             className="project-image"
-                        />
+                            />
+                         <div className="image-label">
+                            {getFileName(image)}
+                        </div>
+                            </div>
                     ))}
                 </div>
                 <div className="column">
                     {filteredImages.filter((_, index) => index % 2 !== 0).map((image, index) => (
-                        <img
-                            key={index}
-                            src={image}
-                            alt={`Project ${index + 1}`}
-                            className="project-image"
-                        />
+                         <div className="image-wrapper">
+
+                         <img
+                             key={index}
+                             src={image}
+                             alt={`Project ${index + 1}`}
+                             className="project-image"
+                             />
+                          <div className="image-label">
+                             {getFileName(image)}
+                         </div>
+                             </div>
                     ))}
                 </div>
             </div>
 
             {/* Logo Slogan */}
-            <div className="contact-section">
-                <img src={logoSlogan} alt="Logo Slogan" className="logo-slogan" />
-                <div className="contact-details">
-                    <p>
-                        <strong>SPAIN</strong> <br /> contact@mtvd-design.com
-                    </p>
-                    <p>
-                        <strong>USA</strong> <br /> contact@mtvd-design.com
-                    </p>
-                    <p>
-                        <strong>ARGENTINA</strong> <br /> contact@mtvd-design.com
-                    </p>
-                </div>
-                <div className="social-icons">
-                    <a href="https://www.linkedin.com/company/mtvd/" target="_blank" rel="noopener noreferrer">
-                        <FaLinkedin className="social-icon" />
-                    </a>
-                    <a href="https://ar.pinterest.com/mtvddesignstudio/" target="_blank" rel="noopener noreferrer">
-                        <FaPinterest className="social-icon" />
-                    </a>
-                    <a href="https://www.youtube.com/@MTVDDesignStudio" target="_blank" rel="noopener noreferrer">
-                        <FaYoutube className="social-icon" />
-                    </a>
-                    <a href="https://www.instagram.com/estudio_montevideo" target="_blank" rel="noopener noreferrer">
-                        <FaInstagram className="social-icon" />
-                    </a>
-                </div>
-                <br>
-                </br>
-                <br>
-                </br>
+            <div style={{ marginTop: '50px' }}>
+                <ContactFooter />
             </div>
         </div>
     );

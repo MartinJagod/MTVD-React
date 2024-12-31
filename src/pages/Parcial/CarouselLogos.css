@@ -1,0 +1,34 @@
+.carousel-container {
+    width: 100vw;
+    height: 30vw;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    position: relative;
+    background-color: #ffffff;
+  }
+  
+  .carousel-track {
+    display: flex;
+    width: max-content; /* Ajusta el ancho al contenido */
+    cursor: grab;
+    touch-action: pan-x; /* Permite el desplazamiento horizontal */
+    scroll-behavior: smooth; /* Suaviza el desplazamiento manual */
+  }
+  
+  .carousel-track:active {
+    cursor: grabbing;
+  }
+  
+  .carousel-item {
+    flex: 0 0 auto;
+    width: 30vw;
+    margin-right: 20px; /* Espaciado entre los logos */
+  }
+  
+  .logo-image {
+    width: 100%;
+    height: auto;
+    user-select: none; /* Evita selección no deseada */
+  }
+  

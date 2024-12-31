@@ -127,3 +127,40 @@ a {
     padding-top: 0px;
     padding-left: 20px;
 }
+/* Contenedor del carrusel */
+.carousel-container-projectsHome {
+    display: flex;
+    overflow-x: auto;
+  }
+  
+  /* Elementos individuales */
+  .carousel-item-projectsHome {
+    opacity: 0; /* Inicialmente invisibles */
+    transform: translateY(20px); /* Aparecen desde abajo */
+    animation: fadeIn 0.5s ease-in-out forwards; /* Animación de entrada */
+  }
+  
+  /* Aplica un retraso escalonado basado en el índice */
+  .carousel-item-projectsHome:nth-child(1) {
+    animation-delay: 0.1s;
+  }
+  .carousel-item-projectsHome:nth-child(2) {
+    animation-delay: 0.2s;
+  }
+  .carousel-item-projectsHome:nth-child(3) {
+    animation-delay: 0.3s;
+  }
+  /* Continúa para más elementos */
+  
+  /* Animación de entrada */
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  

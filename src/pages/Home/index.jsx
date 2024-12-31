@@ -18,8 +18,9 @@ import logoSlogan from '../../assets/images/logo-slogan.png';
 import { FaLinkedin, FaPinterest, FaYoutube, FaInstagram } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 import { FaVolumeMute, FaVolumeUp } from 'react-icons/fa';
-
-
+import ContactFooter from '../Parcial/ContactFooter'; // Ajusta la ruta según tu estructura de carpetas
+import Navbar from '../Parcial/Navbar'; // Ajusta la ruta según tu estructura de carpetas
+import CarouselLogos from "../Parcial/CarouselLogos";
 
 function Home() {
     const [projectCount, setProjectCount] = useState(0);
@@ -38,92 +39,59 @@ function Home() {
     const [isBlurred, setIsBlurred] = useState(true); // Estado para manejar el blur
     let scrollTimeout = null; // Variable para manejar el timeout
     const [isMuted, setIsMuted] = useState(true);
-
-    // inicio parallax
-    const brandingImageRef = useRef(null);
-    const interiorismoImageRef = useRef(null);
-    const arquitecturaImageRef = useRef(null); // Nueva referencia
-    //saca el nombre del archivo
-    function getFileName(filePath) {
-        const fullName = filePath.split('/').pop(); // Obtiene el último segmento de la ruta
-        const nameWithoutExtension = fullName.split('.')[0]; // Extrae la parte antes del primer punto
-        return nameWithoutExtension;
-    }
-
+    
     const handleMenuClick = () => {
         setMenuOpen(!menuOpen);
     };
     const toggleMenu = () => {
         setMenuOpen(!menuOpen); // Alterna entre true y false
     };
+    const line1Ref = useRef(null);
+    const line2Ref = useRef(null);
+    
+    
+    //saca el nombre del archivo
+    function getFileName(filePath) {
+        const fullName = filePath.split('/').pop(); // Obtiene el último segmento de la ruta
+        const nameWithoutExtension = fullName.split('.')[0]; // Extrae la parte antes del primer punto
+        return nameWithoutExtension;
+    }
+    const brandingImageRef = useRef(null);
+    const interiorismoImageRef = useRef(null);
+    const arquitecturaImageRef = useRef(null);
+  
+
 
     useEffect(() => {
-        const handleParallaxEffect = () => {
-            const scrollPosition = window.scrollY;
-
-            // Efecto para la primera imagen (Branding)
-            if (brandingImageRef.current?.isVisible) {
-                const brandingOffset = brandingImageRef.current.getBoundingClientRect().top + scrollPosition;
-                const brandingScroll = Math.max(0, scrollPosition - brandingOffset);
-                const scale = 1 - Math.min(brandingScroll * 0.0001, 0.1);
-                const translateY = brandingScroll * 0.1;
-                brandingImageRef.current.style.transform = `translateY(${translateY}px) scale(${scale})`;
+      const imageRefs = [
+        { ref: brandingImageRef, speed: 0.15 },
+        { ref: interiorismoImageRef, speed: 0.15 },
+        { ref: arquitecturaImageRef, speed: 0.15 },
+      ];
+      
+      const handleParallaxEffect = () => {
+        imageRefs.forEach(({ ref, speed }) => {
+          const image = ref.current;
+          if (image) {
+            const rect = image.getBoundingClientRect();
+            const windowHeight = window.innerHeight;
+  
+            if (rect.top < windowHeight && rect.bottom > 0) {
+              const translateY = (rect.top - windowHeight / 2) * speed;
+              image.style.transform = `translateY(${translateY}px)`;
+            } else {
+              image.style.transform = `translateY(0px)`;
             }
-
-            // Efecto para la segunda imagen (Interiorismo)
-            if (interiorismoImageRef.current?.isVisible) {
-                const interiorismoOffset = interiorismoImageRef.current.getBoundingClientRect().top + scrollPosition;
-                const interiorismoScroll = Math.max(0, scrollPosition - interiorismoOffset);
-                const scale = 1 - Math.min(interiorismoScroll * 0.0001, 0.1);
-                const translateY = interiorismoScroll * 0.1;
-                interiorismoImageRef.current.style.transform = `translateY(${translateY}px) scale(${scale})`;
-            }
-
-            // Efecto para la tercera imagen (Arquitectura)
-            if (arquitecturaImageRef.current?.isVisible) {
-                const arquitecturaOffset = arquitecturaImageRef.current.getBoundingClientRect().top + scrollPosition;
-                const arquitecturaScroll = Math.max(0, scrollPosition - arquitecturaOffset);
-                const scale = 1 - Math.min(arquitecturaScroll * 0.0001, 0.1);
-                const translateY = arquitecturaScroll * 0.1;
-                arquitecturaImageRef.current.style.transform = `translateY(${translateY}px) scale(${scale})`;
-            }
-        };
-
-        const observerCallback = (entries) => {
-            entries.forEach((entry) => {
-                if (entry.target === brandingImageRef.current) {
-                    brandingImageRef.current.isVisible = entry.isIntersecting;
-                }
-                if (entry.target === interiorismoImageRef.current) {
-                    interiorismoImageRef.current.isVisible = entry.isIntersecting;
-                }
-                if (entry.target === arquitecturaImageRef.current) {
-                    arquitecturaImageRef.current.isVisible = entry.isIntersecting;
-                }
-            });
-        };
-
-        const observerOptions = {
-            root: null, // Usa el viewport del navegador
-            threshold: 0, // Activa cuando cualquier parte del elemento entra en pantalla
-        };
-
-        const observer = new IntersectionObserver(observerCallback, observerOptions);
-
-        if (brandingImageRef.current) observer.observe(brandingImageRef.current);
-        if (interiorismoImageRef.current) observer.observe(interiorismoImageRef.current);
-        if (arquitecturaImageRef.current) observer.observe(arquitecturaImageRef.current);
-
-        window.addEventListener('scroll', handleParallaxEffect);
-
-        return () => {
-            if (brandingImageRef.current) observer.unobserve(brandingImageRef.current);
-            if (interiorismoImageRef.current) observer.unobserve(interiorismoImageRef.current);
-            if (arquitecturaImageRef.current) observer.unobserve(arquitecturaImageRef.current);
-            window.removeEventListener('scroll', handleParallaxEffect);
-        };
+          }
+        });
+      };
+  
+      window.addEventListener('scroll', handleParallaxEffect);
+  
+      return () => {
+        window.removeEventListener('scroll', handleParallaxEffect);
+      };
     }, []);
-
     // fin parallax
     const handleScroll = () => {
         setIsBlurred(true); // Activa el blur al hacer scroll
@@ -245,6 +213,7 @@ function Home() {
                     setTimeout(() => {
                         animateCounter(setCountriesCount, 15, 500); // Segundo contador
                     }, delay);
+
 
                     setTimeout(() => {
                         animateCounter(setCitiesCount, 25, 500); // Tercer contador
@@ -406,7 +375,42 @@ function Home() {
         }
     };
 
+    // Inicio lineas en movimeinto
 
+
+    useEffect(() => {
+        const restartAnimation = (element, animationClass) => {
+            element.style.animation = "none"; // Detiene cualquier animación activa
+            void element.offsetWidth; // Reflujo: fuerza al navegador a calcular estilos nuevamente
+            element.style.animation = `${animationClass} 5s linear forwards`; // Reinicia la animación
+        };
+
+        const observer = new IntersectionObserver(
+            (entries) => {
+                entries.forEach((entry) => {
+                    if (entry.isIntersecting) {
+                        if (entry.target.classList.contains("moving-line")) {
+                            restartAnimation(entry.target, "moveLine");
+                        } else if (entry.target.classList.contains("moving-line2")) {
+                            restartAnimation(entry.target, "moveLine2");
+                        }
+                    }
+                });
+            },
+            { threshold: 0.1 } // Ajusta el umbral según sea necesario
+        );
+
+        if (line1Ref.current) observer.observe(line1Ref.current);
+        if (line2Ref.current) observer.observe(line2Ref.current);
+
+        return () => {
+            if (line1Ref.current) observer.unobserve(line1Ref.current);
+            if (line2Ref.current) observer.unobserve(line2Ref.current);
+        };
+    }, []);
+
+
+    // fin lineas
     return (
         <div className="home">
 
@@ -426,8 +430,8 @@ function Home() {
                 <button className="mute-button" onClick={toggleMute}>
                     {isMuted ? <FaVolumeMute /> : <FaVolumeUp />}
                 </button>
-
-                <div className={`header-navbar ${isBlurred ? "" : "no-blur"}`}>
+                <Navbar />
+              {/*   <div className={`header-navbar ${isBlurred ? "" : "no-blur"}`}>
                     <div className="header-content">
                         <div className="logo">
                             <img src={logoHorizontal} alt="Logo Horizontal" className="logo-img" />
@@ -452,7 +456,7 @@ function Home() {
                     </div>
 
 
-                </div>
+                </div> */}
 
 
                 <div className={`search-container ${showInput ? 'search-open' : ''}`}>
@@ -485,8 +489,8 @@ function Home() {
 
 
             <div className="phrase-section">
-                <span className="phrase-line">We are a</span>
-                <span className="phrase-line">design studio</span>
+                <span className="phrase-line"> We are a </span>
+                <span className="phrase-line"> design studio </span>
             </div>
             <div className="full-square">
                 <div className="parallax-wrapper">
@@ -495,11 +499,12 @@ function Home() {
                         alt="Branding 1"
                         className="parallax-image"
                         ref={brandingImageRef}
+
                     />
+                </div>
                     <div className="image-label">
                         {getFileName(branding1)}
                     </div>
-                </div>
             </div>
 
 
@@ -508,7 +513,7 @@ function Home() {
                     <div className="quadrant white-box">
                         <span className="project-box">Inspiring</span>
                         <span className="project-box">people</span>
-                        <div className="moving-line"></div>
+                        <div className="moving-line" ref={line1Ref}></div>
                     </div>
                     <div
                         className={`quadrant yellow-box ${rotateYellowBox ? 'rotate' : ''}`}
@@ -529,7 +534,7 @@ function Home() {
                     <div className="quadrant blue-box" ref={counterRef}>
                         <span className="project-count">+{projectCount}</span>
                         <span className="project-label">projects</span>
-                        <div className="moving-line2"></div>
+                        <div className="moving-line2" ref={line2Ref}></div>
                     </div>
                     <div className="quadrant white-box">
                         <span className="project-box">To create</span>
@@ -573,10 +578,10 @@ function Home() {
                             ref={interiorismoImageRef}
                         />
                         {/* Muestra el nombre del archivo */}
+                    </div>
                         <div className="image-label">
                             {getFileName(interiorismo1)}
                         </div>
-                    </div>
                 </div>
 
 
@@ -606,7 +611,10 @@ function Home() {
 
 
                 <div className="full-square">
-                    <img ref={arquitecturaImageRef} src={arquitectura1} alt="Architecture 1" className="square-image" />
+                <div className="parallax-wrapper">
+
+                    <img ref={arquitecturaImageRef} src={arquitectura1} alt="Architecture 1" className="parallax-image" />
+                </div>
                     <div className="image-label">
                         {getFileName(arquitectura1)}
                     </div>
@@ -659,8 +667,8 @@ function Home() {
                         <span> check our  <strong> projects </strong></span>
                     </a>
                 </div>
-                <div className="button-container-clients">
-                    <div className="carousel-container">
+                 <div className="button-container-clients">
+                 {/*   <div className="carousel-container">
                         <div className="carousel-track">
                             {duplicatedLogos.map((logo, index) => (
                                 <div key={index} className="carousel-item">
@@ -672,35 +680,10 @@ function Home() {
                                 </div>
                             ))}
                         </div>
-                    </div>
-                </div>
-
-                <div className="contact-section-footer">
-                    <hr className="divider-line-home" />
-                    <img src={logoSlogan} alt="Logo Slogan" className="logo-slogan" />
-                    <div className="contact-details">
-                        <p><strong>SPAIN</strong> <br /> contact@mtvd-design.com</p>
-                        <p><strong>USA</strong> <br /> contact@mtvd-design.com</p>
-                        <p><strong>ARGENTINA</strong> <br /> contact@mtvd-design.com</p>
-                    </div>
-                    <div className="social-icons-black">
-                        <a href="https://www.linkedin.com/company/mtvd/" target="_blank" rel="noopener noreferrer">
-                            <FaLinkedin className="social-icon" />
-                        </a>
-                        <a href="https://ar.pinterest.com/mtvddesignstudio/" target="_blank" rel="noopener noreferrer">
-                            <FaPinterest className="social-icon" />
-                        </a>
-                        <a href="https://www.youtube.com/@MTVDDesignStudio" target="_blank" rel="noopener noreferrer">
-                            <FaYoutube className="social-icon" />
-                        </a>
-                        <a href="https://www.instagram.com/estudio_montevideo" target="_blank" rel="noopener noreferrer">
-                            <FaInstagram className="social-icon" />
-                        </a>
-                    </div>
-                    <br />
-                    <br />
-
-                </div>
+                    </div>*/}
+                <CarouselLogos duplicatedLogos={[...logos, ...logos]} />
+                </div> 
+                <ContactFooter  />
             </section>
         </div>
     );

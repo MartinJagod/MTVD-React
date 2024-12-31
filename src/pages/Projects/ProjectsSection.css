@@ -69,20 +69,18 @@ div.search-bar{
     padding: 4px 0;
     text-decoration: none;
     font-family: "Montserrat";
-    appearance: none; /* Remueve la flecha en navegadores compatibles */
-    -webkit-appearance: none; /* Remueve la flecha en WebKit (Safari/Chrome) */
-    -moz-appearance: none; /* Remueve la flecha en Firefox */
 }
+
 .filter-selector {
     border: 1px solid #ccc;
     border-radius: 20px;
-    width: 15vw;
     background-color: #ffffff;
     font-size: 0.6rem;
     font-weight: 1000;
     color: #333;
     text-align: center;
     font-family: "Montserrat";
+    padding: 4px 25px;
 
 }
 
@@ -93,19 +91,27 @@ div.search-bar{
 }
 
 .subcategories {
-    display: block;
-    gap: 5px;
-    padding: 5px 5px;
+    display: flex; /* Cambia block por flex */
+    flex-wrap: nowrap; /* Asegura que todo esté en una sola línea */
+    justify-content: center;
+    gap: 1px; /* Espaciado entre botones */
+    padding: 5px; /* Mantén el padding si es necesario */
+    overflow: hidden; /* Oculta cualquier desbordamiento */
+    white-space: nowrap; /* Evita que el texto se rompa en varias líneas */
 }
 
 .subcategory-button {
-    padding: 5px 10px;
+    padding:5px;
     border: none;
     background: none;
-    font-size: 12px;
+    font-size: 11px;
     cursor: pointer;
     color: #333;
     transition: color 0.3s;
+    flex-shrink: 1; /* Permite que los botones se encojan si es necesario */
+    min-width: 0; /* Asegura que el tamaño mínimo se ajuste */
+    /*text-overflow: ellipsis;  Agrega puntos suspensivos si el texto se corta */
+    overflow: hidden; /* Oculta texto desbordado */
 }
 
 .subcategory-button.active {
@@ -168,3 +174,21 @@ div.search-bar{
     font-size: 29px;
     color: #444;
 }
+
+.image-label {
+    position: absolute;
+    bottom: 10px; /* Distancia desde el borde superior */
+    left: 10px; /* Distancia desde el borde izquierdo */
+    color: white; /* Texto blanco */
+    padding: 5px 10px; /* Espaciado interno */
+    border-radius: 4px; /* Bordes redondeados */
+    font-size: 1rem; /* Tamaño del texto */
+    font-weight: 600;
+    z-index: 2; /* Asegura que esté sobre la imagen */
+    font-family: 'Montserrat', sans-serif;
+  }
+  .image-wrapper{
+    position: relative; /* Posición relativa para el contenedor */
+    overflow: hidden; /* Oculta el contenido que se desborda */
+    border-radius: 15px; /* Bordes redondeados */
+  }
