@@ -1,0 +1,198 @@
+.studio-section {
+    font-family: Arial, sans-serif;
+    color: #333;
+    overflow: hidden;
+    font-family: "Montserrat", sans-serif;
+}
+
+.studio-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 100;
+}
+
+.studio-images {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 70px;
+    gap: 10px;
+}
+
+.studio-image {
+    background-size: cover;
+    background-position: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+    position: relative;
+    border-radius: 15px;
+
+}
+
+.studio-image.expanded {
+    border-color: #000;
+}
+
+
+.image-label {
+    position: absolute;
+    bottom: 5px;
+    left: 25px;
+    color: white;
+    padding: 5px 5px;
+    font-size: 16px;
+    border-radius: 5px;
+    transform: rotate(-90deg); /* Rota el texto 90 grados hacia la izquierda */
+    transform-origin: left bottom;
+    transition: all 0.3s ease; /* Suaviza la transición */
+}
+
+
+.studio-image.selected .image-label {
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+    transform: rotate(0deg); /* Texto horizontal cuando está seleccionado */
+    transform-origin: left bottom;
+    
+}
+
+
+.studio-text {
+    margin-top: 60px;
+    padding: 20px;
+    text-align: left;
+}
+
+.studio-title {
+    font-size: 38px;
+    font-weight: 850;
+    margin-bottom: 1rem;
+
+}
+
+.studio-paragraph {
+    font-size: 0.9rem;
+    line-height: 1.5;
+    margin-bottom: 1rem;
+    padding: 10px;
+    text-align: justify;
+}
+
+.studio-highlight {
+    font-size: 32px;
+    font-weight: bold;
+    color: #555;
+    margin: 2rem 7rem;
+}
+
+.studio-team {
+    margin: 20px;
+    font-family: Arial, sans-serif;
+    color: #333;
+}
+
+.studio-team h2 {
+    text-align: left; /* Alineación a la izquierda */
+    margin-bottom: 20px;
+    font-size: 1.5em;
+    font-weight: bold;
+}
+
+.team-section {
+    margin-bottom: 5px;
+}
+
+.team-section h4 {
+    font-size: 1.2em;
+    text-align: left; /* Alineación a la izquierda */
+    margin-bottom: 2px;
+}
+
+.team-columns {
+    display: flex;
+    justify-content: flex-start; /* Alineación de columnas a la izquierda */
+    gap: 20px;
+}
+
+.team-column {
+    flex: 1;
+    text-align: left; /* Alineación a la izquierda */
+}
+
+.team-column h4 {
+    font-size: 1.2em;
+    margin-bottom: 10px;
+    font-weight: bold;
+}
+
+.team-column ul {
+    list-style: none; /* Elimina los puntos de la lista */
+    padding: 0;
+    margin: 0;
+}
+
+.team-column ul li {
+    margin-bottom: 5px;
+    font-size: 1em;
+    text-align: left; /* Alineación a la izquierda */
+}
+ul {
+    list-style: none; /* Elimina los puntos de la lista */
+    padding: 0;       /* Elimina el relleno predeterminado de las listas */
+    margin: 0;        /* Elimina el margen predeterminado de las listas */
+}
+.studio-footer {
+    margin-top: 20px;
+}
+.column {
+    display: flex;
+    justify-content: center; /* Centra horizontalmente */
+    align-items: center; /* Centra verticalmente */
+    height: 40vh; /* Asegura que ocupa todo el alto del contenedor */
+    position: relative; /* Base para los elementos posicionados */
+}
+
+.styled-quote {
+    position: relative;
+    font-family: "Montserrat", sans-serif;
+    font-size: 1.9em;
+    line-height: 1.5;
+    font-weight: bold;
+    color: #000;
+    width: 40%; /* Ocupa el 30% del ancho del contenedor */
+    text-align: left; /* Centra el texto dentro del blockquote */
+    padding: 10px 20px;
+}
+
+.styled-quote::before {
+    content: "“"; /* Comilla de apertura */
+    font-size: 7em;
+    color: #44b87e;
+    position: absolute;
+    top: -100px; /* Ajusta la posición vertical */
+    left: -10px; /* Ajusta la posición horizontal */
+    z-index: -1;
+}
+
+.styled-quote::after {
+    content: "”"; /* Comilla de cierre */
+    font-size: 3em;
+    color: #44b87e;
+    position: absolute;
+    bottom: -65px; /* Ajusta la posición vertical */
+    right: 20px; /* Ajusta la posición horizontal */
+}
+li {
+    margin-bottom: 5px;
+    font-size: 1em;
+    text-align: left;
+}
+.image-label {
+    text-shadow: 3px 3px 5px rgba(0, 0, 0, 0.9); /* Sombra negra semi-transparente */
+    font-size: 16px; /* Ajusta el tamaño según sea necesario */
+  }
+  

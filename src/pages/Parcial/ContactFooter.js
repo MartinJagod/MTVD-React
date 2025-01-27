@@ -5,7 +5,7 @@ import logoSlogan from '../../assets/images/logo-slogan.png'; // Ajusta la ruta 
 const ContactFooter = () => {
   return (
     <div className="contact-section-footer">
-      <hr className="divider-line-home" />
+    
       <img src={logoSlogan} alt="Logo Slogan" className="logo-slogan" />
       <div className="contact-details">
         <p><strong>SPAIN</strong> <br /> contact@mtvd-design.com</p>

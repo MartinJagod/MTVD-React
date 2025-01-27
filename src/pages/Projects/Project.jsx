@@ -1,7 +1,5 @@
 import React, { useEffect, useState, useRef, useCallback } from 'react';
-import { useNavigate } from "react-router-dom";
-
-import './Home.css';
+import './Project.css';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import home1 from '../../assets/images/home1.jpg';
 import homeVideo from '../../assets/images/homeVideo.mp4'; // Importa el video
@@ -24,7 +22,7 @@ import ContactFooter from '../Parcial/ContactFooter'; // Ajusta la ruta según t
 import Navbar from '../Parcial/Navbar'; // Ajusta la ruta según tu estructura de carpetas
 import CarouselLogos from "../Parcial/CarouselLogos";
 
-function Home() {
+function Project() {
     const [projectCount, setProjectCount] = useState(0);
     const [yearsCount, setYearsCount] = useState(0);
     const [countriesCount, setCountriesCount] = useState(0);
@@ -41,35 +39,11 @@ function Home() {
     const [isBlurred, setIsBlurred] = useState(true); // Estado para manejar el blur
     let scrollTimeout = null; // Variable para manejar el timeout
     const [isMuted, setIsMuted] = useState(true);
-    const navigate = useNavigate();
+    
 //inicio headermover
 const [isSliding, setIsSliding] = useState(false); // Controla el deslizamiento del Navbar
 
 let activityTimeout = null;
-
-//Cambios de pagina
-const goToProjects = () => {
-    navigate("/projectsHome"); // Cambia a la ruta /projects
-  };
-    const goToAwardsAndPress = () => {
-        navigate("/awardsandpress"); // Cambia a la ruta /awardsandpress
-    };
-    const goToStudio = () => {
-        navigate("/studio"); // Cambia a la ruta
-    }
-    const goToContact = () => {
-        navigate("/contact"); // Cambia a la ruta       
-    }
-    const goToHome = () => {        
-        navigate("/"); // Cambia a la ruta
-    }
-    const goToProject = (id) => {       
-        navigate(`/project/${id}`); // Cambia a la ruta
-    }
-    
-
-// fin cambios de pagina
-
 
 useEffect(() => {
     const handleUserActivity = () => {
@@ -494,16 +468,23 @@ useEffect(() => {
 
             {/* Video de fondo */}
             <header className="home-header">
-                <video
-                    ref={videoRef}
-                    className="background-video"
-                    src={homeVideo}
-                    autoPlay
-                    loop={false}
-                    playsInline
-                    muted={true}
-                    onEnded={handleVideoEnd}
-                ></video>
+            <div className="full-square">
+                <div className="parallax-wrapper">
+                    <img
+                        src={branding1}
+                        alt="Branding 1"
+                        className="parallax-image"
+                        ref={brandingImageRef}
+
+                    />
+                </div>
+                    <div className="image-label-home">
+                        {getFileName(branding1)}
+                    </div>
+                    <div className="image-label-star"> 
+                    <img src={starImage} alt="Star" className="star-image-foto" />
+                    </div>
+            </div>
 
                 <button className="mute-button" onClick={toggleMute}>
                     {isMuted ? <FaVolumeMute /> : <FaVolumeUp />}
@@ -514,66 +495,12 @@ useEffect(() => {
                   setMenuOpen={setMenuOpen}
                   showInput={showInput}
                   setShowInput={setShowInput} />
-              {/*   <div className={`header-navbar ${isBlurred ? "" : "no-blur"}`}>
-                    <div className="header-content">
-                        <div className="logo">
-                            <img src={logoHorizontal} alt="Logo Horizontal" className="logo-img" />
-                        </div>
-                        <div className="icons">
-                            <FaSearch className="search-icon-home" onClick={handleSearchClick} />
-                            <span className="icon" onClick={toggleMenu}>☰</span>
-                        </div>
-                    </div>
-                    <div className={`hamburger-menu ${menuOpen ? 'menu-open' : 'menu-close'}`}>
-                        <div className="menu-header">
-                            <span className="menu-close-icon" onClick={() => setMenuOpen(false)}>✖</span>
-                        </div>
-                        <nav className="menu-items">
-                            <Link to="/projectsHome" className="menu-link projects">Projects</Link>
-                            <a href="#press-awards" className="menu-link press-awards">Press & Awards</a>
-                            <a href="#studio" className="menu-link studio">Studio</a>
-                            <Link to="/projects" className="menu-link contact">Contact</Link>
-                            <span className="menu-dash"></span>
-                        </nav>
-                        <div className="menu-footer"></div>
-                    </div>
-
-
-                </div> */}
-
-
-                <div className={`search-container ${showInput ? 'search-open' : ''}`}>
-                    <div className="search-bar">
-                        <input
-                            type="text"
-                            className="search-input"
-                            placeholder="Search..."
-                            value={searchTerm}
-                            onChange={handleInputChange}
-                        />
-                        <span className="close-icon" onClick={handleSearchClick}>✖</span>
-                    </div>
-                    {searchTerm && (
-                        <div className="search-menu">
-                            {filteredOptions.length > 0 ? (
-                                <ul>
-                                    {filteredOptions.map((option, index) => (
-                                        <li key={index}>{option}</li>
-                                    ))}
-                                </ul>
-                            ) : (
-                                <p className="no-results">No results found</p>
-                            )}
-                        </div>
-                    )}
-                </div>
 
             </header>
 
 
-            <div className="phrase-section" onClick={goToStudio}>
-                <span className="phrase-line"> We are a </span>
-                <span className="phrase-line"> design studio </span>
+            <div className="phrase-section">
+                <span className="phrase-line"> COC Villa Allende </span>
             </div>
             <div className="full-square">
                 <div className="parallax-wrapper">
@@ -589,7 +516,7 @@ useEffect(() => {
                         {getFileName(branding1)}
                     </div>
                     <div className="image-label-star"> 
-                    <img src={starImage} alt="Star" className="star-image-foto" onClick={goToAwardsAndPress}/>
+                    <img src={starImage} alt="Star" className="star-image-foto" />
                     </div>
             </div>
 
@@ -605,11 +532,11 @@ useEffect(() => {
                         className={`quadrant yellow-box ${rotateYellowBox ? 'rotate' : ''}`}
                         ref={yellowBoxRef}
                     >
-                        <div className="flip-container" onClick={goToProjects}>
+                        <div className="flip-container">
                             <div className="front">
                                 <img src={logoVertical} alt="Logo Vertical" className="logo-image" />
                             </div>
-                            <div className="back" onClick={goToProjects}>
+                            <div className="back">
                                 <span className='back-item'>Design</span>
                                 <span className='back-item'>Architecture</span>
                                 <span className='back-item'>Branding</span>
@@ -617,12 +544,12 @@ useEffect(() => {
                             </div>
                         </div>
                     </div>
-                    <div className="quadrant blue-box" ref={counterRef} onClick={goToProjects}>
+                    <div className="quadrant blue-box" ref={counterRef}>
                         <span className="project-count">+{projectCount}</span>
                         <span className="project-label">projects</span>
                         <div className="moving-line2" ref={line2Ref}></div>
                     </div>
-                    <div className="quadrant white-box" onClick={goToProjects}>
+                    <div className="quadrant white-box">
                         <span className="project-box">To create</span>
                         <span className="project-box">exciting</span>
                         <span className="project-box">places</span>
@@ -669,7 +596,7 @@ useEffect(() => {
                             {getFileName(interiorismo1)}
                         </div>
                         <div className="image-label-star"> 
-                    <img src={starImage} alt="Star" className="star-image-foto" onClick={goToAwardsAndPress}/>
+                    <img src={starImage} alt="Star" className="star-image-foto" />
                     </div>
                 </div>
 
@@ -687,14 +614,14 @@ useEffect(() => {
 <div className="quadrant vertical-double">
 <img src={interiorismo1} alt="Interiorismo 1" className="module-image" />
 </div> */}
-                <div className="new-quadrant-container" ref={slideBoxesRef} onClick={goToAwardsAndPress}>
+                <div className="new-quadrant-container" ref={slideBoxesRef}>
                     <div
                         className={`quadrant green-box ${slideBoxes ? 'slide-green' : ''}`}
                     >
-                        <img  src={starImage} alt="Star" className="star-image" onClick={goToAwardsAndPress} />
+                        <img src={starImage} alt="Star" className="star-image" />
                     </div>
-                    <div onClick={goToAwardsAndPress} className="quadrant white-box-estrella">
-                        <span  className="text-Awards">Awards</span>
+                    <div className="quadrant white-box-estrella">
+                        <span className="text-Awards">Awards</span>
                     </div>
                 </div>
 
@@ -715,12 +642,12 @@ useEffect(() => {
                 <div className="custom-quadrant-container">
                     <div
                         className={`custom-orange-box ${slideStudioBox ? 'custom-slide-orange' : ''}`}
-                        ref={slideStudioBoxRef} onClick={goToStudio}
+                        ref={slideStudioBoxRef}
                     >
-                        <img src={groupImage} alt="Group Icon" className="icon-image" onClick={goToStudio}/>
+                        <img src={groupImage} alt="Group Icon" className="icon-image" />
 
                     </div>
-                    <div onClick={goToStudio}
+                    <div
                         className={` quadrant custom-white-box ${slideStudioBox ? 'custom-slide-team' : ''}`}
                     >
                         {slideStudioBox && <span className="text-Awards">Our Studio</span>}
@@ -748,14 +675,14 @@ useEffect(() => {
                     </div>
                 </div> */}
                 <div className="horizontal-double-team" >
-                    <img src={teamImage} alt="Team" className="horizontal-image-team"  onClick={goToStudio}/>
+                    <img src={teamImage} alt="Team" className="horizontal-image-team" />
 
                 </div>
             </section>
 
             <section className="content-section">
                 <div className="button-container">
-                    <a href="/projectsHome" className="custom-button">
+                    <a href="/" className="custom-button">
                         <span> check our  <strong> projects </strong></span>
                     </a>
                 </div>
@@ -781,4 +708,4 @@ useEffect(() => {
     );
 }
 
-export default Home;
+export default Project;

@@ -1,17 +1,25 @@
-import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect, useRef } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import { FaSearch } from 'react-icons/fa';
 import logoHorizontal from '../../assets/images/logo-horizontal.png';
-const Navbar = () => {
+import logoHorizontalBlack from '../../assets/images/Logo-horizontal-negro.png';
+
+// En el componente Navbar
+
+const Navbar = ({ isSliding, menuOpen, setMenuOpen, showInput, setShowInput }) => {
     const [isBlurred, setIsBlurred] = useState(true);
-    const [menuOpen, setMenuOpen] = useState(false);
-    const [showInput, setShowInput] = useState(false);
     const [searchTerm, setSearchTerm] = useState('');
     const [filteredOptions, setFilteredOptions] = useState([]);
     const options = ['Architecture', 'Awards', 'Asphalt', 'Aluminum', 'Aggregate', 'Asbestos', 'Adhesive', 'Anchor', 'Acrylic', 'Acoustic'];
+    
+    const location = useLocation(); // Detecta la ruta actual
+    const isHome = location.pathname === '/'; // Verifica si estás en el home
+
+    // Referencias para el menú y el buscador
+    const menuRef = useRef(null);
+    const searchRef = useRef(null);
 
     useEffect(() => {
-        // Maneja el cambio de scroll para agregar/quitar el efecto de blur
         const handleScroll = () => {
             if (window.scrollY > 50) {
                 setIsBlurred(true);
@@ -20,12 +28,31 @@ const Navbar = () => {
             }
         };
         window.addEventListener('scroll', handleScroll);
+
         return () => {
             window.removeEventListener('scroll', handleScroll);
         };
     }, []);
 
-    const handleSearchClick = () => {
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (menuOpen && menuRef.current && !menuRef.current.contains(event.target)) {
+                setMenuOpen(false);
+            }
+
+            if (showInput && searchRef.current && !searchRef.current.contains(event.target)) {
+                setShowInput(false);
+            }
+        };
+
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, [menuOpen, showInput, setMenuOpen, setShowInput]);
+
+    const handleSearchClick = (event) => {
+        event.stopPropagation(); // Detiene la propagación del evento al manejador global
         setShowInput(!showInput);
     };
 
@@ -38,32 +65,57 @@ const Navbar = () => {
     const toggleMenu = () => {
         setMenuOpen(!menuOpen);
     };
+
+    const toggleSearch = () => {
+        setShowInput(!showInput);
+    };
+
+    // Determina qué logo usar y el color de los íconos basado en la ruta actual
+    const logo = location.pathname === '/' ? logoHorizontal : logoHorizontalBlack;
+    const iconColor = location.pathname === '/' ? 'white' : 'black';
+
     return (
-        <div className={`header-navbar ${isBlurred ? "" : "no-blur"}`}>
+        <div     className={`header-navbar ${isBlurred ? '' : 'no-blur'} ${isSliding ? 'navbar-slide-up' : ''} ${
+            isHome ? 'navbar-home' : 'navbar-other'
+        }`}
+    >
             <div className="header-content">
                 <Link to="/">
-                    <img src={logoHorizontal} alt="Logo Horizontal" className="logo-img" />
+                    <img src={logo} alt="Logo Horizontal" className="logo-img" />
                 </Link>
                 <div className="icons">
-                    <FaSearch className="search-icon-home" onClick={handleSearchClick} />
-                    <span className="icon" onClick={toggleMenu}>☰</span>
+                    <FaSearch
+                        className="search-icon-home"
+                        onClick={handleSearchClick}
+                        style={{ color: iconColor }} // Cambia el color del ícono
+                    />
+                    <span
+                        className="icon"
+                        onClick={toggleMenu}
+                        style={{ color: iconColor }} // Cambia el color del ícono
+                    >
+                        ☰
+                    </span>
                 </div>
             </div>
-            <div className={`hamburger-menu ${menuOpen ? 'menu-open' : 'menu-close'}`}>
+
+            {/* Menú hamburguesa */}
+            <div className={`hamburger-menu ${menuOpen ? 'menu-open' : 'menu-close'}`} ref={menuRef}>
                 <div className="menu-header">
-                    <span className="menu-close-icon" onClick={() => setMenuOpen(false)}>✖</span>
+                    <span className="menu-close-icon" onClick={toggleMenu}>✖</span>
                 </div>
                 <nav className="menu-items">
                     <Link to="/projectsHome" className="menu-link projects">Projects</Link>
-                    <a href="#press-awards" className="menu-link press-awards">Press & Awards</a>
-                    <a href="#studio" className="menu-link studio">Studio</a>
-                    <Link to="/projects" className="menu-link contact">Contact</Link>
+                    <Link to="/awardsandpress" className="menu-link press-awards">Press & Awards</Link>
+                    <Link to="/studio" className="menu-link studio">Studio</Link>
+                    <Link to="/contact" className="menu-link contact">Contact</Link>
                     <span className="menu-dash"></span>
                 </nav>
                 <div className="menu-footer"></div>
             </div>
 
-            <div className={`search-container ${showInput ? 'search-open' : ''}`}>
+            {/* Contenedor de búsqueda */}
+            <div className={`search-container ${showInput ? 'search-open' : ''}`} ref={searchRef}>
                 <div className="search-bar">
                     <input
                         type="text"
@@ -72,7 +124,7 @@ const Navbar = () => {
                         value={searchTerm}
                         onChange={handleInputChange}
                     />
-                    <span className="close-icon" onClick={handleSearchClick}>✖</span>
+                    <span className="menu-close-icon" onClick={toggleSearch}>✖</span>
                 </div>
                 {searchTerm && (
                     <div className="search-menu">

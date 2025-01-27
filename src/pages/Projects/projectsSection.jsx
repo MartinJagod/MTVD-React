@@ -18,6 +18,8 @@ function ProjectsSection() {
     const [category, setCategory] = useState('All'); // Categoría seleccionada
     const [section, setSection] = useState('Design'); // Cambiar a 'Architecture' o 'Branding' según la sección
     const sections = ['Design', 'Architecture', 'Branding']; // Opciones disponibles
+      const [showInput, setShowInput] = useState(false);
+        const [menuOpen, setMenuOpen] = useState(false);
  //saca el nombre del archivo
  function getFileName(filePath) {
     const fullName = filePath.split('/').pop(); // Obtiene el último segmento de la ruta
@@ -29,7 +31,45 @@ function ProjectsSection() {
         Architecture: ['Commercial', 'Office', 'Hotel', 'MixedUse', 'Residential', 'Planning'],
         Branding: ['Design', 'Architecture'],
     };
+ 
+//inicio headermover
+const [isSliding, setIsSliding] = useState(false); // Controla el deslizamiento del Navbar
 
+let activityTimeout = null;
+
+useEffect(() => {
+    const handleUserActivity = () => {
+        setIsSliding(false); // Detiene el deslizamiento si hay actividad
+
+        if (activityTimeout) {
+            clearTimeout(activityTimeout);
+        }
+
+        // Configura el timeout para iniciar el deslizamiento después de 2 segundos
+        activityTimeout = setTimeout(() => {
+            // Solo desliza el Navbar si el menú y el buscador están cerrados
+            if (!menuOpen && !showInput) {
+                setIsSliding(true);
+            }
+        }, 2000);
+    };
+
+    // Escuchar eventos de actividad del usuario
+    window.addEventListener('mousemove', handleUserActivity);
+    window.addEventListener('scroll', handleUserActivity);
+    window.addEventListener('click', handleUserActivity);
+
+    return () => {
+        // Limpia los eventos y el timeout al desmontar
+        window.removeEventListener('mousemove', handleUserActivity);
+        window.removeEventListener('scroll', handleUserActivity);
+        window.removeEventListener('click', handleUserActivity);
+        if (activityTimeout) {
+            clearTimeout(activityTimeout);
+        }
+    };
+}, [menuOpen, showInput]);
+// fin headermover
     const images = {
         Design: [home1, home2, interiorismo1],
         Architecture: [interiorismo2, interiorismo3, edward],
@@ -56,7 +96,12 @@ function ProjectsSection() {
             {/* Header */}
             <header className="projects-header">
                 <div className="logo">
-                    <Navbar />
+                <Navbar
+                menuOpen={menuOpen}
+                setMenuOpen={setMenuOpen} // Se pasa correctamente como prop
+                showInput={showInput}
+                setShowInput={setShowInput}
+            />
                 </div>
             </header>
 
@@ -129,6 +174,8 @@ function ProjectsSection() {
 
             {/* Logo Slogan */}
             <div style={{ marginTop: '50px' }}>
+                <br />
+                <br />
                 <ContactFooter />
             </div>
         </div>
