@@ -259,6 +259,7 @@ body {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   z-index: 2000;
   /* Inicialmente fuera de la pantalla */
+  max-width: 235px;
   transform: translatex(100%);
   transition: transform 0.3s ease-in-out; /* Transición suave */
 }
@@ -632,7 +633,7 @@ body {
   justify-content: center;
   margin-top: 30px;
 }
-.custom-button {
+.custom-button-end {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -647,13 +648,14 @@ body {
   background-color: #ffffff;
 }
 
-.custom-button strong {
+.custom-button-end strong {
   font-weight: 700; /* Negrita para la palabra "projects" */
 }
 
-.custom-button:hover {
+.custom-button-end:hover {
   background-color: #FEC93A; /* Fondo al hacer hover */
   color: #000000; /* Color del texto al hacer hover */
+  border:  1px solid #FEC93A;
 }
 
 .divider-line {
@@ -840,8 +842,9 @@ body {
   max-width: 100%;
   object-fit: contain; /* Escala los logos proporcionalmente */
 }
-.phrase-section {
+.phrase-section-home {
   position: relative;
+  margin-top: 70vh; /* Empuja esta sección debajo del header fijo */
   z-index: 2;
   padding: 20px;
   background-color: #ffffff; /* Fondo claro */
@@ -849,12 +852,10 @@ body {
   font-weight: 600;
   color: #000000;
   height: auto; /* Ajusta automáticamente la altura */
-  display: flex;
   flex-direction: row; /* Alineación horizontal por defecto */
   justify-content: center; /* Centra horizontalmente */
   align-items: center; /* Centra verticalmente */
   flex-wrap: nowrap; /* Evita saltos de línea por defecto */
-  margin-top: 70vh; /* Empuja esta sección debajo del header fijo */
 }
 
 .phrase-line {
@@ -874,7 +875,7 @@ body {
   .phrase-line {
     white-space: normal; /* Permite saltos de línea */
     font-size: 9vw; /* Ajusta el tamaño del texto para móviles */
-    margin: 0.5rem 0; /* Agrega espacio vertical entre líneas */
+    /* margin: 0.5rem 0; Agrega espacio vertical entre líneas */
   }
 }
 
@@ -1276,6 +1277,6 @@ body {
 }
 
 .image-label-home, .image-label-star {
-  text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.8); /* Sombra negra semi-transparente */
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3); /* Sombra negra semi-transparente */
   font-size: 16px; /* Ajusta el tamaño según sea necesario */
 }

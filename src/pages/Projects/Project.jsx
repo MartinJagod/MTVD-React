@@ -1,28 +1,48 @@
 import React, { useEffect, useState, useRef, useCallback } from 'react';
+import { useParams } from "react-router-dom";
+import projectsData from "./projectsData";
+import ProjectPopup from "./ProjectPopup";
 import './Project.css';
 import '@fortawesome/fontawesome-free/css/all.min.css';
-import home1 from '../../assets/images/home1.jpg';
-import homeVideo from '../../assets/images/homeVideo.mp4'; // Importa el video
-import branding1 from '../../assets/images/COC.png';
-import interiorismo1 from '../../assets/images/Felicity.jpeg';
-import interiorismo2 from '../../assets/images/Hoppiness.jpg';
-import interiorismo3 from '../../assets/images/interiorismo3.jpg';
-import teamImage from '../../assets/images/team.jpeg';
-import arquitectura1 from '../../assets/images/Hoppiness.jpg';
+import { importImages } from "./importImages"; // 🔹 Importamos la función
+import { importImagesProject } from "./importImagesProject";
 import starImage from '../../assets/images/estrella.png';
-import groupImage from '../../assets/images/group.png';
-import logoHorizontal from '../../assets/images/logo-horizontal.png';
-import logoVertical from '../../assets/images/logo-vertical.png';
-import { FaSearch } from 'react-icons/fa';
-import logoSlogan from '../../assets/images/logo-slogan.png';
-import { FaLinkedin, FaPinterest, FaYoutube, FaInstagram } from 'react-icons/fa';
-import { Link } from 'react-router-dom';
-import { FaVolumeMute, FaVolumeUp } from 'react-icons/fa';
 import ContactFooter from '../Parcial/ContactFooter'; // Ajusta la ruta según tu estructura de carpetas
 import Navbar from '../Parcial/Navbar'; // Ajusta la ruta según tu estructura de carpetas
-import CarouselLogos from "../Parcial/CarouselLogos";
+
 
 function Project() {
+    const interiorismo1='/assets/images/PaginaProyecto/proyecto3/Che Mono.jpg';
+    const { id } = useParams(); // 🔹 Obtiene el ID desde la URL
+    const imagesPrincipal = importImagesProject(); // 🔹 Carga todas las imágenes del proyecto
+
+    console.log("📂 Imágenes importadas:", imagesPrincipal);
+
+    const projectNames = {
+        1: "Che Mono.jpg",
+        2: "Barilatte.jpg"
+    };
+
+    const imageName = projectNames[id] || "Che Mono.jpg"; // 🔹 Imagen por defecto
+
+    const PhraseLineSelected = imageName.replace(/\.jpg$/, "");
+
+    const projectData = projectsData[PhraseLineSelected] || {};
+
+
+    console.log("🖼️ Imagen seleccionada:", PhraseLineSelected);
+
+    if (!imagesPrincipal.principal || !imagesPrincipal.principal[imageName]) {
+        console.error(`❌ No se encontró la imagen: ${imageName} en "principal"`);
+    }
+    /* const imageName = "Che Mono.jpg"; */
+    /*   const principal = require(`../../assets/images/PaginaProyecto/principal/${imageName}`);
+      const project2 = require(`../../assets/images/PaginaProyecto/proyecto2/${imageName}`);
+      const project3 = require(`../../assets/images/PaginaProyecto/proyecto3/${imageName}`);
+      const project4 = require(`../../assets/images/PaginaProyecto/proyecto4/${imageName}`);
+      const miniatura1 = require(`../../assets/images/PaginaProyecto/miniatura1/${imageName}`);
+      const miniatura2 = require(`../../assets/images/PaginaProyecto/miniatura2/${imageName}`);
+   */
     const [projectCount, setProjectCount] = useState(0);
     const [yearsCount, setYearsCount] = useState(0);
     const [countriesCount, setCountriesCount] = useState(0);
@@ -39,45 +59,98 @@ function Project() {
     const [isBlurred, setIsBlurred] = useState(true); // Estado para manejar el blur
     let scrollTimeout = null; // Variable para manejar el timeout
     const [isMuted, setIsMuted] = useState(true);
-    
-//inicio headermover
-const [isSliding, setIsSliding] = useState(false); // Controla el deslizamiento del Navbar
+    const [modalOpen, setModalOpen] = useState(false);
+    const [selectedImage, setSelectedImage] = useState(null);
 
-let activityTimeout = null;
+    //inicio headermover
+    const [isSliding, setIsSliding] = useState(false); // Controla el deslizamiento del Navbar
 
-useEffect(() => {
-    const handleUserActivity = () => {
-        setIsSliding(false); // Detiene el deslizamiento si hay actividad
+    let activityTimeout = null;
 
-        if (activityTimeout) {
-            clearTimeout(activityTimeout);
+    // inicio carousel
+   /*  const images = importImages("CheMono"); */ // 🔹 Se puede cambiar a otra carpeta en el futuro
+
+
+    const openPopup = (image) => {
+        setSelectedImage(image);
+        setModalOpen(true);
+    };
+    // fin carousel
+
+    useEffect(() => {
+        if (!line5Ref.current) {
+            console.warn("❌ La referencia a moving-line5 es NULL al montar el componente");
+            return;
         }
+        console.log("✅ La referencia a moving-line5 está asignada correctamente", line5Ref.current);
 
-        // Configura el timeout para iniciar el deslizamiento después de 2 segundos
-        activityTimeout = setTimeout(() => {
-            // Solo desliza el Navbar si el menú y el buscador están cerrados
-            if (!menuOpen && !showInput) {
-                setIsSliding(true);
+        const restartAnimation = (element, animationClass) => {
+            if (!element) return;
+
+            element.style.animation = "none"; // Detener la animación
+            void element.offsetWidth; // 🔄 Forzar reflujo del navegador
+            element.style.animation = `moveLine5 2s linear forwards`; // Reiniciar animación
+        };
+
+        const observer2 = new IntersectionObserver(
+            (entries) => {
+                entries.forEach((entry) => {
+                    console.log("Observando:", entry.target, "Visible:", entry.isIntersecting);
+
+                    if (entry.isIntersecting && entry.target.classList.contains("moving-line5")) {
+                        restartAnimation(entry.target, "moveLine5");
+                    }
+                });
+            },
+            { threshold: 0.8 } // Detecta salida total con más precisión
+        );
+
+        observer2.observe(line5Ref.current);
+
+        return () => {
+            // 🔹 Validar que line5Ref.current sigue siendo un HTMLElement antes de unobserve()
+            if (line5Ref.current instanceof HTMLElement) {
+                observer2.unobserve(line5Ref.current);
+            } else {
+                console.warn("⚠️ No se pudo unobserve porque line5Ref.current ya no es un Elemento");
             }
-        }, 2000);
-    };
+            observer2.disconnect(); // 🔹 Desconectar completamente el observer para liberar memoria
+        };
+    }, []);
 
-    // Escuchar eventos de actividad del usuario
-    window.addEventListener('mousemove', handleUserActivity);
-    window.addEventListener('scroll', handleUserActivity);
-    window.addEventListener('click', handleUserActivity);
+    useEffect(() => {
+        const handleUserActivity = () => {
+            setIsSliding(false); // Detiene el deslizamiento si hay actividad
 
-    return () => {
-        // Limpia los eventos y el timeout al desmontar
-        window.removeEventListener('mousemove', handleUserActivity);
-        window.removeEventListener('scroll', handleUserActivity);
-        window.removeEventListener('click', handleUserActivity);
-        if (activityTimeout) {
-            clearTimeout(activityTimeout);
-        }
-    };
-}, [menuOpen, showInput]);
-// fin headermover
+            if (activityTimeout) {
+                clearTimeout(activityTimeout);
+            }
+
+            // Configura el timeout para iniciar el deslizamiento después de 2 segundos
+            activityTimeout = setTimeout(() => {
+                // Solo desliza el Navbar si el menú y el buscador están cerrados
+                if (!menuOpen && !showInput) {
+                    setIsSliding(true);
+                }
+            }, 2000);
+        };
+
+        // Escuchar eventos de actividad del usuario
+        window.addEventListener('mousemove', handleUserActivity);
+        window.addEventListener('scroll', handleUserActivity);
+        window.addEventListener('click', handleUserActivity);
+
+        return () => {
+            // Limpia los eventos y el timeout al desmontar
+            window.removeEventListener('mousemove', handleUserActivity);
+            window.removeEventListener('scroll', handleUserActivity);
+            window.removeEventListener('click', handleUserActivity);
+            if (activityTimeout) {
+                clearTimeout(activityTimeout);
+            }
+        };
+    }, [menuOpen, showInput]);
+    // fin headermover
 
     const handleMenuClick = () => {
         setMenuOpen(!menuOpen);
@@ -87,8 +160,14 @@ useEffect(() => {
     };
     const line1Ref = useRef(null);
     const line2Ref = useRef(null);
-    
-    
+    const line3Ref = useRef(null);
+    const line4Ref = useRef(null);
+    const line5Ref = useRef(null);
+    const line6Ref = useRef(null);
+
+
+
+
     //saca el nombre del archivo
     function getFileName(filePath) {
         const fullName = filePath.split('/').pop(); // Obtiene el último segmento de la ruta
@@ -98,38 +177,38 @@ useEffect(() => {
     const brandingImageRef = useRef(null);
     const interiorismoImageRef = useRef(null);
     const arquitecturaImageRef = useRef(null);
-  
-//inicio parallax
+
+    //inicio parallax
 
     useEffect(() => {
-      const imageRefs = [
-        { ref: brandingImageRef, speed: 0.15 },
-        { ref: interiorismoImageRef, speed: 0.15 },
-        { ref: arquitecturaImageRef, speed: 0.15 },
-      ];
-      
-      const handleParallaxEffect = () => {
-        imageRefs.forEach(({ ref, speed }) => {
-          const image = ref.current;
-          if (image) {
-            const rect = image.getBoundingClientRect();
-            const windowHeight = window.innerHeight;
-  
-            if (rect.top < windowHeight && rect.bottom > 0) {
-              const translateY = -(rect.top - windowHeight / 2) * speed;
-              image.style.transform = `translateY(${translateY}px)`;
-            } else {
-              image.style.transform = `translateY(0px)`;
-            }
-          }
-        });
-      };
-  
-      window.addEventListener('scroll', handleParallaxEffect);
-  
-      return () => {
-        window.removeEventListener('scroll', handleParallaxEffect);
-      };
+        const imageRefs = [
+            { ref: brandingImageRef, speed: 0.15 },
+            { ref: interiorismoImageRef, speed: 0.15 },
+            { ref: arquitecturaImageRef, speed: 0.15 },
+        ];
+
+        const handleParallaxEffect = () => {
+            imageRefs.forEach(({ ref, speed }) => {
+                const image = ref.current;
+                if (image) {
+                    const rect = image.getBoundingClientRect();
+                    const windowHeight = window.innerHeight;
+
+                    if (rect.top < windowHeight && rect.bottom > 0) {
+                        const translateY = -(rect.top - windowHeight / 2) * speed;
+                        image.style.transform = `translateY(${translateY}px)`;
+                    } else {
+                        image.style.transform = `translateY(0px)`;
+                    }
+                }
+            });
+        };
+
+        window.addEventListener('scroll', handleParallaxEffect);
+
+        return () => {
+            window.removeEventListener('scroll', handleParallaxEffect);
+        };
     }, []);
 
     // fin parallax
@@ -184,7 +263,7 @@ useEffect(() => {
     const duplicatedLogos = [...logos, ...logos];
     //fin carousel
 
-//Inicio contador animado
+    //Inicio contador animado
     const animateCounter = useCallback((setter, target, duration) => {
         let count = 0;
         const increment = target / (duration / 16);
@@ -202,12 +281,12 @@ useEffect(() => {
     }, []);
 
     const startCountingProjects = useCallback(() => {
-        animateCounter(setProjectCount, 350, 2000);
+        animateCounter(setProjectCount, projectData.contador1, 2000);
         setHasStartedCountingProjects(true);
     }, [animateCounter]);
 
     const startCountingSection = useCallback(() => {
-        animateCounter(setYearsCount, 10, 4000);
+        animateCounter(setYearsCount, 4842, 2000);
         animateCounter(setCountriesCount, 15, 4000);
         animateCounter(setCitiesCount, 25, 4000);
         setHasStartedCountingSection(true);
@@ -223,7 +302,7 @@ useEffect(() => {
                     setProjectCount(0); // Reinicia el contador al salir de pantalla
                 }
             });
-        }, { threshold: 0.5 });
+        }, { threshold: 0.1 });
 
         const projectCounterRef = counterRef.current;
         if (projectCounterRef) {
@@ -249,7 +328,7 @@ useEffect(() => {
                     setCitiesCount(0);
 
                     setTimeout(() => {
-                        animateCounter(setYearsCount, 10, 500); // Primer contador
+                        animateCounter(setYearsCount, 4842, 2000); // Primer contador
                     }, 0);
 
                     setTimeout(() => {
@@ -283,56 +362,7 @@ useEffect(() => {
 
     //fin contador animado
 
-    // Inico deslice de cajas
-    useEffect(() => {
-        const observerSlideBoxes = new IntersectionObserver(
-            (entries) => {
-                entries.forEach((entry) => {
-                    if (entry.isIntersecting) {
-                        setSlideBoxes(false); // Activa la animación
-                    } else {
-                        setSlideBoxes(true); // Resetea la animación si lo prefieres
-                    }
-                });
-            },
-            { threshold: 0.1 } // Ajusta el umbral para determinar cuándo se activa
-        );
 
-        const slideBoxesElement = slideBoxesRef.current;
-        if (slideBoxesElement) {
-            observerSlideBoxes.observe(slideBoxesElement);
-        }
-
-        return () => {
-            if (slideBoxesElement) {
-                observerSlideBoxes.unobserve(slideBoxesElement);
-            }
-        };
-    }, []);
-
-    useEffect(() => {
-        const observerStudioBox = new IntersectionObserver((entries) => {
-            entries.forEach((entry) => {
-                if (entry.isIntersecting) {
-                    setSlideStudioBox(true); // Activa el deslizamiento
-                } else {
-                    setSlideStudioBox(false); // Restablece el estado cuando sale de pantalla
-                }
-            });
-        }, { threshold: 0.8 }); // Detecta cuando al menos el 50% es visible
-
-        const studioBoxElement = slideStudioBoxRef.current;
-        if (studioBoxElement) {
-            observerStudioBox.observe(studioBoxElement);
-        }
-
-        return () => {
-            if (studioBoxElement) {
-                observerStudioBox.unobserve(studioBoxElement);
-            }
-        };
-    }, []);
-    // Fin deslice de cajas
     // Inicio animación de menú 
     useEffect(() => {
         if (menuOpen) {
@@ -400,41 +430,15 @@ useEffect(() => {
     }, []);
     // Fin animación de cajas naranja
 
-    // Inicio reinicio video
-    const videoRef = useRef(null);
 
 
-    useEffect(() => {
-        if (videoRef.current) {
-            videoRef.current.muted = true; // Mute el video inicialmente
-            videoRef.current.play().catch((err) => {
-                console.error("Autoplay blocked: ", err);
-            });
-        }
-    }, []);
 
-    const handleVideoEnd = () => {
-        if (videoRef.current) {
-            videoRef.current.currentTime = 0;
-            videoRef.current.play();
-        }
-    };
-
-    const toggleMute = () => {
-        if (videoRef.current) {
-            const mutedState = !isMuted;
-            videoRef.current.muted = mutedState;
-            setIsMuted(mutedState);
-        }
-    };
-    // Fin reinicio video
-
-    // Inicio lineas en movimeinto
     useEffect(() => {
         const restartAnimation = (element, animationClass) => {
+            if (!element) return;
             element.style.animation = "none"; // Detiene cualquier animación activa
             void element.offsetWidth; // Reflujo: fuerza al navegador a calcular estilos nuevamente
-            element.style.animation = `${animationClass} 1s linear forwards`; // Reinicia la animación
+            element.style.animation = `${animationClass} 3s linear forwards`; // Reinicia la animación
         };
 
         const observer = new IntersectionObserver(
@@ -449,261 +453,238 @@ useEffect(() => {
                     }
                 });
             },
-            { threshold: 0.1 } // Ajusta el umbral según sea necesario
+            { threshold: 0.5 } // Ajusta el umbral según sea necesario
         );
 
         if (line1Ref.current) observer.observe(line1Ref.current);
         if (line2Ref.current) observer.observe(line2Ref.current);
 
         return () => {
-            if (line1Ref.current) observer.unobserve(line1Ref.current);
-            if (line2Ref.current) observer.unobserve(line2Ref.current);
+            // 🔹 Verificar que aún existen los elementos antes de llamar unobserve()
+            if (line1Ref.current instanceof HTMLElement) observer.unobserve(line1Ref.current);
+            if (line2Ref.current instanceof HTMLElement) observer.unobserve(line2Ref.current);
+
+            observer.disconnect(); // 🔹 Desconectar el observer completamente para liberar memoria
         };
     }, []);
-    // fin lineas
 
-    
+    useEffect(() => {
+        if (!line3Ref.current) {
+            console.warn("❌ La referencia a moving-line3 es NULL al montar el componente");
+            return;
+        }
+
+        console.log("✅ La referencia a moving-line3 está asignada correctamente", line3Ref.current);
+
+        const restartAnimation = (element, animationClass) => {
+            if (!element) return;
+
+            element.style.animation = "none"; // Detener la animación
+            void element.offsetWidth; // 🔄 Forzar reflujo
+            element.style.animation = `${animationClass} 2s linear forwards`; // Reiniciar animación
+        };
+
+        const observer = new IntersectionObserver(
+            (entries) => {
+                entries.forEach((entry) => {
+                    console.log("Observando:", entry.target, "Visible:", entry.isIntersecting);
+                    if (entry.isIntersecting && entry.target.classList.contains("moving-line3")) {
+                        restartAnimation(entry.target, "moveLine3");
+                    }
+                });
+            },
+            { threshold: 0.5 }
+        );
+
+        observer.observe(line3Ref.current);
+
+        return () => {
+            // 🔹 Verificar que el elemento aún existe ANTES de llamar a unobserve()
+            if (line3Ref.current && line3Ref.current instanceof HTMLElement) {
+                observer.unobserve(line3Ref.current);
+            }
+            observer.disconnect(); // 🔹 Desconectar completamente el observer para liberar memoria
+        };
+    }, []);
+
+
     return (
         <div className="home">
 
-            {/* Video de fondo */}
-            <header className="home-header">
-            <div className="full-square">
-                <div className="parallax-wrapper">
-                    <img
-                        src={branding1}
-                        alt="Branding 1"
-                        className="parallax-image"
-                        ref={brandingImageRef}
+            {/* Imagen  de fondo */}
+            <header className="projet-header">
+                <div className="full-square">
+                    <div className="parallax-wrapper">
+                        <img
+                            src={imagesPrincipal.principal[imageName]}
+                            alt="Branding 1"
+                            className="parallax-image"
+                            ref={brandingImageRef}
+                            onClick={() => openPopup(imagesPrincipal.principal[imageName])}
 
-                    />
+                        />
+                    </div>
+
+                    <div className="image-label-star">
+                        <img src={starImage} alt="Star" className="star-image-foto" />
+                    </div>
                 </div>
-                    <div className="image-label-home">
-                        {getFileName(branding1)}
-                    </div>
-                    <div className="image-label-star"> 
-                    <img src={starImage} alt="Star" className="star-image-foto" />
-                    </div>
-            </div>
 
-                <button className="mute-button" onClick={toggleMute}>
-                    {isMuted ? <FaVolumeMute /> : <FaVolumeUp />}
-                </button>
-                <Navbar 
-                  isSliding={isSliding}
-                  menuOpen={menuOpen}
-                  setMenuOpen={setMenuOpen}
-                  showInput={showInput}
-                  setShowInput={setShowInput} />
+                <Navbar
+                    isSliding={isSliding}
+                    menuOpen={menuOpen}
+                    setMenuOpen={setMenuOpen}
+                    showInput={showInput}
+                    setShowInput={setShowInput} />
 
             </header>
 
-
+            {/* Inicio frase  */}
             <div className="phrase-section">
-                <span className="phrase-line"> COC Villa Allende </span>
+                <span className="phrase-line">{PhraseLineSelected}</span>
             </div>
-            <div className="full-square">
-                <div className="parallax-wrapper">
-                    <img
-                        src={branding1}
-                        alt="Branding 1"
-                        className="parallax-image"
-                        ref={brandingImageRef}
 
-                    />
-                </div>
-                    <div className="image-label-home">
-                        {getFileName(branding1)}
-                    </div>
-                    <div className="image-label-star"> 
-                    <img src={starImage} alt="Star" className="star-image-foto" />
-                    </div>
-            </div>
+            {/* fin frase  */}
 
 
             <section className="image-and-quadrants">
                 <div className="quadrant-container">
+                    <div className='container-image-small-projet' >
+                        <img
+                            src={imagesPrincipal.miniatura1[imageName]}
+                            alt="Branding 1"
+                            ref={brandingImageRef}
+                            className='image-small-projet'
+                            onClick={() => openPopup(imagesPrincipal.miniatura1[imageName])}
+                        />
+                    </div>
+
                     <div className="quadrant white-box">
-                        <span className="project-box">Inspiring</span>
-                        <span className="project-box">people</span>
+                        <span className="project-box">{projectData.frase1}</span>
+                    </div>
+                    <div className="quadrant white-box">
+                        <span className="project-box">{projectData.frase2}</span>
                         <div className="moving-line" ref={line1Ref}></div>
                     </div>
-                    <div
-                        className={`quadrant yellow-box ${rotateYellowBox ? 'rotate' : ''}`}
-                        ref={yellowBoxRef}
-                    >
-                        <div className="flip-container">
-                            <div className="front">
-                                <img src={logoVertical} alt="Logo Vertical" className="logo-image" />
-                            </div>
-                            <div className="back">
-                                <span className='back-item'>Design</span>
-                                <span className='back-item'>Architecture</span>
-                                <span className='back-item'>Branding</span>
-
-                            </div>
-                        </div>
-                    </div>
-                    <div className="quadrant blue-box" ref={counterRef}>
-                        <span className="project-count">+{projectCount}</span>
-                        <span className="project-label">projects</span>
+                    <div className="quadrant green-box" ref={counterRef} style={{ color: "white", width: '50vw' }}>
+                        <span className="project-count">{projectCount}</span>
+                        <span className="project-label-project">{projectData.nombre}</span>
                         <div className="moving-line2" ref={line2Ref}></div>
                     </div>
-                    <div className="quadrant white-box">
-                        <span className="project-box">To create</span>
-                        <span className="project-box">exciting</span>
-                        <span className="project-box">places</span>
-                    </div>
                 </div>
 
-
-                <div className="quadrant">
-
-
-
-                    {/* Nueva sección horizontal para los contadores */}
-                    <div className="horizontal-counter-section-new" ref={sectionCountersRef}>
-                        <div className="horizontal-counter-item-new">
-                            <span className="horizontal-project-count-new">+{yearsCount}</span>
-                            <br />
-                            <span className="horizontal-project-label-new" style={{ paddingLeft: "30px" }}>years</span>
-                        </div>
-                        <div className="horizontal-counter-item-new">
-                            <span className="horizontal-project-count-new">+{countriesCount}</span>
-                            <br />
-                            <span className="horizontal-project-label-new" style={{ paddingLeft: "70px" }}>countries</span>
-                        </div>
-                        <div className="horizontal-counter-item-new">
-                            <span className="horizontal-project-count-new">+{citiesCount}</span>
-                            <br />
-                            <span className="horizontal-project-label-new" style={{ paddingLeft: "27px" }}>cities</span>
-                        </div>
-
-                    </div>
-
-                </div>
                 <div className="full-square">
                     <div className="parallax-wrapper">
                         <img
-                            src={interiorismo1}
-                            alt="Interiorismo 1"
+                            src={imagesPrincipal.proyecto2[imageName]}
+                            alt="Branding 1"
                             className="parallax-image"
-                            ref={interiorismoImageRef}
+                            ref={arquitecturaImageRef}
+                            onClick={() => openPopup(imagesPrincipal.proyecto2[imageName])}
                         />
-                        {/* Muestra el nombre del archivo */}
                     </div>
-                        <div className="image-label-home">
-                            {getFileName(interiorismo1)}
-                        </div>
-                        <div className="image-label-star"> 
-                    <img src={starImage} alt="Star" className="star-image-foto" />
+
+                    <div className="image-label-star">
+                        <img src={starImage} alt="Star" className="star-image-foto" />
                     </div>
                 </div>
-
-
-
-                {/*            <div className="quadrant vertical-double">
-
-<div className="quadrant module-box">
-<img src={branding1} alt="Branding 1" className="module-image" />
-</div>
-<div className="quadrant-blue module-box">
-<img src={interiorismo2} alt="Interiorismo 2" className="module-image" />
-</div>
-</div>
-<div className="quadrant vertical-double">
-<img src={interiorismo1} alt="Interiorismo 1" className="module-image" />
-</div> */}
-                <div className="new-quadrant-container" ref={slideBoxesRef}>
-                    <div
-                        className={`quadrant green-box ${slideBoxes ? 'slide-green' : ''}`}
-                    >
-                        <img src={starImage} alt="Star" className="star-image" />
+                <div className="horizontal-double-team">
+                    <div className="quadrant yellow-box" ref={sectionCountersRef} style={{ width: '50vw' }}>
+                        <span className="project-count">{yearsCount}</span>
+                        <span className="project-label-project2">ft2</span>
                     </div>
-                    <div className="quadrant white-box-estrella">
-                        <span className="text-Awards">Awards</span>
+                    <div className="quadrant white-box" style={{ width: '50vw', backgroundOpacity: "0.1" }}>
+                        <span className="project-label-small">Location</span>
+                        <span className="project-label-normal" style={{ marginBottom: "10px" }}>{projectData.location}</span>
+
+                        <span className="project-label-small">Year</span>
+                        <span className="project-label-normal" style={{ marginBottom: "10px" }}>{projectData.year}</span>
+                        <div className="moving-line3" ref={line3Ref} data-animation="moveLine3"></div>
+
+                        <span className="project-label-small">Area</span>
+                        <span className="project-label-normal">{projectData.area}</span>
                     </div>
                 </div>
 
 
                 <div className="full-square">
-                <div className="parallax-wrapper">
-
-                    <img ref={arquitecturaImageRef} src={arquitectura1} alt="Architecture 1" className="parallax-image" />
-                </div>
-                    <div className="image-label-home">
-                        {getFileName(arquitectura1)}
+                    <div className="parallax-wrapper">
+                        <img
+                            src={imagesPrincipal.miniatura2[imageName]}
+                            alt="Branding 1"
+                            className="parallax-image"
+                            ref={brandingImageRef}
+                            onClick={() => openPopup(imagesPrincipal.miniatura2[imageName])}
+                        />
                     </div>
-                    <div className="image-label-star"> 
-                    <img src={starImage} alt="Star" className="star-image-foto" />
-                    </div>
-                </div>
 
-                <div className="custom-quadrant-container">
-                    <div
-                        className={`custom-orange-box ${slideStudioBox ? 'custom-slide-orange' : ''}`}
-                        ref={slideStudioBoxRef}
-                    >
-                        <img src={groupImage} alt="Group Icon" className="icon-image" />
-
-                    </div>
-                    <div
-                        className={` quadrant custom-white-box ${slideStudioBox ? 'custom-slide-team' : ''}`}
-                    >
-                        {slideStudioBox && <span className="text-Awards">Our Studio</span>}
+                    <div className="image-label-star">
+                        <img src={starImage} alt="Star" className="star-image-foto" />
                     </div>
                 </div>
-
-                {/*             <div className="quadrant-container">
-    <div className="quadrant vertical-double">
-                        <img src={arquitectura1} alt="Arquitectura 1" className="module-image" />
-                    </div>
-                    <div
-                        className={`vertical-double-container ${slideStudioBox ? 'slide-active' : ''}`}
-                        ref={slideStudioBoxRef}
-                    >
-                        <div className="vertical-box white-box-studio">
-                            {slideStudioBox && <span>Our Studio</span>}
+                <div className="full-square">
+                    <div className="vertical-half-square">
+                        <div className="half-parallax-wrapper">
+                            <img
+                                src={imagesPrincipal.proyecto4[imageName]}
+                                alt="Interiorismo 1"
+                                className="half-parallax-image"
+                                ref={interiorismoImageRef}
+                                onClick={() => openPopup(imagesPrincipal.proyecto4[imageName])}
+                            />
+                            {/* Muestra el nombre del archivo */}
                         </div>
-                        <div className="vertical-box orange-box-studio">
-                            <img src={groupImage} alt="Group Icon" className="icon-image" />
+
+                        <div className="image-label-star">
+                            <img src={starImage} alt="Star" className="star-image-foto" />
                         </div>
-                    </div> 
-
-                    <div className="quadrant vertical-double">
-                        <img src={interiorismo3} alt="Interiorismo 3" className="module-image" />
                     </div>
-                </div> */}
-                <div className="horizontal-double-team" >
-                    <img src={teamImage} alt="Team" className="horizontal-image-team" />
+                    <div className="vertical-half-square">
+                        <div className='container-image-small-projet' >
+                            <img
+                                src={imagesPrincipal.miniatura2[imageName]}
+                                alt="Branding 1"
+                                className='image-small-projet'
+                                onClick={() => openPopup(imagesPrincipal.miniatura2[imageName])}
+                            />
+                        </div>
+                        <div className="quadrant" >
+                            <span className="project-box-frase">{projectData.frase3}</span>
+                            <div className="moving-line5" ref={line5Ref} data-animation="moveLine5"> </div>
 
+                        </div>
+
+                    </div>
+                </div>
+                {/* Texto después de las imágenes */}
+                <div className="project-text">
+                    <span className="project-title">{projectData.encabezado}</span>
+
+                    <br />
+                    <br />
+                    <br />
+
+                    <p className="studio-paragraph">
+                    {projectData.parrafo1}
+                    </p>
+
+                    <p className="studio-paragraph">
+                    {projectData.parrafo2}
+                    </p>
                 </div>
             </section>
 
             <section className="content-section">
-                <div className="button-container">
-                    <a href="/" className="custom-button">
-                        <span> check our  <strong> projects </strong></span>
-                    </a>
-                </div>
-                 <div className="button-container-clients">
-                 {/*   <div className="carousel-container">
-                        <div className="carousel-track">
-                            {duplicatedLogos.map((logo, index) => (
-                                <div key={index} className="carousel-item">
-                                    <img
-                                        src={logo}
-                                        alt={`Logo ${index}`}
-                                        className="logo-image"
-                                    />
-                                </div>
-                            ))}
-                        </div>
-                    </div>*/}
-                <CarouselLogos duplicatedLogos={[...logos, ...logos]} />
-                </div> 
-                <ContactFooter  />
+
+                <ContactFooter />
             </section>
+            <ProjectPopup 
+            isOpen={modalOpen} 
+            onClose={() => setModalOpen(false)} 
+            initialImage={selectedImage} 
+            projectName={PhraseLineSelected}
+            />
+
         </div>
     );
 }

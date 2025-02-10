@@ -5,8 +5,8 @@ import './Home.css';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import home1 from '../../assets/images/home1.jpg';
 import homeVideo from '../../assets/images/homeVideo.mp4'; // Importa el video
-import branding1 from '../../assets/images/COC.png';
-import interiorismo1 from '../../assets/images/Felicity.jpeg';
+
+/* import interiorismo1 from '../../assets/images/Felicity.jpeg'; */
 import interiorismo2 from '../../assets/images/Hoppiness.jpg';
 import interiorismo3 from '../../assets/images/interiorismo3.jpg';
 import teamImage from '../../assets/images/team.jpeg';
@@ -25,6 +25,10 @@ import Navbar from '../Parcial/Navbar'; // Ajusta la ruta según tu estructura d
 import CarouselLogos from "../Parcial/CarouselLogos";
 
 function Home() {
+
+
+    const branding1 = "/assets/images/PaginaProyecto/principal/Che Mono.jpg";
+    const interiorismo1 = "/assets/images/PaginaProyecto/principal/Barilatte.jpg";
     const [projectCount, setProjectCount] = useState(0);
     const [yearsCount, setYearsCount] = useState(0);
     const [countriesCount, setCountriesCount] = useState(0);
@@ -42,15 +46,15 @@ function Home() {
     let scrollTimeout = null; // Variable para manejar el timeout
     const [isMuted, setIsMuted] = useState(true);
     const navigate = useNavigate();
-//inicio headermover
-const [isSliding, setIsSliding] = useState(false); // Controla el deslizamiento del Navbar
+    //inicio headermover
+    const [isSliding, setIsSliding] = useState(false); // Controla el deslizamiento del Navbar
 
-let activityTimeout = null;
+    let activityTimeout = null;
 
-//Cambios de pagina
-const goToProjects = () => {
-    navigate("/projectsHome"); // Cambia a la ruta /projects
-  };
+    //Cambios de pagina
+    const goToProjects = () => {
+        navigate("/projectsHome"); // Cambia a la ruta /projects
+    };
     const goToAwardsAndPress = () => {
         navigate("/awardsandpress"); // Cambia a la ruta /awardsandpress
     };
@@ -60,50 +64,50 @@ const goToProjects = () => {
     const goToContact = () => {
         navigate("/contact"); // Cambia a la ruta       
     }
-    const goToHome = () => {        
+    const goToHome = () => {
         navigate("/"); // Cambia a la ruta
     }
-    const goToProject = (id) => {       
+    const goToProject = (id) => {
         navigate(`/project/${id}`); // Cambia a la ruta
     }
-    
-
-// fin cambios de pagina
 
 
-useEffect(() => {
-    const handleUserActivity = () => {
-        setIsSliding(false); // Detiene el deslizamiento si hay actividad
+    // fin cambios de pagina
 
-        if (activityTimeout) {
-            clearTimeout(activityTimeout);
-        }
 
-        // Configura el timeout para iniciar el deslizamiento después de 2 segundos
-        activityTimeout = setTimeout(() => {
-            // Solo desliza el Navbar si el menú y el buscador están cerrados
-            if (!menuOpen && !showInput) {
-                setIsSliding(true);
+    useEffect(() => {
+        const handleUserActivity = () => {
+            setIsSliding(false); // Detiene el deslizamiento si hay actividad
+
+            if (activityTimeout) {
+                clearTimeout(activityTimeout);
             }
-        }, 2000);
-    };
 
-    // Escuchar eventos de actividad del usuario
-    window.addEventListener('mousemove', handleUserActivity);
-    window.addEventListener('scroll', handleUserActivity);
-    window.addEventListener('click', handleUserActivity);
+            // Configura el timeout para iniciar el deslizamiento después de 2 segundos
+            activityTimeout = setTimeout(() => {
+                // Solo desliza el Navbar si el menú y el buscador están cerrados
+                if (!menuOpen && !showInput) {
+                    setIsSliding(true);
+                }
+            }, 2000);
+        };
 
-    return () => {
-        // Limpia los eventos y el timeout al desmontar
-        window.removeEventListener('mousemove', handleUserActivity);
-        window.removeEventListener('scroll', handleUserActivity);
-        window.removeEventListener('click', handleUserActivity);
-        if (activityTimeout) {
-            clearTimeout(activityTimeout);
-        }
-    };
-}, [menuOpen, showInput]);
-// fin headermover
+        // Escuchar eventos de actividad del usuario
+        window.addEventListener('mousemove', handleUserActivity);
+        window.addEventListener('scroll', handleUserActivity);
+        window.addEventListener('click', handleUserActivity);
+
+        return () => {
+            // Limpia los eventos y el timeout al desmontar
+            window.removeEventListener('mousemove', handleUserActivity);
+            window.removeEventListener('scroll', handleUserActivity);
+            window.removeEventListener('click', handleUserActivity);
+            if (activityTimeout) {
+                clearTimeout(activityTimeout);
+            }
+        };
+    }, [menuOpen, showInput]);
+    // fin headermover
 
     const handleMenuClick = () => {
         setMenuOpen(!menuOpen);
@@ -113,8 +117,8 @@ useEffect(() => {
     };
     const line1Ref = useRef(null);
     const line2Ref = useRef(null);
-    
-    
+
+
     //saca el nombre del archivo
     function getFileName(filePath) {
         const fullName = filePath.split('/').pop(); // Obtiene el último segmento de la ruta
@@ -124,38 +128,38 @@ useEffect(() => {
     const brandingImageRef = useRef(null);
     const interiorismoImageRef = useRef(null);
     const arquitecturaImageRef = useRef(null);
-  
-//inicio parallax
+
+    //inicio parallax
 
     useEffect(() => {
-      const imageRefs = [
-        { ref: brandingImageRef, speed: 0.15 },
-        { ref: interiorismoImageRef, speed: 0.15 },
-        { ref: arquitecturaImageRef, speed: 0.15 },
-      ];
-      
-      const handleParallaxEffect = () => {
-        imageRefs.forEach(({ ref, speed }) => {
-          const image = ref.current;
-          if (image) {
-            const rect = image.getBoundingClientRect();
-            const windowHeight = window.innerHeight;
-  
-            if (rect.top < windowHeight && rect.bottom > 0) {
-              const translateY = -(rect.top - windowHeight / 2) * speed;
-              image.style.transform = `translateY(${translateY}px)`;
-            } else {
-              image.style.transform = `translateY(0px)`;
-            }
-          }
-        });
-      };
-  
-      window.addEventListener('scroll', handleParallaxEffect);
-  
-      return () => {
-        window.removeEventListener('scroll', handleParallaxEffect);
-      };
+        const imageRefs = [
+            { ref: brandingImageRef, speed: 0.15 },
+            { ref: interiorismoImageRef, speed: 0.15 },
+            { ref: arquitecturaImageRef, speed: 0.15 },
+        ];
+
+        const handleParallaxEffect = () => {
+            imageRefs.forEach(({ ref, speed }) => {
+                const image = ref.current;
+                if (image) {
+                    const rect = image.getBoundingClientRect();
+                    const windowHeight = window.innerHeight;
+
+                    if (rect.top < windowHeight && rect.bottom > 0) {
+                        const translateY = -(rect.top - windowHeight / 2) * speed;
+                        image.style.transform = `translateY(${translateY}px)`;
+                    } else {
+                        image.style.transform = `translateY(0px)`;
+                    }
+                }
+            });
+        };
+
+        window.addEventListener('scroll', handleParallaxEffect);
+
+        return () => {
+            window.removeEventListener('scroll', handleParallaxEffect);
+        };
     }, []);
 
     // fin parallax
@@ -210,7 +214,7 @@ useEffect(() => {
     const duplicatedLogos = [...logos, ...logos];
     //fin carousel
 
-//Inicio contador animado
+    //Inicio contador animado
     const animateCounter = useCallback((setter, target, duration) => {
         let count = 0;
         const increment = target / (duration / 16);
@@ -359,34 +363,36 @@ useEffect(() => {
         };
     }, []);
     // Fin deslice de cajas
-    // Inicio animación de menú 
-    useEffect(() => {
-        if (menuOpen) {
-            const links = document.querySelectorAll('.menu-link');
-            const dash = document.querySelector('.menu-dash');
-
-            // Espera 3 segundos antes de iniciar las animaciones
-            const timeout = setTimeout(() => {
-                links.forEach((link, index) => {
-                    setTimeout(() => {
-                        link.classList.add('animate-color');
-                        dash.className = `menu-dash ${link.classList[1]}`; // Sincroniza el color del guion
-
-                        setTimeout(() => {
-                            link.classList.remove('animate-color');
-                            if (index === links.length - 1) {
-                                dash.className = 'menu-dash'; // Resetea el guion al final
-                            }
-                        }, 200); // Duración para volver al estado inicial
-                    }, index * 200); // Espaciado entre animaciones
-                });
-            }, 500); // Espera 0.5 segundos para que el menú se abra completamente y haga color al guion
-
-            // Limpia el timeout al desmontar el componente o si `menuOpen` cambia
-            return () => clearTimeout(timeout);
-        }
-    }, [menuOpen]);
-    // Fin animación de menú
+  
+   // Inicio animación de menú 
+  
+          useEffect(() => {
+              if (menuOpen) {
+                  const links = document.querySelectorAll('.menu-link');
+                  const dash = document.querySelector('.menu-dash');
+      
+                  // Espera 3 segundos antes de iniciar las animaciones
+                  const timeout = setTimeout(() => {
+                      links.forEach((link, index) => {
+                          setTimeout(() => {
+                              link.classList.add('animate-color');
+                              dash.className = `menu-dash ${link.classList[1]}`; // Sincroniza el color del guion
+      
+                              setTimeout(() => {
+                                  link.classList.remove('animate-color');
+                                  if (index === links.length - 1) {
+                                      dash.className = 'menu-dash'; // Resetea el guion al final
+                                  }
+                              }, 200); // Duración para volver al estado inicial
+                          }, index * 200); // Espaciado entre animaciones
+                      });
+                  }, 500); // Espera 0.5 segundos para que el menú se abra completamente y haga color al guion
+      
+                  // Limpia el timeout al desmontar el componente o si `menuOpen` cambia
+                  return () => clearTimeout(timeout);
+              }
+          }, [menuOpen]);
+          // Fin animación de menú
 
     // Inicio animación de búsqueda
     const handleSearchClick = () => {
@@ -401,6 +407,7 @@ useEffect(() => {
     const filteredOptions = options.filter(option =>
         option.toLowerCase().includes(searchTerm.toLowerCase())
     );
+    
     // Fin animación de búsqueda
     // Inicio animación de cajas naranja 
 
@@ -488,7 +495,7 @@ useEffect(() => {
     }, []);
     // fin lineas
 
-    
+
     return (
         <div className="home">
 
@@ -508,13 +515,13 @@ useEffect(() => {
                 <button className="mute-button" onClick={toggleMute}>
                     {isMuted ? <FaVolumeMute /> : <FaVolumeUp />}
                 </button>
-                <Navbar 
-                  isSliding={isSliding}
-                  menuOpen={menuOpen}
-                  setMenuOpen={setMenuOpen}
-                  showInput={showInput}
-                  setShowInput={setShowInput} />
-              {/*   <div className={`header-navbar ${isBlurred ? "" : "no-blur"}`}>
+                <Navbar
+                    isSliding={isSliding}
+                    menuOpen={menuOpen}
+                    setMenuOpen={setMenuOpen}
+                    showInput={showInput}
+                    setShowInput={setShowInput} />
+                {/*   <div className={`header-navbar ${isBlurred ? "" : "no-blur"}`}>
                     <div className="header-content">
                         <div className="logo">
                             <img src={logoHorizontal} alt="Logo Horizontal" className="logo-img" />
@@ -541,7 +548,7 @@ useEffect(() => {
 
                 </div> */}
 
-
+{/* 
                 <div className={`search-container ${showInput ? 'search-open' : ''}`}>
                     <div className="search-bar">
                         <input
@@ -566,13 +573,13 @@ useEffect(() => {
                             )}
                         </div>
                     )}
-                </div>
+                </div> */}
 
             </header>
 
 
-            <div className="phrase-section" onClick={goToStudio}>
-                <span className="phrase-line"> We are a </span>
+            <div className="phrase-section-home" onClick={goToStudio}>
+                <span className="phrase-line"> We are a </span> <br />
                 <span className="phrase-line"> design studio </span>
             </div>
             <div className="full-square">
@@ -582,15 +589,15 @@ useEffect(() => {
                         alt="Branding 1"
                         className="parallax-image"
                         ref={brandingImageRef}
-
+                        onClick={()=>{goToProject(1)}}
                     />
                 </div>
-                    <div className="image-label-home">
-                        {getFileName(branding1)}
-                    </div>
-                    <div className="image-label-star"> 
-                    <img src={starImage} alt="Star" className="star-image-foto" onClick={goToAwardsAndPress}/>
-                    </div>
+                <div className="image-label-home">
+                    {getFileName(branding1)}
+                </div>
+                <div className="image-label-star">
+                    <img src={starImage} alt="Star" className="star-image-foto" onClick={goToAwardsAndPress} />
+                </div>
             </div>
 
 
@@ -662,14 +669,16 @@ useEffect(() => {
                             alt="Interiorismo 1"
                             className="parallax-image"
                             ref={interiorismoImageRef}
+                        onClick={()=>{goToProject(2)}}
+
                         />
                         {/* Muestra el nombre del archivo */}
                     </div>
-                        <div className="image-label-home">
-                            {getFileName(interiorismo1)}
-                        </div>
-                        <div className="image-label-star"> 
-                    <img src={starImage} alt="Star" className="star-image-foto" onClick={goToAwardsAndPress}/>
+                    <div className="image-label-home">
+                        {getFileName(interiorismo1)}
+                    </div>
+                    <div className="image-label-star">
+                        <img src={starImage} alt="Star" className="star-image-foto" onClick={goToAwardsAndPress} />
                     </div>
                 </div>
 
@@ -691,24 +700,24 @@ useEffect(() => {
                     <div
                         className={`quadrant green-box ${slideBoxes ? 'slide-green' : ''}`}
                     >
-                        <img  src={starImage} alt="Star" className="star-image" onClick={goToAwardsAndPress} />
+                        <img src={starImage} alt="Star" className="star-image" onClick={goToAwardsAndPress} />
                     </div>
                     <div onClick={goToAwardsAndPress} className="quadrant white-box-estrella">
-                        <span  className="text-Awards">Awards</span>
+                        <span className="text-Awards">Awards</span>
                     </div>
                 </div>
 
 
                 <div className="full-square">
-                <div className="parallax-wrapper">
+                    <div className="parallax-wrapper">
 
-                    <img ref={arquitecturaImageRef} src={arquitectura1} alt="Architecture 1" className="parallax-image" />
-                </div>
+                        <img ref={arquitecturaImageRef} src={arquitectura1} alt="Architecture 1" className="parallax-image" />
+                    </div>
                     <div className="image-label-home">
                         {getFileName(arquitectura1)}
                     </div>
-                    <div className="image-label-star"> 
-                    <img src={starImage} alt="Star" className="star-image-foto" />
+                    <div className="image-label-star">
+                        <img src={starImage} alt="Star" className="star-image-foto" />
                     </div>
                 </div>
 
@@ -717,7 +726,7 @@ useEffect(() => {
                         className={`custom-orange-box ${slideStudioBox ? 'custom-slide-orange' : ''}`}
                         ref={slideStudioBoxRef} onClick={goToStudio}
                     >
-                        <img src={groupImage} alt="Group Icon" className="icon-image" onClick={goToStudio}/>
+                        <img src={groupImage} alt="Group Icon" className="icon-image" onClick={goToStudio} />
 
                     </div>
                     <div onClick={goToStudio}
@@ -748,19 +757,19 @@ useEffect(() => {
                     </div>
                 </div> */}
                 <div className="horizontal-double-team" >
-                    <img src={teamImage} alt="Team" className="horizontal-image-team"  onClick={goToStudio}/>
+                    <img src={teamImage} alt="Team" className="horizontal-image-team" onClick={goToStudio} />
 
                 </div>
             </section>
 
             <section className="content-section">
                 <div className="button-container">
-                    <a href="/projectsHome" className="custom-button">
-                        <span> check our  <strong> projects </strong></span>
+                    <a className="custom-button-end">
+                        <span onClick={goToProjects}> check our  <strong> projects </strong></span>
                     </a>
                 </div>
-                 <div className="button-container-clients">
-                 {/*   <div className="carousel-container">
+                <div className="button-container-clients">
+                    {/*   <div className="carousel-container">
                         <div className="carousel-track">
                             {duplicatedLogos.map((logo, index) => (
                                 <div key={index} className="carousel-item">
@@ -773,9 +782,9 @@ useEffect(() => {
                             ))}
                         </div>
                     </div>*/}
-                <CarouselLogos duplicatedLogos={[...logos, ...logos]} />
-                </div> 
-                <ContactFooter  />
+                  <CarouselLogos logos={logos} />
+                </div>
+                <ContactFooter />
             </section>
         </div>
     );

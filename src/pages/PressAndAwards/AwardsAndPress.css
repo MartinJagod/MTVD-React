@@ -37,12 +37,12 @@
     overflow-x: auto;
     overflow-y: hidden;
     scroll-behavior: smooth;
-    gap:25px;
+    gap:30px;
     height: 550px;
 
   }
   
-  .timeline-line {
+ /*  .timeline-line {
     position: absolute;
     height: 1px;
     width: 1000%;
@@ -50,8 +50,27 @@
     top: 50%;
     z-index: -1;
     
-  }
-  
+  } */
+  .timeline-line {
+    position: absolute;
+    height: 1px;
+    width: 0; /* Iniciamos con 0 de ancho */
+    background-color: #333;
+    top: 50%;
+    z-index: -1;
+    animation: drawLine 25s ease-in-out forwards; /* Aumentamos la duración */
+}
+
+@keyframes drawLine {
+    from {
+        width: 0; /* Comienza sin ancho */
+    }
+    to {
+        width: 1000%; /* Se extiende al tamaño deseado */
+    }
+}
+
+
   .timeline-item {
     position: relative;
     flex-shrink: 0;
@@ -74,7 +93,7 @@
   .timeline-hito-year{
     font-size: 55px;
     font-weight: 850;
-    margin-bottom: 10px;
+    margin-bottom: 30px;
     padding-right: 3px;
     text-align: left;
     line-height: 1;;
@@ -84,7 +103,7 @@
     font-size: 20px;
     font-weight: bold;
     margin-bottom: 10px;
-    padding-right: 3px;
+    padding-right: 0px;
     text-align: left;
     line-height: 1;
     white-space: normal; /* Permite que el texto haga salto de línea */
@@ -117,11 +136,10 @@
     height: 180px;
     object-fit: fill;
   }
-  
   .timeline-notes {
     list-style: none;
     padding: 5px;
-    margin: 10px 0 0 0;
+    margin: 51px 0 0 0;
     font-size: 10px;
     color: #555;
     text-align: right;
@@ -130,6 +148,7 @@
   .timeline-note {
     margin-bottom: 5px;
   }
+  
   
   /* Scrollbar customization */
   .timeline-horizontal::-webkit-scrollbar {
@@ -147,18 +166,18 @@
     left: 1px; /* Ajuste para posicionarlo justo al inicio */
     transform: translateY(-50%);
     z-index: 2; /* Asegura que esté por encima de la línea */
-}
-
-.awards-and-press-background {
-  position: absolute; /* Permite el movimiento */
-  top: 0;
-  left: 0;
+  }
+  
+  .awards-and-press-background {
+    position: absolute; /* Permite el movimiento */
+    top: 0;
+    left: 0;
   width: 1000%; /* Cubre todo el ancho de la línea de tiempo */
   height: 550px; /* Ocupa toda la altura del viewport */
   background-size: auto 100%; /* Mantiene la proporción de la imagen */
   background-repeat: repeat-x; /* Repetición horizontal */
   z-index: -1; /* Envía el fondo detrás del contenido */
-  opacity: 0.2; /* Transparencia */
+  opacity: 0.1; /* Transparencia */
 }
 .timeline-horizontal {
   position: relative;
@@ -177,6 +196,7 @@
   width: 100%;
   object-fit: cover; /* Escala la imagen para cubrir el contenedor */
   display: block; /* Elimina espacios blancos alrededor de la imagen */
+  border-radius: 10px;
 }
 
 .above{
@@ -187,6 +207,45 @@
   justify-content: flex-end;
 }
 
+.below .timeline-third-section ul.timeline-notes {
+  margin: 0 0 51px 0 !important;
+}
+
 .timeline-item{
-  height: 350px;
+  height: 400px;
+}
+
+.below .timeline-hito-year{
+  margin-top: 30px;
+}
+/* Línea de tiempo animada */
+.timeline-line {
+  position: absolute;
+  height: 1px;
+  width: 0; /* inicia en 0 */
+  background-color: #333;
+  top: 50%;
+  z-index: -1;
+  animation: drawLine 45s ease-in-out forwards;
+}
+
+@keyframes drawLine {
+  from { width: 0; }
+  to { width: 1000%; } /* ajusta según tu diseño */
+}
+
+/* Los elementos empiezan ocultos */
+.timeline-item,
+.timeline-hito {
+  opacity: 0;
+}
+
+/* Animación fade-in */
+.fade-in {
+  animation: fadeIn 1s ease forwards;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0 }
+  to { opacity: 1 }
 }

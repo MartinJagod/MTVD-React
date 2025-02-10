@@ -163,4 +163,22 @@ a {
       transform: translateY(0);
     }
   }
+  .carousel-container-projectsHome {
+    display: flex;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    cursor: grab;
+    user-select: none;
+    white-space: nowrap;
+    padding: 10px 0;
+  }
+  
+  .carousel-item-projectsHome {
+    margin: 0 10px;
+    transition: transform 0.3s ease-out;
+  }
+  
+  .carousel-container-projectsHome:active {
+    cursor: grabbing;
+  }
   

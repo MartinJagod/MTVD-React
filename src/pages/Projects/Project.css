@@ -10,16 +10,7 @@ body {
 }
 
 /* 1. Primera sección: Encabezado */
-.home-header {
-  position: absolute; /* Fija el header al viewport */
-  top: 0;
-  left: 0;
-  width: 100%; /* Ocupa todo el ancho */
-  height: 70vh; /* Ocupa toda la altura visible del viewport */
-  background-size: cover; /* Ajusta la imagen de fondo para cubrir el contenedor */
-  background-position: center; /* Centra la imagen de fondo */
-  background-repeat: no-repeat;
-}
+
 .header-navbar {
   position: fixed; /* Fija el header al viewport */
   top: 0;
@@ -150,8 +141,8 @@ body {
   color: #333;
   padding-top: 0px;
   font-size: 20px; /* Tamaño de fuente más pequeño para la palabra "projects" */
-  align-items: center; 
-  /* padding-left: 23px; */
+  align-items: start; 
+  padding-left: 16px;
 }
 .yellow-box {
   background-color: #ffffff;
@@ -236,11 +227,14 @@ body {
 }
 
 .project-label {
-  font-size: 12px; /* Tamaño de fuente más pequeño para la palabra "projects" */
+  font-size: 15px; /* Tamaño de fuente más pequeño para la palabra "projects" */
   font-weight: 400;
+  margin: 0;
+
 }
 
 .project-box {
+  font-family: "Montserrat";
   font-size: 25px;
   font-weight: 700;
   /* padding-left: 27px; */
@@ -330,7 +324,7 @@ body {
   width: 30px; /* Ancho de la línea */
   height: 4px; /* Altura de la línea */
   background-color: #FD7E40; /* Color de la línea */
-  animation: moveLine 0.25s linear forwards; /* Animación de la línea */
+  animation: moveLine 3s linear ; /* Animación de la línea */
  
   z-index: 2000;
 }
@@ -340,7 +334,7 @@ body {
     transform: translateX(43vw); /* Comienza desde la derecha de la pantalla */
   }
   100% {
-    transform: translateX(-31.5vw); /* Se mueve hasta el extremo derecho de la pantalla */
+    transform: translateX(-38vw); /* Se mueve hasta el extremo derecho de la pantalla */
   }
 }
 
@@ -350,10 +344,9 @@ body {
   right: 0; /* Comienza desde la izquierda */
   width: 30px; /* Ancho de la línea */
   height: 4px; /* Altura de la línea */
-  background-color: #FEC93A; /* Color de la línea */
-  animation: moveLine2 0.25s linear forwards; /* Animación de la línea */
+  background-color: #44B87E; /* Color de la línea */
+  animation: moveLine2 1s linear forwards; /* Animación de la línea */
   
-  z-index: 2000;
 }
 
 @keyframes moveLine2 {
@@ -362,6 +355,26 @@ body {
   }
   100% {
     transform: translateX(18.5vw); /* Se mueve hasta el extremo derecho de la pantalla */
+  }
+}
+
+.moving-line3 {
+  position: absolute;
+  bottom: 20px; /* Ajusta la posición vertical dentro del cuadrante */
+  right: 0; /* Comienza desde la izquierda */
+  width: 30px; /* Ancho de la línea */
+  height: 4px; /* Altura de la línea */
+  background-color: #44B87E; /* Color de la línea */
+  animation: moveLine3 2s linear forwards; /* Animación de la línea */
+  
+}
+
+@keyframes moveLine3 {
+  0% {
+    transform: translateX(-95vw); /* Comienza desde la derecha de la pantalla */
+  }
+  100% {
+    transform: translateX(-43vw); /* Se mueve hasta el extremo derecho de la pantalla */
   }
 }
 
@@ -484,6 +497,17 @@ body {
   overflow: hidden;
   transition: transform 0.5s ease-in-out;
 }
+.yellow-box {
+  background-color: #FEC93A; /* Color verde */
+  color: #ffffff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  overflow: hidden;
+  transition: transform 0.5s ease-in-out;
+}
+
 .green-box.slide-green {
   transform: translateX(100%); /* Desliza el cuadro verde hacia la derecha */
 }
@@ -549,10 +573,22 @@ body {
   font-weight: 600;
 }
 
-.project-label {
-  font-size: 20px;
+.project-label-project {
+  font-size: 15px;
   font-weight: 600;
-  padding-left: 20px;
+}
+.project-label-project2 {
+  font-size: 15px;
+  font-weight: 600;
+  margin-left: -85px;
+}
+.project-label-small {
+  font-size: 8px;
+  font-weight: 600;
+}
+.project-label-normal {
+  font-size: 13px;
+  font-weight: 600;
 }
 .vertical-double-container {
   display: flex;
@@ -613,7 +649,7 @@ body {
   justify-content: center;
   align-items: center;
   overflow: hidden;
-  z-index: 1002;
+  z-index: 0;
 }
 
 .horizontal-image-team {
@@ -841,7 +877,7 @@ body {
 }
 .phrase-section {
   position: relative;
-  z-index: 2;
+  z-index: 0;
   padding: 20px;
   background-color: #ffffff; /* Fondo claro */
   text-align: center;
@@ -853,7 +889,6 @@ body {
   justify-content: center; /* Centra horizontalmente */
   align-items: center; /* Centra verticalmente */
   flex-wrap: nowrap; /* Evita saltos de línea por defecto */
-  margin-top: 70vh; /* Empuja esta sección debajo del header fijo */
 }
 
 .phrase-line {
@@ -873,7 +908,6 @@ body {
   .phrase-line {
     white-space: normal; /* Permite saltos de línea */
     font-size: 9vw; /* Ajusta el tamaño del texto para móviles */
-    margin: 0.5rem 0; /* Agrega espacio vertical entre líneas */
   }
 }
 
@@ -1060,7 +1094,8 @@ body {
 }
 /* Estilos base */
 .menu-link {
-  color: #ffffff; /* Blanco inicial */
+  font-weight: 400;
+  color: #ffffff;
   text-decoration: none;
   font-size: 23px;
   font-family: 'Montserrat', sans-serif;
@@ -1144,14 +1179,15 @@ body {
 }
 
 .parallax-image {
-  width: 300vw;
+  width: 120vw;
   position: relative; /* Asegura que el contenedor esté posicionado */
-  left: -50%; /* Mueve el contenedor hacia el centro */
+  left: -15%; /* Mueve el contenedor hacia el centro */
   top: 0;
   background-position: center center; /* Centra la imagen de fondo */
   transform: translateY(0); /* Escala inicial ligeramente mayor */
   transition: transform 0.1s ease-out; /* Suavidad en el movimiento */
   will-change: transform; /* Optimización para animaciones */
+  
 }
 
 .parallax-wrapper {
@@ -1170,7 +1206,7 @@ body {
   height: 50vh;
   background-color: #3c3c3c;
   border-bottom-left-radius: 20px;
-  z-index: 1000; /* Asegura que esté por encima de todo */
+  z-index: 999; /* Asegura que esté por encima de todo */
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -1183,6 +1219,7 @@ body {
 }
 
 .hamburger-menu.menu-open {
+  max-width: 240px;
   transform: translatex(0); /* Mueve el menú hacia dentro */
 }
 
@@ -1196,7 +1233,7 @@ body {
   background-color: #44B87E;
   top: 0;
   right: 0vw; /* Inicialmente en la derecha */
-  z-index: 2; /* Encima del white-box */
+  z-index: 0; /* Encima del white-box */
 }
 
 .slide-green {
@@ -1271,6 +1308,192 @@ body {
   opacity: 0;
 }
 .menu-close-icon{
+  color: #bbb;
+  padding: 4px;
+  font-size: 16px;
   z-index: 1002;
 }
+.container-image-small-projet{
+  width: 50vw;
+  height: 50vw;
+}
+.image-small-projet{
+  width: 50vw;
+  height: 50vw;
+  object-fit: initial;
+  background-position: center center; /* Centra la imagen de fondo */
 
+} 
+
+
+.vertical-half-square {
+  width: 50vw;
+  height: 100vw;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow: hidden;
+  position: relative;
+  background-color: #ffffff;
+}
+.half-parallax-image {
+  width: 120vw;
+  position: relative; /* Asegura que el contenedor esté posicionado */
+  left: -15%; /* Mueve el contenedor hacia el centro */
+  top: -30%;
+  transform: translateY(0); /* Escala inicial ligeramente mayor */
+  transition: transform 0.1s ease-out; /* Suavidad en el movimiento */
+  will-change: transform; /* Optimización para animaciones */
+  
+}
+
+.half-parallax-wrapper {
+  overflow: hidden;
+  /*   position: relative;
+  width: 100%;
+  height: 100%; */
+  perspective: 1px; /* Simula profundidad */
+}
+.project-title {
+  font-size: 4.5vw;
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+
+.project-text {
+  margin-top: 20px;
+  padding: 20px;
+  text-align: left;
+}
+
+.project-box-frase{
+  padding: 20px;
+  font-size: 4.5vw;
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+
+.moving-line5 {
+  position: absolute;
+  z-index: 2000;
+  bottom: 20px; /* Ajusta la posición vertical dentro del cuadrante */
+  right: 0; /* Comienza desde la izquierda */
+  width: 30px; /* Ancho de la línea */
+  height: 4px; /* Altura de la línea */
+  background-color: #FD7E40; /* Color de la línea */
+  animation: moveLine5 2s linear forwards; /* Animación de la línea */
+  
+}
+
+@keyframes moveLine5 {
+  0% {
+    transform: translateX(-10vw); /* Comienza desde la derecha de la pantalla */
+  }
+  100% {
+    transform: translateX(-40vw); /* Se mueve hasta el extremo derecho de la pantalla */
+  }
+}
+.gallery {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.thumbnail {
+  width: 150px;
+  height: auto;
+  cursor: pointer;
+  transition: transform 0.2s ease-in-out;
+}
+
+.thumbnail:hover {
+  transform: scale(1.1);
+}
+
+.popup-modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 80%;
+  max-width: 800px;
+  border-radius: 10px;
+  z-index: 1000;
+  border: none;
+}
+
+.close-btn {
+  position: absolute;
+ right: 10px;
+ top:-20px; 
+  color: black;
+  border: none;
+  cursor: pointer;
+  font-size: 20px;
+}
+
+.carousel-image {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+  border:none;
+}
+.swiper-wrapper {
+  border: none;
+} 
+.swiper-slide {
+  border: none;
+  border-radius: 15px;
+
+} 
+
+.swiper {
+  border: none;
+  border-radius: 15px;
+
+} 
+/* Asegura que el modal no tenga bordes ni fondo */
+.popup-modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 80%;
+  max-width: 800px;
+  background: transparent !important; /* 🔹 Hace que el modal no tenga fondo */
+  padding: 0;
+  border: none !important;
+  box-shadow: none !important;
+  outline: none !important; /* 🔹 Elimina cualquier borde del modal */
+  border-radius: 15px;
+
+}
+
+/* Asegura que el Swiper no tenga bordes ni fondo negro */
+.swiper {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  border-radius: 15px;
+
+}
+
+/* Centra el contenido del Swiper en la pantalla */
+.swiper-slide {
+  display: flex;
+  justify-content: center; /* 🔹 Centra horizontalmente */
+  align-items: center; /* 🔹 Centra verticalmente */
+  height: 80vh; /* 🔹 Ajusta la altura del carrusel */
+  background: transparent !important;
+  border-radius: 15px;
+
+}
+
+/* Ajusta la imagen para que se centre y no se deforme */
+.carousel-image {
+  max-width: 100%;
+  max-height: 100%;
+
+  object-fit: contain; /* 🔹 Evita que la imagen se recorte */
+  border-radius: 15px;
+}

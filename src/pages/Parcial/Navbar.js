@@ -11,9 +11,9 @@ const Navbar = ({ isSliding, menuOpen, setMenuOpen, showInput, setShowInput }) =
     const [searchTerm, setSearchTerm] = useState('');
     const [filteredOptions, setFilteredOptions] = useState([]);
     const options = ['Architecture', 'Awards', 'Asphalt', 'Aluminum', 'Aggregate', 'Asbestos', 'Adhesive', 'Anchor', 'Acrylic', 'Acoustic'];
-    
-    const location = useLocation(); // Detecta la ruta actual
-    const isHome = location.pathname === '/'; // Verifica si estás en el home
+
+    const location = useLocation();
+    const isHome = location.pathname === '/';
 
     // Referencias para el menú y el buscador
     const menuRef = useRef(null);
@@ -21,45 +21,44 @@ const Navbar = ({ isSliding, menuOpen, setMenuOpen, showInput, setShowInput }) =
 
     useEffect(() => {
         const handleScroll = () => {
-            if (window.scrollY > 50) {
-                setIsBlurred(true);
-            } else {
-                setIsBlurred(false);
-            }
+            setIsBlurred(window.scrollY > 50);
         };
         window.addEventListener('scroll', handleScroll);
-
-        return () => {
-            window.removeEventListener('scroll', handleScroll);
-        };
+        return () => window.removeEventListener('scroll', handleScroll);
     }, []);
 
     useEffect(() => {
         const handleClickOutside = (event) => {
+            // Si el menú está abierto y el clic no fue dentro del menú, cerrarlo
             if (menuOpen && menuRef.current && !menuRef.current.contains(event.target)) {
                 setMenuOpen(false);
             }
 
+            // Si el buscador está abierto y el clic no fue dentro del buscador, cerrarlo
             if (showInput && searchRef.current && !searchRef.current.contains(event.target)) {
                 setShowInput(false);
+                setSearchTerm('');
             }
         };
 
         document.addEventListener('mousedown', handleClickOutside);
-        return () => {
-            document.removeEventListener('mousedown', handleClickOutside);
-        };
-    }, [menuOpen, showInput, setMenuOpen, setShowInput]);
+        return () => document.removeEventListener('mousedown', handleClickOutside);
+    }, [menuOpen, showInput]);
 
     const handleSearchClick = (event) => {
         event.stopPropagation(); // Detiene la propagación del evento al manejador global
-        setShowInput(!showInput);
+        setShowInput(prevState => !prevState);
+        if (!showInput) {
+            setSearchTerm('');
+        }
     };
 
     const handleInputChange = (e) => {
         const term = e.target.value;
         setSearchTerm(term);
-        setFilteredOptions(options.filter((opt) => opt.toLowerCase().includes(term.toLowerCase())));
+        setFilteredOptions(
+            options.filter((opt) => opt.toLowerCase().includes(term.toLowerCase()))
+        );
     };
 
     const toggleMenu = () => {
@@ -67,18 +66,16 @@ const Navbar = ({ isSliding, menuOpen, setMenuOpen, showInput, setShowInput }) =
     };
 
     const toggleSearch = () => {
-        setShowInput(!showInput);
+        setShowInput(false);
+        setSearchTerm('');
     };
 
     // Determina qué logo usar y el color de los íconos basado en la ruta actual
-    const logo = location.pathname === '/' ? logoHorizontal : logoHorizontalBlack;
-    const iconColor = location.pathname === '/' ? 'white' : 'black';
+    const logo = isHome ? logoHorizontal : logoHorizontalBlack;
+    const iconColor = isHome ? 'white' : 'black';
 
     return (
-        <div     className={`header-navbar ${isBlurred ? '' : 'no-blur'} ${isSliding ? 'navbar-slide-up' : ''} ${
-            isHome ? 'navbar-home' : 'navbar-other'
-        }`}
-    >
+        <div className={`header-navbar ${isBlurred ? '' : 'no-blur'} ${isSliding ? 'navbar-slide-up' : ''} ${isHome ? 'navbar-home' : 'navbar-other'}`}>
             <div className="header-content">
                 <Link to="/">
                     <img src={logo} alt="Logo Horizontal" className="logo-img" />
@@ -87,12 +84,12 @@ const Navbar = ({ isSliding, menuOpen, setMenuOpen, showInput, setShowInput }) =
                     <FaSearch
                         className="search-icon-home"
                         onClick={handleSearchClick}
-                        style={{ color: iconColor }} // Cambia el color del ícono
+                        style={{ color: iconColor }}
                     />
                     <span
                         className="icon"
                         onClick={toggleMenu}
-                        style={{ color: iconColor }} // Cambia el color del ícono
+                        style={{ color: iconColor }}
                     >
                         ☰
                     </span>
@@ -126,7 +123,7 @@ const Navbar = ({ isSliding, menuOpen, setMenuOpen, showInput, setShowInput }) =
                     />
                     <span className="menu-close-icon" onClick={toggleSearch}>✖</span>
                 </div>
-                {searchTerm && (
+                {showInput && searchTerm && (
                     <div className="search-menu">
                         {filteredOptions.length > 0 ? (
                             <ul>
@@ -145,3 +142,4 @@ const Navbar = ({ isSliding, menuOpen, setMenuOpen, showInput, setShowInput }) =
 };
 
 export default Navbar;
+

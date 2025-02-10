@@ -1,79 +1,84 @@
-import React, { useRef, useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import "./CarouselLogos.css";
 
-const CarouselLogos = ({ duplicatedLogos }) => {
+const CarouselLogos = ({ logos }) => {
+  const [logoList, setLogoList] = useState([...logos, ...logos]); // Duplicamos los logos para el scroll infinito
   const trackRef = useRef(null);
-  const [isDragging, setIsDragging] = useState(false); // Manejo del estado del arrastre
-  const [startX, setStartX] = useState(0);
-  const [scrollLeft, setScrollLeft] = useState(0);
+  const isDragging = useRef(false);
+  const startX = useRef(0);
+  const scrollLeft = useRef(0);
+  const autoScroll = useRef(null);
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      if (trackRef.current && !isDragging) {
-        trackRef.current.scrollLeft += 1; // Velocidad del desplazamiento automático
-        if (trackRef.current.scrollLeft >= trackRef.current.scrollWidth / 2) {
-          trackRef.current.scrollLeft = 0; // Reinicia el desplazamiento
-        }
+    startAutoScroll();
+    return () => clearInterval(autoScroll.current);
+  }, []);
+
+  const startAutoScroll = () => {
+    clearInterval(autoScroll.current);
+    autoScroll.current = setInterval(() => {
+      if (!isDragging.current) {
+        moveLogos();
       }
-    }, 10);
+    }, 2000); // Ajusta la velocidad del desplazamiento automático
+  };
 
-    return () => {
-      clearInterval(interval); // Limpia el intervalo al desmontar
-    };
-  }, [isDragging]);
+  const moveLogos = () => {
+    if (trackRef.current) {
+      trackRef.current.style.transition = "transform 0.5s ease-in-out";
+      trackRef.current.style.transform = "translateX(-15vw)"; // Mueve el track
 
+      setTimeout(() => {
+        setLogoList((prev) => {
+          const [first, ...rest] = prev;
+          return [...rest, first]; // Mueve el primer logo al final
+        });
+
+        trackRef.current.style.transition = "none";
+        trackRef.current.style.transform = "translateX(0)";
+      }, 500); // Espera a que termine la animación antes de actualizar el array
+    }
+  };
+
+  // 🖱️ Manejo del arrastre con mouse
   const handleMouseDown = (e) => {
-    if (!trackRef.current) return;
-    setIsDragging(true);
-    setStartX(e.pageX - trackRef.current.offsetLeft);
-    setScrollLeft(trackRef.current.scrollLeft);
+    isDragging.current = true;
+    startX.current = e.pageX - trackRef.current.offsetLeft;
+    scrollLeft.current = trackRef.current.scrollLeft;
     trackRef.current.style.cursor = "grabbing";
+    clearInterval(autoScroll.current);
   };
 
   const handleMouseMove = (e) => {
-    if (!isDragging || !trackRef.current) return;
-    const x = e.pageX - trackRef.current.offsetLeft;
-    const walk = (x - startX) * 2; // Ajusta la velocidad del desplazamiento manual
-    trackRef.current.scrollLeft = scrollLeft - walk;
+    if (!isDragging.current) return;
+    const moveX = e.pageX - startX.current;
+    trackRef.current.scrollLeft = scrollLeft.current - moveX;
   };
 
   const handleMouseUp = () => {
-    if (!trackRef.current) return;
-    setIsDragging(false);
+    isDragging.current = false;
     trackRef.current.style.cursor = "grab";
+    startAutoScroll();
   };
 
+  // 📱 Manejo del arrastre táctil
   const handleTouchStart = (e) => {
-    if (!trackRef.current) return;
-    setIsDragging(true);
-    setStartX(e.touches[0].pageX - trackRef.current.offsetLeft);
-    setScrollLeft(trackRef.current.scrollLeft);
+    isDragging.current = true;
+    startX.current = e.touches[0].pageX - trackRef.current.offsetLeft;
+    scrollLeft.current = trackRef.current.scrollLeft;
+    clearInterval(autoScroll.current);
   };
 
   const handleTouchMove = (e) => {
-    if (!isDragging || !trackRef.current) return;
-    const x = e.touches[0].pageX - trackRef.current.offsetLeft;
-    const walk = (x - startX) * 2; // Ajusta la velocidad del desplazamiento manual
-    trackRef.current.scrollLeft = scrollLeft - walk;
+    if (!isDragging.current) return;
+    const moveX = e.touches[0].pageX - startX.current;
+    trackRef.current.scrollLeft = scrollLeft.current - moveX;
   };
 
   const handleTouchEnd = () => {
-    setIsDragging(false);
+    isDragging.current = false;
+    startAutoScroll();
   };
-
-  useEffect(() => {
-    const handleResize = () => {
-      if (trackRef.current) {
-        trackRef.current.scrollLeft = 0; // Reinicia la posición en caso de redimensionamiento
-      }
-    };
-
-    window.addEventListener("resize", handleResize);
-
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
-  }, []);
 
   return (
     <div className="carousel-container">
@@ -88,7 +93,7 @@ const CarouselLogos = ({ duplicatedLogos }) => {
         onTouchMove={handleTouchMove}
         onTouchEnd={handleTouchEnd}
       >
-        {duplicatedLogos.map((logo, index) => (
+        {logoList.map((logo, index) => (
           <div key={index} className="carousel-item">
             <img src={logo} alt={`Logo ${index}`} className="logo-image" />
           </div>
@@ -99,3 +104,4 @@ const CarouselLogos = ({ duplicatedLogos }) => {
 };
 
 export default CarouselLogos;
+

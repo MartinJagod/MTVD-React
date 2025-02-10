@@ -1,15 +1,49 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState, useRef, useCallback } from 'react';
+import { useNavigate } from "react-router-dom";
+
 import Navbar from "../Parcial/Navbar";
 import ContactFooter from "../Parcial/ContactFooter";
 import "./contact.css";
 
 
 const Contact = () => {
+     // Inicio animación de menú 
+                 const [menuOpen, setMenuOpen] = useState(false);
+                 const [searchTerm, setSearchTerm] = useState('');
+                 const navigate = useNavigate();
+                 const options = ['Architecture', 'Awards', 'Asphalt', 'Aluminum', 'Aggregate', 'Asbestos', 'Adhesive', 'Anchor', 'Acrylic', 'Acoustic'];
+         
+            useEffect(() => {
+                if (menuOpen) {
+                    const links = document.querySelectorAll('.menu-link');
+                    const dash = document.querySelector('.menu-dash');
+        
+                    // Espera 3 segundos antes de iniciar las animaciones
+                    const timeout = setTimeout(() => {
+                        links.forEach((link, index) => {
+                            setTimeout(() => {
+                                link.classList.add('animate-color');
+                                dash.className = `menu-dash ${link.classList[1]}`; // Sincroniza el color del guion
+        
+                                setTimeout(() => {
+                                    link.classList.remove('animate-color');
+                                    if (index === links.length - 1) {
+                                        dash.className = 'menu-dash'; // Resetea el guion al final
+                                    }
+                                }, 200); // Duración para volver al estado inicial
+                            }, index * 200); // Espaciado entre animaciones
+                        });
+                    }, 500); // Espera 0.5 segundos para que el menú se abra completamente y haga color al guion
+        
+                    // Limpia el timeout al desmontar el componente o si `menuOpen` cambia
+                    return () => clearTimeout(timeout);
+                }
+            }, [menuOpen]);
+            // Fin animación de menú
     //inicio headermover
     const [isSliding, setIsSliding] = useState(false); // Controla el deslizamiento del Navbar
     let activityTimeout = null;
       const [showInput, setShowInput] = useState(false);
-          const [menuOpen, setMenuOpen] = useState(false);
     useEffect(() => {
         const handleUserActivity = () => {
             setIsSliding(false); // Detiene el deslizamiento si hay actividad
@@ -24,7 +58,7 @@ const Contact = () => {
                 if (!menuOpen && !showInput) {
                     setIsSliding(true);
                 }
-            }, 2000);
+            }, 10000);
         };
     
         // Escuchar eventos de actividad del usuario
@@ -46,21 +80,17 @@ const Contact = () => {
         <div className="contact-page">
             {/* Navbar */}
             <header className="contact-header">
-            <Navbar
-                menuOpen={menuOpen}
-                setMenuOpen={setMenuOpen} // Se pasa correctamente como prop
-                showInput={showInput}
-                setShowInput={setShowInput}
+            <Navbar isSliding={isSliding}
+                    menuOpen={menuOpen}
+                    setMenuOpen={setMenuOpen}
+                    showInput={showInput}
+                    setShowInput={setShowInput}
             />
             </header>
 
             {/* Main Content */}
             <main className="contact-main">
-                <h2 className="contact-title">
-                    Complete the <br />
-                    form and write to us. <br />
-                    <span className="contact-highlight">We will contact you.</span>
-                </h2>
+             
 
                 {/* Formulario */}
                 <form className="contact-form">

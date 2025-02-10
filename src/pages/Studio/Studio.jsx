@@ -1,108 +1,136 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState, useRef, useCallback } from 'react';
+import { useNavigate } from "react-router-dom";
 
 import Navbar from '../Parcial/Navbar';
 import ContactFooter from '../Parcial/ContactFooter';
-import './studio.css'; // Agrega estilos personalizados para esta vista
+import './studio.css'; 
 import equipo from '../../assets/images/equipo.jpg';
 import socios from '../../assets/images/socios.jpg';
 import interiorismo from '../../assets/images/interiorismo.jpg';
 import arquitectura from '../../assets/images/arquitectura.jpg';
-import support from '../../assets/images/support.jpg'; // Cambiado de administración a support
-import pms from '../../assets/images/pms.jpg'; // Cambiado de marketing a pms
+import support from '../../assets/images/support.jpg'; 
+import pms from '../../assets/images/pms.jpg'; 
 import CarouselLogos from "../Parcial/CarouselLogos";
 
 const Studio = () => {
-    //inicio headermover
-    const [isSliding, setIsSliding] = useState(false); // Controla el deslizamiento del Navbar
-    let activityTimeout = null;
-    const [showInput, setShowInput] = useState(false);
-    const [menuOpen, setMenuOpen] = useState(false);
-    useEffect(() => {
-        const handleUserActivity = () => {
-            setIsSliding(false); // Detiene el deslizamiento si hay actividad
+  
+    // Inicio animación de menú 
+        const [showInput, setShowInput] = useState(false);
+        const [menuOpen, setMenuOpen] = useState(false);
+        const [searchTerm, setSearchTerm] = useState('');
+        const navigate = useNavigate();
+        const [isSliding, setIsSliding] = useState(false); // Controla el deslizamiento del Navbar
+        const options = ['Architecture', 'Awards', 'Asphalt', 'Aluminum', 'Aggregate', 'Asbestos', 'Adhesive', 'Anchor', 'Acrylic', 'Acoustic'];
 
-            if (activityTimeout) {
-                clearTimeout(activityTimeout);
+        useEffect(() => {
+            if (menuOpen) {
+                const links = document.querySelectorAll('.menu-link');
+                const dash = document.querySelector('.menu-dash');
+    
+                // Espera 3 segundos antes de iniciar las animaciones
+                const timeout = setTimeout(() => {
+                    links.forEach((link, index) => {
+                        setTimeout(() => {
+                            link.classList.add('animate-color');
+                            dash.className = `menu-dash ${link.classList[1]}`; // Sincroniza el color del guion
+    
+                            setTimeout(() => {
+                                link.classList.remove('animate-color');
+                                if (index === links.length - 1) {
+                                    dash.className = 'menu-dash'; // Resetea el guion al final
+                                }
+                            }, 200); // Duración para volver al estado inicial
+                        }, index * 200); // Espaciado entre animaciones
+                    });
+                }, 500); // Espera 0.5 segundos para que el menú se abra completamente y haga color al guion
+    
+                // Limpia el timeout al desmontar el componente o si `menuOpen` cambia
+                return () => clearTimeout(timeout);
             }
+        }, [menuOpen]);
+        // Fin animación de menú
+          // Inicio animación de búsqueda
+    const handleSearchClick = () => {
+        setShowInput(!showInput);
+        setSearchTerm('');
+    };
 
-            // Configura el timeout para iniciar el deslizamiento después de 2 segundos
-            activityTimeout = setTimeout(() => {
-                // Solo desliza el Navbar si el menú y el buscador están cerrados
-                if (!menuOpen && !showInput) {
-                    setIsSliding(true);
-                }
-            }, 2000);
-        };
+    const handleInputChange = (e) => {
+        setSearchTerm(e.target.value);
+    };
 
-        // Escuchar eventos de actividad del usuario
-        window.addEventListener('mousemove', handleUserActivity);
-        window.addEventListener('scroll', handleUserActivity);
-        window.addEventListener('click', handleUserActivity);
-
-        return () => {
-            // Limpia los eventos y el timeout al desmontar
-            window.removeEventListener('mousemove', handleUserActivity);
-            window.removeEventListener('scroll', handleUserActivity);
-            window.removeEventListener('click', handleUserActivity);
-            if (activityTimeout) {
-                clearTimeout(activityTimeout);
-            }
-        };
-    }, [menuOpen, showInput]);
-    // Carga todos los archivos de la carpeta 'assets/images/logosClientes'
-    const importAll = (requireContext) =>
-        requireContext.keys().map(requireContext);
-
-    // Obtén los logos
-    const logos = importAll(
-        require.context('../../assets/images/logosClientes', false, /\.(png|jpe?g|svg)$/)
+    const filteredOptions = options.filter(option =>
+        option.toLowerCase().includes(searchTerm.toLowerCase())
     );
-
-    // Duplicar los logos para permitir flujo continuo
-    const duplicatedLogos = [...logos, ...logos];
-    //fin carousel
-
+    // Fin animación de búsqueda
     const images = [
         { id: 'equipo', src: equipo, alt: 'Team' },
         { id: 'socios', src: socios, alt: 'Founders' },
-        { id: 'pms', src: pms, alt: 'PMS' }, // Actualizado
+        { id: 'pms', src: pms, alt: 'PMS' },
         { id: 'interiorismo', src: interiorismo, alt: 'Design' },
         { id: 'arquitectura', src: arquitectura, alt: 'Architecture' },
-        { id: 'support', src: support, alt: 'Support' }, // Actualizado
+        { id: 'support', src: support, alt: 'Support' },
     ];
 
-    const [selectedImage, setSelectedImage] = useState('equipo'); // Imagen inicial seleccionada
+    const [selectedImage, setSelectedImage] = useState(null);
+    const [lastInteraction, setLastInteraction] = useState(Date.now());
+
+    useEffect(() => {
+        const interval = setInterval(() => {
+            if (Date.now() - lastInteraction > 6000) { 
+                setSelectedImage(prev => {
+                    const currentIndex = images.findIndex(img => img.id === prev);
+                    const nextIndex = (currentIndex + 1) % images.length; 
+                    return images[nextIndex].id;
+                });
+            }
+        }, 2000); 
+
+        return () => clearInterval(interval);
+    }, [lastInteraction, images]);
+
+    const handleImageClick = (id) => {
+        setSelectedImage(id);
+        setLastInteraction(Date.now()); 
+    };
 
     return (
         <div className="studio-section">
-            {/* Encabezado con Navbar */}
             <header className="studio-header">
-                <Navbar
+                <Navbar   isSliding={isSliding}
                     menuOpen={menuOpen}
-                    setMenuOpen={setMenuOpen} // Se pasa correctamente como prop
+                    setMenuOpen={setMenuOpen}
                     showInput={showInput}
-                    setShowInput={setShowInput}
-                />
+                    setShowInput={setShowInput} />
             </header>
 
-            {/* Contenedor de imágenes del equipo */}
-            <div className="studio-images" style={{ marginLeft: '10px', marginRight: '10px' }}>
+            {/* Contenedor de imágenes con paneo automático */}
+            <div className="studio-images" style={{
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '10px',
+                marginLeft: '10px',
+                marginRight: '10px'
+            }}>
                 {images.map((image) => (
                     <div
                         key={image.id}
                         className={`studio-image ${selectedImage === image.id ? 'selected' : ''}`}
-                        onClick={() => setSelectedImage(image.id)}
+                        onClick={() => handleImageClick(image.id)}
                         style={{
                             backgroundImage: `url(${image.src})`,
-                            width: selectedImage === image.id ? '60vw' : '6vw',
-                            height: '39vh',
+                            width: '90vw',
+                            height: selectedImage === image.id ? '39vh' : '4vh',
+                            backgroundSize: 'cover',
+                            backgroundPosition: 'center',
+                            transition: 'height 1s ease-in-out',
+                            cursor: 'pointer',
                         }}
                     >
                         <span className="image-label">{image.alt}</span>
                     </div>
                 ))}
             </div>
-
             {/* Texto después de las imágenes */}
             <div className="studio-text">
                 <span className="studio-title">We are a<br /> design studio</span>
@@ -215,7 +243,7 @@ const Studio = () => {
                     <br />
                     <br />
 
-                    <CarouselLogos duplicatedLogos={[...logos, ...logos]} />
+               
 
                 </div>
             </div>
