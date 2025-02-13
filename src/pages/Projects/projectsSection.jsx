@@ -126,7 +126,7 @@ function ProjectsSection() {
             </header>
 
             {/* Section Selector */}
-            <div className="section-selector" style={{ marginTop: '50px' }}>
+            <div className="section-selector">
                 <select style={{textAlign: "center"}}
                     className="section-input-section"
                     value={section}

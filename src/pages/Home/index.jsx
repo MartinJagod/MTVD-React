@@ -7,10 +7,8 @@ import home1 from '../../assets/images/home1.jpg';
 import homeVideo from '../../assets/images/homeVideo.mp4'; // Importa el video
 
 /* import interiorismo1 from '../../assets/images/Felicity.jpeg'; */
-import interiorismo2 from '../../assets/images/Hoppiness.jpg';
 import interiorismo3 from '../../assets/images/interiorismo3.jpg';
 import teamImage from '../../assets/images/team.jpeg';
-import arquitectura1 from '../../assets/images/Hoppiness.jpg';
 import starImage from '../../assets/images/estrella.png';
 import groupImage from '../../assets/images/group.png';
 import logoHorizontal from '../../assets/images/logo-horizontal.png';
@@ -25,10 +23,12 @@ import Navbar from '../Parcial/Navbar'; // Ajusta la ruta según tu estructura d
 import CarouselLogos from "../Parcial/CarouselLogos";
 
 function Home() {
-
-
+    
+    
     const branding1 = "/assets/images/PaginaProyecto/principal/Che Mono.jpg";
     const interiorismo1 = "/assets/images/PaginaProyecto/principal/Barilatte.jpg";
+    const interiorismo2 = "/assets/images/PaginaProyecto/principal/Soberana.jpg";
+    const arquitectura1 = "/assets/images/PaginaProyecto/principal/Soberana.jpg";
     const [projectCount, setProjectCount] = useState(0);
     const [yearsCount, setYearsCount] = useState(0);
     const [countriesCount, setCountriesCount] = useState(0);
@@ -709,10 +709,16 @@ function Home() {
 
 
                 <div className="full-square">
-                    <div className="parallax-wrapper">
+                <div className="parallax-wrapper">
+                        <img
+                            src={arquitectura1}
+                            alt="Architecture 1"
+                            className="parallax-image"
+                            ref={arquitecturaImageRef}
+                        onClick={()=>{goToProject(3)}}
 
-                        <img ref={arquitecturaImageRef} src={arquitectura1} alt="Architecture 1" className="parallax-image" />
-                    </div>
+                        />
+                </div>
                     <div className="image-label-home">
                         {getFileName(arquitectura1)}
                     </div>

@@ -40,7 +40,7 @@ function AnimatedRoutes() {
           <Route path="/studio" element={<Studio />} /> {/* Ruta para Studio */}
           <Route path="/contact" element={<Contact />} /> {/* Ruta para Contact */}
           <Route path="/" element={<Home />} />
-          <Route path="*" element={<NotFoundRedirect />} />
+          {/* <Route path="*" element={<NotFoundRedirect />} /> */}
         </Routes>
       </CSSTransition>
     </TransitionGroup>

@@ -19,8 +19,10 @@ function Project() {
     console.log("📂 Imágenes importadas:", imagesPrincipal);
 
     const projectNames = {
-        1: "Che Mono.jpg",
-        2: "Barilatte.jpg"
+        1:"Che Mono.jpg",
+        2:"Barilatte.jpg",
+        3:"Soberana.jpg"
+
     };
 
     const imageName = projectNames[id] || "Che Mono.jpg"; // 🔹 Imagen por defecto
@@ -346,7 +348,7 @@ function Project() {
                     setCitiesCount(0);
                 }
             });
-        }, { threshold: 0.5 });
+        }, { threshold: 0.2 });
 
         const sectionCounterRef = sectionCountersRef.current;
         if (sectionCounterRef) {
@@ -622,8 +624,8 @@ function Project() {
                         <img src={starImage} alt="Star" className="star-image-foto" />
                     </div>
                 </div>
-                <div className="full-square">
-                    <div className="vertical-half-square">
+                <div className="quadrant-container">
+                   {/*  <div className="vertical-half-square">
                         <div className="half-parallax-wrapper">
                             <img
                                 src={imagesPrincipal.proyecto4[imageName]}
@@ -632,17 +634,26 @@ function Project() {
                                 ref={interiorismoImageRef}
                                 onClick={() => openPopup(imagesPrincipal.proyecto4[imageName])}
                             />
-                            {/* Muestra el nombre del archivo */}
                         </div>
 
                         <div className="image-label-star">
                             <img src={starImage} alt="Star" className="star-image-foto" />
                         </div>
+                    </div> */}
+                    <div className="quadrant blue-box" ref={sectionCountersRef} style={{ width: '50vw' }}>
+                        <span className="project-box-frase"> Balance of energy, style and comfort.</span>
                     </div>
-                    <div className="vertical-half-square">
                         <div className='container-image-small-projet' >
                             <img
                                 src={imagesPrincipal.miniatura2[imageName]}
+                                alt="Branding 1"
+                                className='image-small-projet'
+                                onClick={() => openPopup(imagesPrincipal.miniatura2[imageName])}
+                            />
+                        </div>
+                        <div className='container-image-small-projet' >
+                            <img
+                                src={imagesPrincipal.proyecto4[imageName]}
                                 alt="Branding 1"
                                 className='image-small-projet'
                                 onClick={() => openPopup(imagesPrincipal.miniatura2[imageName])}
@@ -653,8 +664,6 @@ function Project() {
                             <div className="moving-line5" ref={line5Ref} data-animation="moveLine5"> </div>
 
                         </div>
-
-                    </div>
                 </div>
                 {/* Texto después de las imágenes */}
                 <div className="project-text">

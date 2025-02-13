@@ -59,6 +59,20 @@ const projectsData = {
                    making each store a destination rather than just a stop. Soft lighting, natural textures, and a cozy ambiance create
                    an experience where customers can immerse themselves in the flavors and traditions they love, now with a bold new identity.
                    Barilatte is not just about ice cream; it’s about celebrating heritage with a forward-thinking vision, where every scoop tells a story.`
+    },
+    "Soberana": {
+        frase1: "Where Argentine tradition meets global flavors.",
+        frase2: "A Michelin-recognized experience blending culture, design, and fine dining.",
+        contador1: 350,
+        nombre: "covered meters",
+        location: "Mendoza, Argentina",
+        year: 2024,
+        area: "350m2 / 3,767 ft2",
+        frase3: "A historic house reimagined into a world-class dining destination.",
+        encabezado: "Soberana is more than a restaurant—it’s a journey through flavors, traditions, and architectural elegance, seamlessly merging history with contemporary design.",
+        parrafo1: "Nestled in the heart of Mendoza, Soberana is a culinary sanctuary where Argentine roots blend with international influences. Originally a historic house, it has been masterfully transformed by Estudio Montevideo into an upscale restaurant that embodies sophistication, comfort, and functionality. Through a meticulous zoning strategy, the space was redefined to optimize service flow while creating immersive dining experiences that cater to every moment of the visit. The attention to detail extends from the kitchen’s workflow to the guest's journey, ensuring a seamless and memorable experience. Recognized by the Michelin Guide, Soberana is a testament to how architecture and design can elevate gastronomy into an art form.",
+        parrafo2: "With a concept of ‘world cuisine with an Argentine imprint,’ Soberana presents a menu that pays homage to local flavors while incorporating global inspirations, particularly French, Italian, and Spanish influences. The ambiance reflects a careful balance between classic materials and contemporary elegance, with an inviting terrace, a stylish cocktail bar, a climate-controlled patio, and a striking glass-enclosed wine cellar. Each space is curated to enhance the dining experience, from intimate dinners to lively social gatherings. Signature dishes include onion soup with Gruyère gratin, langoustines with potato rösti, seafood fideuà, white fish, seasonal risotto, and lamb rack with creamy pumpkin and coconut purée. Cooking with a Josper oven has become a defining characteristic, infusing each dish with an unmistakable depth of flavor. Soberana is not just a place to eat—it is a destination to savor, celebrate, and remember.",
+        frase4: "From historic charm to Michelin prestige, Soberana is a celebration of taste, design, and cultural fusion."
     }
 };
 

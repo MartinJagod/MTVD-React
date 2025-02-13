@@ -59,8 +59,8 @@
 }
 
 textarea {
-    resize: none;
-    height: 70vw;
+    resize:vertical;
+    height: 30vw;
 }
 
 .form-note {

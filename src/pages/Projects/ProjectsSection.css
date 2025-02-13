@@ -55,18 +55,18 @@ div.search-bar{
 
 .section-input-section {
     font-family: "Montserrat";
-    width: 50%;
-    border: 1px solid #bbb;
     width: 40vw;
     border: 1px solid #bbb;
     border-radius: 20px;
     color: #444;
-    font-size: 0.8rem;
+    font-size: 0.6rem;
     font-weight: 800;
-    padding: 4px 3%;
+    padding: 4px 0;
     text-align: center;
     margin-left: 15px;
     background-color: #ffffff;
+    margin-top: 20px;
+
 }
 .section-input-section option {
     font-family: "Montserrat";
@@ -80,11 +80,12 @@ div.search-bar{
     border-radius: 20px;
     background-color: #ffffff;
     font-size: 0.6rem;
-    font-weight: 1000;
-    color: #333;
+    font-weight: 800;
+    color: #444;
     text-align: center;
     font-family: "Montserrat";
     padding: 4px 25px;
+    margin-top: 20px;
 
 }
 

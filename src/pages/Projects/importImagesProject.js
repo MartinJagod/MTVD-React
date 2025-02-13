@@ -1,29 +1,19 @@
-const imagesPrincipal = {
-    principal: {
-        "Che Mono.jpg": "/assets/images/PaginaProyecto/principal/Che Mono.jpg",
-        "Barilatte.jpg": "/assets/images/PaginaProyecto/principal/Barilatte.jpg"
-    },
-    proyecto2: {
-        "Che Mono.jpg": "/assets/images/PaginaProyecto/proyecto2/Che Mono.jpg",
-        "Barilatte.jpg": "/assets/images/PaginaProyecto/proyecto2/Barilatte.jpg"
-    },
-    proyecto3: {
-        "Che Mono.jpg": "/assets/images/PaginaProyecto/proyecto3/Che Mono.jpg",
-        "Barilatte.jpg": "/assets/images/PaginaProyecto/proyecto3/Barilatte.jpg"
-    },
-    proyecto4: {
-        "Che Mono.jpg": "/assets/images/PaginaProyecto/proyecto4/Che Mono.jpg",
-        "Barilatte.jpg": "/assets/images/PaginaProyecto/proyecto4/Barilatte.jpg"
-    },
-    miniatura1: {
-        "Che Mono.jpg": "/assets/images/PaginaProyecto/miniatura1/Che Mono.jpg",
-        "Barilatte.jpg": "/assets/images/PaginaProyecto/miniatura1/Barilatte.jpg"
-    },
-    miniatura2: {
-        "Che Mono.jpg": "/assets/images/PaginaProyecto/miniatura2/Che Mono.jpg",
-        "Barilatte.jpg": "/assets/images/PaginaProyecto/miniatura2/Barilatte.jpg"
-    }
+const folderNames = ["principal", "proyecto2", "proyecto3", "proyecto4", "miniatura1", "miniatura2"];
+const imageNames = ["Che Mono.jpg", "Barilatte.jpg", "Soberana.jpg"];
+
+const generateImagePaths = (folders, images) => {
+    return folders.reduce((acc, folder) => {
+        acc[folder] = images.reduce((imgAcc, img) => {
+            imgAcc[img] = `/assets/images/PaginaProyecto/${folder}/${img}`;
+            return imgAcc;
+        }, {});
+        return acc;
+    }, {});
 };
+
+const imagesPrincipal = generateImagePaths(folderNames, imageNames);
 
 // Función para obtener las imágenes
 export const importImagesProject = () => imagesPrincipal;
+
+console.log(importImagesProject()); // Para probar

@@ -72,7 +72,7 @@ const Studio = () => {
         { id: 'support', src: support, alt: 'Support' },
     ];
 
-    const [selectedImage, setSelectedImage] = useState(null);
+    const [selectedImage, setSelectedImage] = useState('equipo');
     const [lastInteraction, setLastInteraction] = useState(Date.now());
 
     useEffect(() => {

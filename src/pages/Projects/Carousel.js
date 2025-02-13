@@ -52,10 +52,10 @@ const Carousel = ({ title, images }) => {
         onMouseUp={handleMouseUp}
         onMouseLeave={handleMouseUp}
       >
-        {images.map((image, index) => (
+        {images.map((imageUrl, index) => (
           <div key={index} className="carousel-item-projectsHome">
-            <img src={image.webformatURL} alt={image.tags} className="carousel-image-projectsHome" />
-            <p>{image.tags}</p>
+            <img src={imageUrl} alt={`Imagen ${index + 1}`} className="carousel-image-projectsHome" />
+            <p>{imageUrl.split('/').pop().replace(/\.[^/.]+$/, '')}</p> {/* Nombre del archivo sin extensión */}
           </div>
         ))}
       </div>

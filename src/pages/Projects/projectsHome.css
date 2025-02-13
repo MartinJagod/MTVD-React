@@ -9,13 +9,16 @@ a {
     text-decoration: none;
 
 }
+.projects-content {
+  margin-top: 30px;
+
+} 
 .projects-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-top: 0;
     padding-top: 0;
-    margin-bottom: 15px ;
     text-decoration: none;
 
 }
@@ -39,12 +42,11 @@ a {
     display: flex;
     overflow-x: auto;
     scroll-behavior: smooth;
-    padding: 10px 0;
     -ms-overflow-style: none; /* Oculta scrollbars en IE y Edge */
     scrollbar-width: none; /* Oculta scrollbars en Firefox */
     width: 100vw;
-    height: auto;
-    gap: 5px
+    height: 200px;
+    gap: 15px
 }
 
 .carousel-container-projectsHome::-webkit-scrollbar {
@@ -108,12 +110,13 @@ a {
     background: none;
     color: #444;
     font-size: 0.6rem;
-    font-weight: 1000;
+    font-weight: 800;
     text-align: center;
     margin-left: 15px;
     padding: 4px 0;
     text-decoration: none;
     font-family: "Montserrat";
+    margin-top: 20px;
     appearance: none; /* Remueve la flecha en navegadores compatibles */
     -webkit-appearance: none; /* Remueve la flecha en WebKit (Safari/Chrome) */
     -moz-appearance: none; /* Remueve la flecha en Firefox */
@@ -170,7 +173,6 @@ a {
     cursor: grab;
     user-select: none;
     white-space: nowrap;
-    padding: 10px 0;
   }
   
   .carousel-item-projectsHome {
