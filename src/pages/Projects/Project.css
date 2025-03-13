@@ -29,7 +29,7 @@ body {
 
 /* Fondo fijo para otras páginas */
 .navbar-other {
-  background: rgba(255, 255, 255, 1); /* Fondo blanco o cualquier color sólido */
+  background: linear-gradient(to bottom, rgb(255, 255, 255, 0.5), rgba(255, 255, 255, 0)); /* Degradado de negro a transparente */
   transition: background 0.3s ease;
 }
 
@@ -111,7 +111,7 @@ body {
   grid-template-rows: repeat(1, 1fr);
   width: 100%; /* Ancho completo */
 }
-.quadrant {
+.quadrant-project {
   display: flex;
   flex-direction: column; /* Alinea los elementos verticalmente */
   justify-content: center;
@@ -125,7 +125,7 @@ body {
 .quadrant {
   position: relative; /* Asegura que la línea esté dentro del cuadrante */
 }
-.quadrant-blue {
+.quadrant-blue-project {
   display: flex;
   flex-direction: column; /* Alinea los elementos verticalmente */
   justify-content: center;
@@ -136,13 +136,14 @@ body {
   height: calc(100vw); /* La altura es la mitad del ancho, menos el espacio del gap */
   
 }
-.white-box {
+.white-box-project {
   background-color: #ffffff;
   color: #333;
   padding-top: 0px;
   font-size: 20px; /* Tamaño de fuente más pequeño para la palabra "projects" */
   align-items: start; 
-  padding-left: 16px;
+  margin: 0 auto;
+  width: 80%;
 }
 .yellow-box {
   background-color: #ffffff;
@@ -215,27 +216,27 @@ body {
     transform: rotateY(360deg); /* Completa una rotación completa */
   }
 }
-.blue-box {
+.blue-box-project {
   background-color: #3B76f3; /* Azul */
   color: #ffffff;
   width: 100%;
 }
 
-.project-count {
+.project-count-project {
   font-size: 50px; /* Tamaño de fuente más grande para los números */
   font-weight: 600;
 }
 
-.project-label {
+.project-label-project {
   font-size: 15px; /* Tamaño de fuente más pequeño para la palabra "projects" */
   font-weight: 400;
   margin: 0;
 
 }
 
-.project-box {
+.project-box-project {
   font-family: "Montserrat";
-  font-size: 25px;
+  font-size: 20px;
   font-weight: 700;
   /* padding-left: 27px; */
 }
@@ -317,19 +318,19 @@ body {
   text-align: center;
 }
 
-.moving-line {
+.moving-line-project {
   position: absolute;
   bottom: 20px; /* Ajusta la posición vertical dentro del cuadrante */
   right: 0; /* Comienza desde la izquierda */
   width: 30px; /* Ancho de la línea */
   height: 4px; /* Altura de la línea */
   background-color: #FD7E40; /* Color de la línea */
-  animation: moveLine 3s linear ; /* Animación de la línea */
+  animation: moveLine-project 3s linear ; /* Animación de la línea */
  
   z-index: 2000;
 }
 
-@keyframes moveLine {
+@keyframes moveLine-project {
   0% {
     transform: translateX(43vw); /* Comienza desde la derecha de la pantalla */
   }
@@ -447,7 +448,7 @@ body {
   height: 100%;
   object-fit: cover; /* Ajusta la imagen al tamaño del contenedor sin deformarla */
 }
-.green-box {
+.green-box-project {
   background-color: #44B87E;
   display: flex;
   justify-content: center;
@@ -474,12 +475,12 @@ body {
   transform: translateX(-100%);
 }
 
-.star-image {
+.star-image-project {
   width: 50px;
   height: 50px;
 }
 
-.green-box {
+.green-box-project {
   background-color: #44B87E; /* Color verde */
   display: flex;
   justify-content: center;
@@ -488,7 +489,7 @@ body {
   overflow: hidden;
   transition: transform 0.5s ease-in-out;
 }
-.orange-box {
+.orange-box-project {
   background-color: #FD7E40; /* Color verde */
   display: flex;
   justify-content: center;
@@ -497,7 +498,7 @@ body {
   overflow: hidden;
   transition: transform 0.5s ease-in-out;
 }
-.yellow-box {
+.yellow-box-project {
   background-color: #FEC93A; /* Color verde */
   color: #ffffff;
   display: flex;
@@ -509,13 +510,13 @@ body {
 }
 
 .green-box.slide-green {
-  transform: translateX(100%); /* Desliza el cuadro verde hacia la derecha */
+  transform: translateX(100%); 
 }
 .orange-box.slide-green {
-  transform: translateX(100%); /* Desliza el cuadro verde hacia la derecha */
+  transform: translateX(100%); 
 }
 
-/* .white-box-estrella {
+ .white-box-estrella {
   background-color: white;
   display: flex;
   justify-content: center;
@@ -523,8 +524,8 @@ body {
   cursor: pointer;
   overflow: hidden;
   transition: transform 0.5s ease-in-out;
-} */
-.white-box-estrella {
+} 
+.white-box-estrella-project {
   background-color: white;
   display: flex;
   justify-content: center;
@@ -556,7 +557,7 @@ body {
   font-weight: bold;
   font-size: 20px;
 }
-.counters-box {
+.counters-box-project {
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;
@@ -564,18 +565,21 @@ body {
   background-color: #ffffff; /* Ajusta el color de fondo si es necesario */
 }
 
-.counter-item {
+.counter-item-project {
   text-align: center;
 }
 
-.project-count {
+.project-count-project {
   font-size: 50px; /* Tamaño de fuente para los números */
   font-weight: 600;
+  color: #ffffff;
 }
 
 .project-label-project {
   font-size: 15px;
   font-weight: 600;
+  color: #ffffff;
+
 }
 .project-label-project2 {
   font-size: 15px;
@@ -583,12 +587,15 @@ body {
   margin-left: -85px;
 }
 .project-label-small {
-  font-size: 8px;
+  font-size: 14px;
   font-weight: 600;
+  margin-left: 20px;
 }
 .project-label-normal {
-  font-size: 13px;
+  font-size: 16px;
   font-weight: 600;
+  margin-left: 20px;
+
 }
 .vertical-double-container {
   display: flex;
@@ -874,7 +881,9 @@ body {
   max-height: 100%; /* Ajusta la altura de los logos */
   max-width: 100%;
   object-fit: contain; /* Escala los logos proporcionalmente */
-}
+  margin: auto 0;
+ }
+
 .phrase-section {
   position: relative;
   z-index: 0;
@@ -951,7 +960,7 @@ body {
 .project-label {
   font-size: 2vw;
   font-weight: 600;
-  margin-left: 35px;
+  margin-left: 40%;
 
 }
 
@@ -964,8 +973,10 @@ body {
   height: 100px;
 }
 .front, .back {
-  font-size: 5vw;
+  font-size: 3vw;
   gap: 40px;
+  align-items: flex-start;
+  width: 33vw;
 }
 .carousel-container {
   width: 100vw;
@@ -1000,13 +1011,13 @@ body {
 
 /* Links del menú */
 .menu-items {
+  
   flex-grow: 1;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: flex-start;
-  gap: 20px;
-  margin-top: 30px;
+  gap: 40px;
 }
 
 .menu-link {
@@ -1241,7 +1252,7 @@ body {
 }
 
 /* White box */
-.white-box-estrella {
+.white-box-estrella-project {
   background-color: white;
   top: 0;
   right: -50vw; /* Siempre a la derecha */
@@ -1497,3 +1508,59 @@ body {
   object-fit: contain; /* 🔹 Evita que la imagen se recorte */
   border-radius: 15px;
 }
+/* Estilos para desktop */
+@media (min-width: 1024px) {
+  .desktop-menu {
+    display: block;
+
+  }
+  .desktop-menu nav {
+    display: flex;
+    justify-content: flex-end; /* Ubica los items a la derecha */
+    align-items: center;
+    flex-direction: row;
+    margin-right: 50px;
+    color: #222;
+  }
+  .desktop-menu .menu-link {
+    color: #222;
+
+  }
+  /* Oculta la hamburguesa y el ícono en desktop */
+  .hamburger-menu, .icons .icon {
+    display: none;
+  }
+  .desktop-hide{
+    display: none;
+  }
+  .menu-items{
+    padding: 0px;
+  }
+  .logo-img{
+    width: 150px;
+  }
+  .phrase-line {
+    font-size: 4.5vw;}
+  
+}
+
+
+/* Estilos para mobile */
+@media (max-width: 1023px) {
+  .desktop-menu {
+    display: none;
+  }
+
+
+  .mobile-hide{
+  display: none;
+  }
+  
+  .hamburger-menu, .icons .icon {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+}
+

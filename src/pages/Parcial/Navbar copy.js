@@ -80,33 +80,21 @@ const Navbar = ({ isSliding, menuOpen, setMenuOpen, showInput, setShowInput }) =
                 <Link to="/">
                     <img src={logo} alt="Logo Horizontal" className="logo-img" />
                 </Link>
-            <div style={{ display: 'flex', alignItems: 'center', marginRight: '7%' }}>
-             
-            {/* Menú horizontal para desktop */}
-            <div className="desktop-menu">
-                <nav className="menu-items" >
-                    <Link to="/projectsHome" className="menu-link projects"  style={{ color: iconColor }}>Projects</Link>
-                    <Link to="/awardsandpress" className="menu-link press-awards"  style={{ color: iconColor }}>Press & Awards</Link>
-                    <Link to="/studio" className="menu-link studio"  style={{ color: iconColor }}>Studio</Link>
-                    <Link to="/contact" className="menu-link contact"  style={{ color: iconColor }}>Contact</Link>
-                </nav>
-            </div>
-                <div className="icons" style={{ display: 'flex', alignItems: 'center', justifyItems: 'center' }}>
+                <div className="icons">
                     <FaSearch
                         className="search-icon-home"
                         onClick={handleSearchClick}
-                        style={{ color: iconColor, paddingLeft: '10px' }}
+                        style={{ color: iconColor }}
                     />
                     <span
                         className="icon"
                         onClick={toggleMenu}
-                        style={{ color: iconColor , paddingLeft: '10px'}}
+                        style={{ color: iconColor }}
                     >
                         ☰
                     </span>
                 </div>
             </div>
-
 
             {/* Menú hamburguesa */}
             <div className={`hamburger-menu ${menuOpen ? 'menu-open' : 'menu-close'}`} ref={menuRef}>
@@ -149,9 +137,9 @@ const Navbar = ({ isSliding, menuOpen, setMenuOpen, showInput, setShowInput }) =
                     </div>
                 )}
             </div>
-        </div>   
         </div>
     );
 };
 
 export default Navbar;
+

@@ -23,8 +23,8 @@ import Navbar from '../Parcial/Navbar'; // Ajusta la ruta según tu estructura d
 import CarouselLogos from "../Parcial/CarouselLogos";
 
 function Home() {
-    
-    
+
+
     const branding1 = "/assets/images/PaginaProyecto/principal/Che Mono.jpg";
     const interiorismo1 = "/assets/images/PaginaProyecto/principal/Barilatte.jpg";
     const interiorismo2 = "/assets/images/PaginaProyecto/principal/Soberana.jpg";
@@ -37,11 +37,15 @@ function Home() {
     const [menuOpen, setMenuOpen] = useState(false);
     const [searchTerm, setSearchTerm] = useState('');
     const [rotateYellowBox, setRotateYellowBox] = useState(false);
+    const [rotateYellowBoxDesktop, setRotateYellowBoxDesktop] = useState(false);
+
     const [slideBoxes, setSlideBoxes] = useState(false);
     const [slideStudioBox, setSlideStudioBox] = useState(false);
     const [hasStartedCountingProjects, setHasStartedCountingProjects] = useState(false);
     const [hasStartedCountingSection, setHasStartedCountingSection] = useState(false);
     const yellowBoxRef = useRef(null); // Referencia al yellow-box
+    const yellowBoxDesktopRef = useRef(null); // Referencia al yellow-box
+
     const [isBlurred, setIsBlurred] = useState(true); // Estado para manejar el blur
     let scrollTimeout = null; // Variable para manejar el timeout
     const [isMuted, setIsMuted] = useState(true);
@@ -128,6 +132,9 @@ function Home() {
     const brandingImageRef = useRef(null);
     const interiorismoImageRef = useRef(null);
     const arquitecturaImageRef = useRef(null);
+    const brandingDesktopImageRef = useRef(null);
+    const interiorismoDesktopImageRef = useRef(null);
+    const arquitecturaDesktopImageRef = useRef(null);
 
     //inicio parallax
 
@@ -136,6 +143,9 @@ function Home() {
             { ref: brandingImageRef, speed: 0.15 },
             { ref: interiorismoImageRef, speed: 0.15 },
             { ref: arquitecturaImageRef, speed: 0.15 },
+            { ref: brandingDesktopImageRef, speed: 0.15 },
+            { ref: interiorismoDesktopImageRef, speed: 0.15 },
+            { ref: arquitecturaDesktopImageRef, speed: 0.15 },
         ];
 
         const handleParallaxEffect = () => {
@@ -202,8 +212,13 @@ function Home() {
     const options = ['Architecture', 'Awards', 'Asphalt', 'Aluminum', 'Aggregate', 'Asbestos', 'Adhesive', 'Anchor', 'Acrylic', 'Acoustic'];
 
     // Carga todos los archivos de la carpeta 'assets/images/logosClientes'
+    /*     const importAll = (requireContext) =>
+            requireContext.keys().map(requireContext); */
     const importAll = (requireContext) =>
-        requireContext.keys().map(requireContext);
+        requireContext.keys().map(key => {
+            const module = requireContext(key);
+            return module.default || module;
+        });
 
     // Obtén los logos
     const logos = importAll(
@@ -325,7 +340,7 @@ function Home() {
                     }
                 });
             },
-            { threshold: 0.1 } // Ajusta el umbral para determinar cuándo se activa
+            { threshold: 1 } // Ajusta el umbral para determinar cuándo se activa
         );
 
         const slideBoxesElement = slideBoxesRef.current;
@@ -363,36 +378,36 @@ function Home() {
         };
     }, []);
     // Fin deslice de cajas
-  
-   // Inicio animación de menú 
-  
-          useEffect(() => {
-              if (menuOpen) {
-                  const links = document.querySelectorAll('.menu-link');
-                  const dash = document.querySelector('.menu-dash');
-      
-                  // Espera 3 segundos antes de iniciar las animaciones
-                  const timeout = setTimeout(() => {
-                      links.forEach((link, index) => {
-                          setTimeout(() => {
-                              link.classList.add('animate-color');
-                              dash.className = `menu-dash ${link.classList[1]}`; // Sincroniza el color del guion
-      
-                              setTimeout(() => {
-                                  link.classList.remove('animate-color');
-                                  if (index === links.length - 1) {
-                                      dash.className = 'menu-dash'; // Resetea el guion al final
-                                  }
-                              }, 200); // Duración para volver al estado inicial
-                          }, index * 200); // Espaciado entre animaciones
-                      });
-                  }, 500); // Espera 0.5 segundos para que el menú se abra completamente y haga color al guion
-      
-                  // Limpia el timeout al desmontar el componente o si `menuOpen` cambia
-                  return () => clearTimeout(timeout);
-              }
-          }, [menuOpen]);
-          // Fin animación de menú
+
+    // Inicio animación de menú 
+
+    useEffect(() => {
+        if (menuOpen) {
+            const links = document.querySelectorAll('.menu-link');
+            const dash = document.querySelector('.menu-dash');
+
+            // Espera 3 segundos antes de iniciar las animaciones
+            const timeout = setTimeout(() => {
+                links.forEach((link, index) => {
+                    setTimeout(() => {
+                        link.classList.add('animate-color');
+                        dash.className = `menu-dash ${link.classList[1]}`; // Sincroniza el color del guion
+
+                        setTimeout(() => {
+                            link.classList.remove('animate-color');
+                            if (index === links.length - 1) {
+                                dash.className = 'menu-dash'; // Resetea el guion al final
+                            }
+                        }, 200); // Duración para volver al estado inicial
+                    }, index * 200); // Espaciado entre animaciones
+                });
+            }, 500); // Espera 0.5 segundos para que el menú se abra completamente y haga color al guion
+
+            // Limpia el timeout al desmontar el componente o si `menuOpen` cambia
+            return () => clearTimeout(timeout);
+        }
+    }, [menuOpen]);
+    // Fin animación de menú
 
     // Inicio animación de búsqueda
     const handleSearchClick = () => {
@@ -407,7 +422,7 @@ function Home() {
     const filteredOptions = options.filter(option =>
         option.toLowerCase().includes(searchTerm.toLowerCase())
     );
-    
+
     // Fin animación de búsqueda
     // Inicio animación de cajas naranja 
 
@@ -432,7 +447,29 @@ function Home() {
         };
     }, []);
     // Fin animación de cajas naranja
+// Inicio animación de cajas naranja 
 
+useEffect(() => {
+    const observerYellowBox = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+                setRotateYellowBoxDesktop((prev) => !prev); // Alterna el estado cada vez que entra en pantalla
+            }
+        });
+    }, { threshold: 1 }); // Detecta cuando el 80% del elemento es visible
+
+    const yellowBoxElement = yellowBoxDesktopRef.current;
+    if (yellowBoxElement) {
+        observerYellowBox.observe(yellowBoxElement);
+    }
+
+    return () => {
+        if (yellowBoxElement) {
+            observerYellowBox.unobserve(yellowBoxElement);
+        }
+    };
+}, []);
+// Fin animación de cajas naranja
     // Inicio reinicio video
     const videoRef = useRef(null);
 
@@ -521,75 +558,27 @@ function Home() {
                     setMenuOpen={setMenuOpen}
                     showInput={showInput}
                     setShowInput={setShowInput} />
-                {/*   <div className={`header-navbar ${isBlurred ? "" : "no-blur"}`}>
-                    <div className="header-content">
-                        <div className="logo">
-                            <img src={logoHorizontal} alt="Logo Horizontal" className="logo-img" />
-                        </div>
-                        <div className="icons">
-                            <FaSearch className="search-icon-home" onClick={handleSearchClick} />
-                            <span className="icon" onClick={toggleMenu}>☰</span>
-                        </div>
-                    </div>
-                    <div className={`hamburger-menu ${menuOpen ? 'menu-open' : 'menu-close'}`}>
-                        <div className="menu-header">
-                            <span className="menu-close-icon" onClick={() => setMenuOpen(false)}>✖</span>
-                        </div>
-                        <nav className="menu-items">
-                            <Link to="/projectsHome" className="menu-link projects">Projects</Link>
-                            <a href="#press-awards" className="menu-link press-awards">Press & Awards</a>
-                            <a href="#studio" className="menu-link studio">Studio</a>
-                            <Link to="/projects" className="menu-link contact">Contact</Link>
-                            <span className="menu-dash"></span>
-                        </nav>
-                        <div className="menu-footer"></div>
-                    </div>
-
-
-                </div> */}
-
-{/* 
-                <div className={`search-container ${showInput ? 'search-open' : ''}`}>
-                    <div className="search-bar">
-                        <input
-                            type="text"
-                            className="search-input"
-                            placeholder="Search..."
-                            value={searchTerm}
-                            onChange={handleInputChange}
-                        />
-                        <span className="close-icon" onClick={handleSearchClick}>✖</span>
-                    </div>
-                    {searchTerm && (
-                        <div className="search-menu">
-                            {filteredOptions.length > 0 ? (
-                                <ul>
-                                    {filteredOptions.map((option, index) => (
-                                        <li key={index}>{option}</li>
-                                    ))}
-                                </ul>
-                            ) : (
-                                <p className="no-results">No results found</p>
-                            )}
-                        </div>
-                    )}
-                </div> */}
 
             </header>
 
 
-            <div className="phrase-section-home" onClick={goToStudio}>
+            <div className="phrase-section-home desktop-hide" onClick={goToStudio}>
                 <span className="phrase-line"> We are a </span> <br />
                 <span className="phrase-line"> design studio </span>
             </div>
-            <div className="full-square">
+            <div className="phrase-section-home mobile-hide" onClick={goToStudio}>
+                <span className="phrase-line"> We are a design studio </span>
+            </div>
+            {/* Seccion mobile */}
+            <div className="full-square desktop-hide">
+                
                 <div className="parallax-wrapper">
                     <img
                         src={branding1}
                         alt="Branding 1"
                         className="parallax-image"
                         ref={brandingImageRef}
-                        onClick={()=>{goToProject(1)}}
+                        onClick={() => { goToProject(1) }}
                     />
                 </div>
                 <div className="image-label-home">
@@ -599,9 +588,7 @@ function Home() {
                     <img src={starImage} alt="Star" className="star-image-foto" onClick={goToAwardsAndPress} />
                 </div>
             </div>
-
-
-            <section className="image-and-quadrants">
+            <section className="image-and-quadrants desktop-hide">
                 <div className="quadrant-container">
                     <div className="quadrant white-box">
                         <span className="project-box">Inspiring</span>
@@ -669,7 +656,7 @@ function Home() {
                             alt="Interiorismo 1"
                             className="parallax-image"
                             ref={interiorismoImageRef}
-                        onClick={()=>{goToProject(2)}}
+                            onClick={() => { goToProject(2) }}
 
                         />
                         {/* Muestra el nombre del archivo */}
@@ -682,20 +669,6 @@ function Home() {
                     </div>
                 </div>
 
-
-
-                {/*            <div className="quadrant vertical-double">
-
-<div className="quadrant module-box">
-<img src={branding1} alt="Branding 1" className="module-image" />
-</div>
-<div className="quadrant-blue module-box">
-<img src={interiorismo2} alt="Interiorismo 2" className="module-image" />
-</div>
-</div>
-<div className="quadrant vertical-double">
-<img src={interiorismo1} alt="Interiorismo 1" className="module-image" />
-</div> */}
                 <div className="new-quadrant-container" ref={slideBoxesRef} onClick={goToAwardsAndPress}>
                     <div
                         className={`quadrant green-box ${slideBoxes ? 'slide-green' : ''}`}
@@ -709,16 +682,16 @@ function Home() {
 
 
                 <div className="full-square">
-                <div className="parallax-wrapper">
+                    <div className="parallax-wrapper">
                         <img
                             src={arquitectura1}
                             alt="Architecture 1"
                             className="parallax-image"
                             ref={arquitecturaImageRef}
-                        onClick={()=>{goToProject(3)}}
+                            onClick={() => { goToProject(3) }}
 
                         />
-                </div>
+                    </div>
                     <div className="image-label-home">
                         {getFileName(arquitectura1)}
                     </div>
@@ -742,53 +715,182 @@ function Home() {
                     </div>
                 </div>
 
-                {/*             <div className="quadrant-container">
-    <div className="quadrant vertical-double">
-                        <img src={arquitectura1} alt="Arquitectura 1" className="module-image" />
-                    </div>
-                    <div
-                        className={`vertical-double-container ${slideStudioBox ? 'slide-active' : ''}`}
-                        ref={slideStudioBoxRef}
-                    >
-                        <div className="vertical-box white-box-studio">
-                            {slideStudioBox && <span>Our Studio</span>}
-                        </div>
-                        <div className="vertical-box orange-box-studio">
-                            <img src={groupImage} alt="Group Icon" className="icon-image" />
-                        </div>
-                    </div> 
-
-                    <div className="quadrant vertical-double">
-                        <img src={interiorismo3} alt="Interiorismo 3" className="module-image" />
-                    </div>
-                </div> */}
                 <div className="horizontal-double-team" >
                     <img src={teamImage} alt="Team" className="horizontal-image-team" onClick={goToStudio} />
 
                 </div>
             </section>
 
+            {/* fin seccion mobile */}
+
+            {/* Seccion Desktop */}
+            {/* caja doblea ancho */}
+            <div className="full-square-desktop mobile-hide grid-container-uno">
+                <div className="container-one">
+                    <div className="parallax-wrapper home-parallax-desktop box-uno" >
+                        <img
+                            src={branding1}
+                            alt="Branding 1"
+                            className="parallax-image"
+                            ref={brandingDesktopImageRef}
+                            onClick={() => { goToProject(1) }}
+                            style={{ width: "70vw",  position: 'relative',left: '-17%' }}
+                        />
+                        <div className="image-label-home-desktop">
+                            {getFileName(branding1)}
+                        </div>
+                        <div className="image-label-star-desktop">
+                            <img src={starImage} alt="Star" className="star-image-foto-desktop" onClick={goToAwardsAndPress} />
+                        </div>
+                    </div>
+                   
+                    <div className=" quadrant white-box-desktop box-two"  style={{position: 'relative',left: '75%'}}>
+                        <span className="project-box-desktop">Inspiring</span> <br />
+                        <span className="project-box-desktop">people</span>
+                        <div className="moving-line" ref={line1Ref}></div>
+                    </div>
+                </div>
+            </div>
+
+                {/*                 Van 3 cajas iguales en la misma fila ,   */}
+                <div className="row-2-desktop">
+    <div className="quadrant-row-2 white-box-desktop" onClick={goToProjects}>
+        <span className="project-box-desktop">To create</span>
+        <span className="project-box-desktop">exciting</span>
+        <span className="project-box-desktop">places</span>
+    </div>
+    <div className={`quadrant-row-2 yellow-box ${rotateYellowBoxDesktop ? 'rotate' : ''}`} 
+    ref={yellowBoxDesktopRef} 
+    onClick={goToProjects}>
+        <div className="flip-container">
+            <div className="front">
+                <img src={logoVertical} alt="Logo Vertical" className="logo-image" />
+            </div>
+            <div className="back">
+                <span className='back-item'>Design</span>
+                <span className='back-item'>Architecture</span>
+                <span className='back-item'>Branding</span>
+            </div>
+        </div>
+    </div>
+
+    <div className="quadrant-row-2 white-box-desktop" onClick={goToProjects}>
+        <span className="project-box-desktop">To create</span>
+        <span className="project-box-desktop">exciting</span>
+        <span className="project-box-desktop">places</span>
+    </div>
+</div>
+
+            <section className="image-and-quadrants mobile-hide">
+
+
+                <div className="quadrant mobile-hide">
+
+
+
+                    {/* Nueva sección horizontal para los contadores */}
+                    <div className="horizontal-counter-section-new mobile-hide" ref={sectionCountersRef}>
+                        <div className="horizontal-counter-item-new">
+                            <span className="horizontal-project-count-new">+{yearsCount}</span>
+                            <br />
+                            <span className="horizontal-project-label-new" style={{ paddingLeft: "30px" }}>years</span>
+                        </div>
+                        <div className="horizontal-counter-item-new">
+                            <span className="horizontal-project-count-new">+{countriesCount}</span>
+                            <br />
+                            <span className="horizontal-project-label-new" style={{ paddingLeft: "70px" }}>countries</span>
+                        </div>
+                        <div className="horizontal-counter-item-new">
+                            <span className="horizontal-project-count-new">+{citiesCount}</span>
+                            <br />
+                            <span className="horizontal-project-label-new" style={{ paddingLeft: "27px" }}>cities</span>
+                        </div>
+
+                    </div>
+
+                </div>
+                <div className="full-square">
+                    <div className="parallax-wrapper">
+                        <img
+                            src={interiorismo1}
+                            alt="Interiorismo 1"
+                            className="parallax-image"
+                            ref={interiorismoDesktopImageRef}
+                            onClick={() => { goToProject(2) }}
+
+                        />
+                        {/* Muestra el nombre del archivo */}
+                    </div>
+                    <div className="image-label-home">
+                        {getFileName(interiorismo1)}
+                    </div>
+                    <div className="image-label-star">
+                        <img src={starImage} alt="Star" className="star-image-foto" onClick={goToAwardsAndPress} />
+                    </div>
+                </div>
+
+                <div className="new-quadrant-container" ref={slideBoxesRef} onClick={goToAwardsAndPress}>
+                    <div
+                        className={`quadrant green-box ${slideBoxes ? 'slide-green' : ''}`}
+                    >
+                        <img src={starImage} alt="Star" className="star-image" onClick={goToAwardsAndPress} />
+                    </div>
+                    <div onClick={goToAwardsAndPress} className="quadrant white-box-estrella">
+                        <span className="text-Awards">Awards</span>
+                    </div>
+                </div>
+
+
+                <div className="full-square">
+                    <div className="parallax-wrapper">
+                        <img
+                            src={arquitectura1}
+                            alt="Architecture 1"
+                            className="parallax-image"
+                            ref={arquitecturaDesktopImageRef}
+                            onClick={() => { goToProject(3) }}
+
+                        />
+                    </div>
+                    <div className="image-label-home">
+                        {getFileName(arquitectura1)}
+                    </div>
+                    <div className="image-label-star">
+                        <img src={starImage} alt="Star" className="star-image-foto" />
+                    </div>
+                </div>
+
+                <div className="custom-quadrant-container">
+                    <div
+                        className={`custom-orange-box ${slideStudioBox ? 'custom-slide-orange' : ''}`}
+                        ref={slideStudioBoxRef} onClick={goToStudio}
+                    >
+                        <img src={groupImage} alt="Group Icon" className="icon-image" onClick={goToStudio} />
+
+                    </div>
+                    <div onClick={goToStudio}
+                        className={` quadrant custom-white-box ${slideStudioBox ? 'custom-slide-team' : ''}`}
+                    >
+                        {slideStudioBox && <span className="text-Awards">Our Studio</span>}
+                    </div>
+                </div>
+
+                <div className="horizontal-double-team" >
+                    <img src={teamImage} alt="Team" className="horizontal-image-team" onClick={goToStudio} />
+
+                </div>
+            </section>
+            {/* fin seccion Desktop */}
             <section className="content-section">
                 <div className="button-container">
                     <a className="custom-button-end">
                         <span onClick={goToProjects}> check our  <strong> projects </strong></span>
                     </a>
                 </div>
+
+
                 <div className="button-container-clients">
-                    {/*   <div className="carousel-container">
-                        <div className="carousel-track">
-                            {duplicatedLogos.map((logo, index) => (
-                                <div key={index} className="carousel-item">
-                                    <img
-                                        src={logo}
-                                        alt={`Logo ${index}`}
-                                        className="logo-image"
-                                    />
-                                </div>
-                            ))}
-                        </div>
-                    </div>*/}
-                  <CarouselLogos logos={logos} />
+                    <CarouselLogos logos={logos} />
                 </div>
                 <ContactFooter />
             </section>

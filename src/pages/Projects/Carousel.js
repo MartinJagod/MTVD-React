@@ -55,7 +55,10 @@ const Carousel = ({ title, images }) => {
         {images.map((imageUrl, index) => (
           <div key={index} className="carousel-item-projectsHome">
             <img src={imageUrl} alt={`Imagen ${index + 1}`} className="carousel-image-projectsHome" />
-            <p>{imageUrl.split('/').pop().replace(/\.[^/.]+$/, '')}</p> {/* Nombre del archivo sin extensión */}
+            <p>
+  {decodeURIComponent(imageUrl.split('/').pop().replace(/\.[^/.]+$/, '').replace(/\d+$/, ''))}
+</p>
+
           </div>
         ))}
       </div>

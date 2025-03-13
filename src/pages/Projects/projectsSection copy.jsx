@@ -1,28 +1,29 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate, useSearchParams, Link } from 'react-router-dom';
 import './ProjectsSection.css';
 import Navbar from '../Parcial/Navbar';
 import ContactFooter from '../Parcial/ContactFooter';
+import home1 from '../../assets/images/home1.jpg';
+import home2 from '../../assets/images/home2.jpg';
+import interiorismo1 from '../../assets/images/Felicity.jpeg';
+import interiorismo2 from '../../assets/images/Hoppiness.jpg';
+import interiorismo3 from '../../assets/images/interiorismo3.jpg';
+import edward from '../../assets/images/edward.png';
+import branding1 from '../../assets/images/COC.png';
+import { CiTextAlignCenter } from 'react-icons/ci';
 
 function ProjectsSection() {
     const [searchParams] = useSearchParams();
+    const [searchTerm, setSearchTerm] = useState('');
     const [category, setCategory] = useState('All');
     const sections = ['Design', 'Architecture', 'Branding'];
     const [section, setSection] = useState('Design'); 
     const navigate = useNavigate();
-    const [filteredImages, setFilteredImages] = useState([]);
-
-    // Estados para control del menú
+    
+    // Animación de menú
     const [showInput, setShowInput] = useState(false);
     const [menuOpen, setMenuOpen] = useState(false);
-    const [isSliding, setIsSliding] = useState(false);
 
-    const goToProjects = () => {
-        navigate("/projectsHome"); // Cambia a la ruta /projects
-    };
-    const goToProject = (id) => {
-        navigate(`/project/${id}`); // Cambia a la ruta
-    }
     useEffect(() => {
         if (menuOpen) {
             const links = document.querySelectorAll('.menu-link');
@@ -33,7 +34,6 @@ function ProjectsSection() {
                     setTimeout(() => {
                         link.classList.add('animate-color');
                         dash.className = `menu-dash ${link.classList[1]}`;
-
                         setTimeout(() => {
                             link.classList.remove('animate-color');
                             if (index === links.length - 1) {
@@ -48,13 +48,49 @@ function ProjectsSection() {
         }
     }, [menuOpen]);
 
+   /*  function getFileName(filePath) {
+        const fullName = filePath.split('/').pop();
+        return fullName.split('.')[0];
+    } */
+
     const subcategories = {
         Design: ['Retail', 'Restaurant', 'Office', 'Hotel', 'Mixeduse', 'Mall'],
         Architecture: ['Commercial', 'Office', 'Hotel', 'MixedUse', 'Residential', 'Planning'],
         Branding: ['Design', 'Architecture'],
     };
 
-    // Obtener sección de la URL
+    // Controla el Navbar deslizante
+    const [isSliding, setIsSliding] = useState(false);
+    let activityTimeout = null;
+
+    useEffect(() => {
+        const handleUserActivity = () => {
+            setIsSliding(false);
+            if (activityTimeout) clearTimeout(activityTimeout);
+            activityTimeout = setTimeout(() => {
+                if (!menuOpen && !showInput) setIsSliding(false);
+            }, 20000);
+        };
+
+        window.addEventListener('mousemove', handleUserActivity);
+        window.addEventListener('scroll', handleUserActivity);
+        window.addEventListener('click', handleUserActivity);
+
+        return () => {
+            window.removeEventListener('mousemove', handleUserActivity);
+            window.removeEventListener('scroll', handleUserActivity);
+            window.removeEventListener('click', handleUserActivity);
+            if (activityTimeout) clearTimeout(activityTimeout);
+        };
+    }, [menuOpen, showInput]);
+
+    const images = {
+        Design: [home1, home2, interiorismo1],
+        Architecture: [interiorismo2, interiorismo3, edward],
+        Branding: [branding1],
+    };
+
+    // Sincronizar sección con los parámetros de URL
     useEffect(() => {
         const sectionFromUrl = searchParams.get('section');
         if (sectionFromUrl && sections.includes(sectionFromUrl)) {
@@ -62,68 +98,64 @@ function ProjectsSection() {
         }
     }, [searchParams]);
 
-    // 🔹 Fetch de imágenes desde la API según la sección
+    // Actualizar `filteredImages` cuando cambia `section`
+    const [filteredImages, setFilteredImages] = useState(images[section] || []);
+
     useEffect(() => {
-        console.log("📡 Solicitando imágenes de la API para:", section);
-
-        fetch("http://193.203.182.77:5000/api/projects-home")
-            .then(response => response.json())
-            .then(data => {
-                console.log("✅ Datos recibidos:", data);
-
-                // Verificamos que la categoría exista en la respuesta
-                if (data[section.toLowerCase()]) {
-                    setFilteredImages(data[section.toLowerCase()].hits);
-                } else {
-                    setFilteredImages([]);
-                }
-            })
-            .catch(error => {
-                console.error("❌ Error al obtener imágenes:", error);
-                setFilteredImages([]);
-            });
+        console.log("Sección actualizada:", section);
+        setFilteredImages(images[section] || []);
     }, [section]);
 
+    const handleInputChange = (e) => {
+        setSearchTerm(e.target.value);
+    };
     const getFileName = (imageUrl) => {
         if (!imageUrl) return "";
         
-        // Extraer el nombre del archivo
+        // Extraer solo el nombre del archivo de la URL
         let fileName = imageUrl.substring(imageUrl.lastIndexOf("/") + 1);
         
-        // Decodificar caracteres como %20 → " "
+        // Decodificar caracteres especiales como %20 → " "
         fileName = decodeURIComponent(fileName);
     
         // Eliminar la extensión del archivo
-        let fileNameWithoutExtension = fileName.replace(/\.[^/.]+$/, "");
+        const fileExtension = fileName.substring(fileName.lastIndexOf("."));
+        let fileNameWithoutExtension = fileName.substring(0, fileName.lastIndexOf("."));
     
-        // Eliminar números al final del nombre
-        return fileNameWithoutExtension.replace(/\d+$/, "");
+        // Eliminar números al final del nombre antes de la extensión
+        fileNameWithoutExtension = fileNameWithoutExtension.replace(/\d+$/, "");
+    
+        // Reconstruir el nombre sin los números pero con la extensión original
+        return fileNameWithoutExtension + fileExtension;
     };
     
     return (
         <div className="projects-section">
             {/* Header */}
             <header className="projects-header">
-                <Navbar
-                    isSliding={isSliding}
-                    menuOpen={menuOpen}
-                    setMenuOpen={setMenuOpen}
-                    showInput={showInput}
-                    setShowInput={setShowInput}
-                />
+                <div className="logo">
+                    <Navbar
+                        isSliding={isSliding}
+                        menuOpen={menuOpen}
+                        setMenuOpen={setMenuOpen}
+                        showInput={showInput}
+                        setShowInput={setShowInput}
+                    />
+                </div>
             </header>
 
             {/* Section Selector */}
             <div className="section-selector">
-                <select
+                <select style={{textAlign: "center"}}
                     className="section-input-section"
                     value={section}
                     onChange={(e) => {
+                        console.log("Nuevo valor seleccionado:", e.target.value);
                         setSection(e.target.value);
                     }}
                 >
                     {sections.map((sec, index) => (
-                        <option className='section-input-section-option'  key={index} value={sec}>
+                        <option key={index} value={sec}>
                             {sec}
                         </option>
                     ))}
@@ -137,37 +169,38 @@ function ProjectsSection() {
             {/* Subcategories */}
             <div className="subcategories">
                 {subcategories[section]?.map((subcategory, index) => (
-                   <button
-                   key={index}
-                   className={`subcategory-button ${subcategory === category ? 'active' : ''}`}
-                   onClick={() => setCategory(category === subcategory ? '' : subcategory)}
-               >
-                   {subcategory}
-               </button>
+                    <button
+                        key={index}
+                        className={`subcategory-button ${subcategory === category ? 'active' : ''}`}
+                        onClick={() => setCategory(subcategory)}
+                    >
+                        {subcategory}
+                    </button>
                 ))}
             </div>
 
             {/* Image Grid */}
             <div className="image-grid">
-                <div className="column-project">
+                <div className="column">
                     {filteredImages.filter((_, index) => index % 2 === 0).map((image, index) => (
                         <div className="image-wrapper" key={index}>
-                            <img src={image} alt={`Project ${index + 1}`} className="project-image" onClick={()=>{goToProject(1)}}/>
+                            <img src={image} alt={`Project ${index + 1}`} className="project-image" />
+
                             <div className="image-label-section">{getFileName(image)}</div>
                         </div>
                     ))}
                 </div>
-                <div className="column-project">
+                <div className="column">
                     {filteredImages.filter((_, index) => index % 2 !== 0).map((image, index) => (
                         <div className="image-wrapper" key={index}>
-                            <img src={image} alt={`Project ${index + 1}`} className="project-image" onClick={()=>{goToProject(2)}}/>
+                            <img src={image} alt={`Project ${index + 1}`} className="project-image" />
                             <div className="image-label-section">{getFileName(image)}</div>
                         </div>
                     ))}
                 </div>
             </div>
 
-            {/* Footer */}
+            {/* Logo Slogan */}
             <div style={{ marginTop: '50px' }}>
                 <br />
                 <br />

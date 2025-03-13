@@ -92,7 +92,7 @@ function ProjectsHome() {
                 // Realizar el scroll después de cargar las imágenes
                 setTimeout(() => {
                     scrollCarousel("carousel-design", 10);
-                    scrollCarousel("carousel-architecture", 7);
+                    scrollCarousel("carousel-architecture", 9);
                     scrollCarousel("carousel-branding", 13);
                 }, 1000);
             })
@@ -105,20 +105,44 @@ function ProjectsHome() {
 
     const scrollCarousel = (carouselId, targetIndex) => {
         const carouselWrapper = document.getElementById(carouselId);
-        if (carouselWrapper) {
-            const carouselContainer = carouselWrapper.querySelector('.carousel-container-projectsHome');
-            const items = carouselContainer.querySelectorAll('.carousel-item-projectsHome');
-            if (items && items[targetIndex - 1]) {
-                const targetElement = items[targetIndex - 1];
-                const scrollPosition = targetElement.offsetLeft;
-                carouselContainer.scrollTo({
-                    left: scrollPosition,
-                    behavior: 'smooth',
-                });
+        if (!carouselWrapper) return;
+    
+        const carouselContainer = carouselWrapper.querySelector('.carousel-container-projectsHome');
+        const items = carouselContainer.querySelectorAll('.carousel-item-projectsHome');
+        
+        if (!items || !items[targetIndex - 1]) return;
+    
+        const targetElement = items[targetIndex - 1];
+        const targetScrollPosition = targetElement.offsetLeft;
+        
+        // 🔹 Agregamos animación con interpolación
+        smoothScroll(carouselContainer, targetScrollPosition, 800);
+    };
+    
+    // 🔥 Función de desplazamiento suave con interpolación
+    const smoothScroll = (element, target, duration) => {
+        const start = element.scrollLeft;
+        const change = target - start;
+        const startTime = performance.now();
+    
+        function animateScroll(currentTime) {
+            const elapsedTime = currentTime - startTime;
+            const progress = Math.min(elapsedTime / duration, 1); // 0 → 1
+    
+            // 🔹 Función de interpolación (ease-out)
+            element.scrollLeft = start + change * easeOutCubic(progress);
+    
+            if (progress < 1) {
+                requestAnimationFrame(animateScroll);
             }
         }
+    
+        requestAnimationFrame(animateScroll);
     };
-
+    
+    // 🔹 Función de interpolación Ease-Out Cubic (Simula aceleración inicial y desaceleración final)
+    const easeOutCubic = (t) => 1 - Math.pow(1 - t, 3);
+    
     if (loading) return <div>Loading...</div>;
     if (error) return <div>Error loading data</div>;
 

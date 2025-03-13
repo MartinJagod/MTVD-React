@@ -188,26 +188,29 @@ function Project() {
             { ref: interiorismoImageRef, speed: 0.15 },
             { ref: arquitecturaImageRef, speed: 0.15 },
         ];
-
+    
         const handleParallaxEffect = () => {
             imageRefs.forEach(({ ref, speed }) => {
+                if (!ref.current) {
+                    console.warn(`⚠️ El ref aún no está disponible:`, ref);
+                    return; // ⛔ Evita ejecutar código sobre un `null`
+                }
+    
                 const image = ref.current;
-                if (image) {
-                    const rect = image.getBoundingClientRect();
-                    const windowHeight = window.innerHeight;
-
-                    if (rect.top < windowHeight && rect.bottom > 0) {
-                        const translateY = -(rect.top - windowHeight / 2) * speed;
-                        image.style.transform = `translateY(${translateY}px)`;
-                    } else {
-                        image.style.transform = `translateY(0px)`;
-                    }
+                const rect = image.getBoundingClientRect();
+                const windowHeight = window.innerHeight;
+    
+                if (rect.top < windowHeight && rect.bottom > 0) {
+                    const translateY = -(rect.top - windowHeight / 2) * speed;
+                    image.style.transform = `translateY(${translateY}px)`;
+                } else {
+                    image.style.transform = `translateY(0px)`;
                 }
             });
         };
-
+    
         window.addEventListener('scroll', handleParallaxEffect);
-
+    
         return () => {
             window.removeEventListener('scroll', handleParallaxEffect);
         };
@@ -323,29 +326,29 @@ function Project() {
             entries.forEach((entry) => {
                 if (entry.isIntersecting) {
                     // Inicia el conteo en secuencia
-                    const delay = 500; // 1 segundo entre contadores
+                    const delay = 50; // 1 segundo entre contadores
 
                     setYearsCount(0);
-                    setCountriesCount(0);
-                    setCitiesCount(0);
-
+                  /*   setCountriesCount(0);
+                    setCitiesCount(0); */
+/* 
                     setTimeout(() => {
-                        animateCounter(setYearsCount, 4842, 2000); // Primer contador
-                    }, 0);
+                    }, 0); */
+                        animateCounter(setYearsCount, 4842, 500); // Primer contador
 
-                    setTimeout(() => {
+/*                     setTimeout(() => {
                         animateCounter(setCountriesCount, 15, 500); // Segundo contador
                     }, delay);
 
 
                     setTimeout(() => {
                         animateCounter(setCitiesCount, 25, 500); // Tercer contador
-                    }, delay * 2);
+                    }, delay * 2); */
                 } else {
                     // Reinicia los contadores al salir de pantalla
                     setYearsCount(0);
-                    setCountriesCount(0);
-                    setCitiesCount(0);
+                   /*  setCountriesCount(0);
+                    setCitiesCount(0); */
                 }
             });
         }, { threshold: 0.2 });
@@ -549,6 +552,7 @@ function Project() {
             {/* fin frase  */}
 
 
+
             <section className="image-and-quadrants">
                 <div className="quadrant-container">
                     <div className='container-image-small-projet' >
@@ -561,17 +565,17 @@ function Project() {
                         />
                     </div>
 
-                    <div className="quadrant white-box">
-                        <span className="project-box">{projectData.frase1}</span>
+                    <div className="quadrant-project white-box-project">
+                        <span className="project-box-project">{projectData.frase1}</span>
                     </div>
-                    <div className="quadrant white-box">
-                        <span className="project-box">{projectData.frase2}</span>
-                        <div className="moving-line" ref={line1Ref}></div>
+                    <div className="quadrant-project white-box-project"  >
+                        <span className="project-box-project" >{projectData.frase2}</span>
+                        <div className="moving-line-project" ref={line1Ref}></div>
                     </div>
-                    <div className="quadrant green-box" ref={counterRef} style={{ color: "white", width: '50vw' }}>
-                        <span className="project-count">{projectCount}</span>
+                    <div className="quadrant-project green-box-project" ref={counterRef}>
+                        <span className="project-count-project">{projectCount}</span>
                         <span className="project-label-project">{projectData.nombre}</span>
-                        <div className="moving-line2" ref={line2Ref}></div>
+                        <div className="moving-line2-project" ref={line2Ref}></div>
                     </div>
                 </div>
 
@@ -591,11 +595,11 @@ function Project() {
                     </div>
                 </div>
                 <div className="horizontal-double-team">
-                    <div className="quadrant yellow-box" ref={sectionCountersRef} style={{ width: '50vw' }}>
-                        <span className="project-count">{yearsCount}</span>
+                    <div className="quadrant-project yellow-box-project" ref={sectionCountersRef} style={{ width: '50vw' }}>
+                        <span className="project-count-project">{yearsCount}</span>
                         <span className="project-label-project2">ft2</span>
                     </div>
-                    <div className="quadrant white-box" style={{ width: '50vw', backgroundOpacity: "0.1" }}>
+                    <div className="quadrant-project white-box-project" style={{ width: '50vw', backgroundOpacity: "0.1" }}>
                         <span className="project-label-small">Location</span>
                         <span className="project-label-normal" style={{ marginBottom: "10px" }}>{projectData.location}</span>
 
@@ -612,11 +616,11 @@ function Project() {
                 <div className="full-square">
                     <div className="parallax-wrapper">
                         <img
-                            src={imagesPrincipal.miniatura2[imageName]}
+                            src={imagesPrincipal.proyecto3[imageName]}
                             alt="Branding 1"
                             className="parallax-image"
                             ref={brandingImageRef}
-                            onClick={() => openPopup(imagesPrincipal.miniatura2[imageName])}
+                            onClick={() => openPopup(imagesPrincipal.proyecto3[imageName])}
                         />
                     </div>
 
@@ -640,7 +644,7 @@ function Project() {
                             <img src={starImage} alt="Star" className="star-image-foto" />
                         </div>
                     </div> */}
-                    <div className="quadrant blue-box" ref={sectionCountersRef} style={{ width: '50vw' }}>
+                    <div className="quadrant-project blue-box-project" ref={sectionCountersRef} style={{ width: '50vw' }}>
                         <span className="project-box-frase"> Balance of energy, style and comfort.</span>
                     </div>
                         <div className='container-image-small-projet' >

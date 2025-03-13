@@ -20,7 +20,8 @@ console.log(`📁 Directorio de imágenes: ${IMAGES_PATH}`);
 // ✅ 1. API para obtener imágenes de una carpeta específica
 app.get("/api/images/:folder", (req, res) => {
     try {
-        let folder = decodeURIComponent(req.params.folder.trim());
+        let folder = decodeURIComponent(req.params.folder).replace(/\s+/g, "").trim();
+        console.log(`🛠 (DEV) Buscando imágenes en la carpeta: "${folder}"`);
         const directoryPath = path.join(IMAGES_PATH, folder);
 
         if (!fs.existsSync(directoryPath)) {

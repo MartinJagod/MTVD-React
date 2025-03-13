@@ -16,14 +16,19 @@ if (rootElement) {
 }
 
 const ProjectPopup = ({ isOpen, onClose, initialImage, projectName }) => {
+    if (projectName =="Che Mono" ){projectName = projectName.replace(/\s+/g, "").trim()}
     const [initialIndex, setInitialIndex] = useState(0);
     const [images, setImages] = useState([]);
     const modalRef = useRef(null);
-
+    const normalizeProjectName = (name) => {
+        return name.replace(/\s+/g, " ").trim();  // 🔹 Reemplaza múltiples espacios y recorta bordes
+    };
     console.log("🟢 1. Modal abierto. Proyecto seleccionado:", projectName);
+    projectName = projectName.trim()
+    console.log("🟡 Estado inicial de projectName:", projectName.trim());
 
     useEffect(() => {
-        if (!projectName || projectName.trim() === "") {
+        if (!projectName || normalizeProjectName(projectName) === "") {
             console.warn("⚠ No se ejecuta el fetch porque `projectName` es:", projectName);
             return;
         }
@@ -42,7 +47,10 @@ const ProjectPopup = ({ isOpen, onClose, initialImage, projectName }) => {
     
         try {
             const API_URL = "http://193.203.182.77:5000/api/images/";
-            const formattedProjectName = encodeURIComponent(projectName.trim());
+            const formattedProjectName = normalizeProjectName(projectName);
+
+            console.log( `Fetch a la url= ${API_URL}${formattedProjectName}`);
+            
             const fullURL = `${API_URL}${formattedProjectName}`;
     
             console.log(`🔍 4. Intentando obtener imágenes de: ${fullURL}`);
