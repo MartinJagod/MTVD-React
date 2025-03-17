@@ -40,7 +40,11 @@ function Home() {
     const [rotateYellowBoxDesktop, setRotateYellowBoxDesktop] = useState(false);
 
     const [slideBoxes, setSlideBoxes] = useState(false);
+    const [slideBoxesDesktop, setSlideBoxesDesktop] = useState(false);
+
     const [slideStudioBox, setSlideStudioBox] = useState(false);
+    const [slideStudioBoxDesktop, setSlideStudioBoxDesktop] = useState(false);
+
     const [hasStartedCountingProjects, setHasStartedCountingProjects] = useState(false);
     const [hasStartedCountingSection, setHasStartedCountingSection] = useState(false);
     const yellowBoxRef = useRef(null); // Referencia al yellow-box
@@ -144,8 +148,8 @@ function Home() {
             { ref: interiorismoImageRef, speed: 0.15 },
             { ref: arquitecturaImageRef, speed: 0.15 },
             { ref: brandingDesktopImageRef, speed: 0.15 },
-            { ref: interiorismoDesktopImageRef, speed: 0.15 },
-            { ref: arquitecturaDesktopImageRef, speed: 0.15 },
+            { ref: interiorismoDesktopImageRef, speed: 0.20 },
+            { ref: arquitecturaDesktopImageRef, speed: 0.25 },
         ];
 
         const handleParallaxEffect = () => {
@@ -207,7 +211,10 @@ function Home() {
     const counterRef = useRef(null);
     const sectionCountersRef = useRef(null);
     const slideBoxesRef = useRef(null);
+    const slideBoxesDesktopRef = useRef(null);
     const slideStudioBoxRef = useRef(null);
+    const slideStudioBoxDesktopRef = useRef(null);
+
 
     const options = ['Architecture', 'Awards', 'Asphalt', 'Aluminum', 'Aggregate', 'Asbestos', 'Adhesive', 'Anchor', 'Acrylic', 'Acoustic'];
 
@@ -327,6 +334,31 @@ function Home() {
     }, [animateCounter]); // Asegúrate de incluir animateCounter si está definido fuera del useEffect
 
     //fin contador animado
+    useEffect(() => {
+        const observerSlideBoxesDesktop = new IntersectionObserver(
+            (entries) => {
+                entries.forEach((entry) => {
+                    if (entry.isIntersecting) {
+                        setSlideBoxesDesktop(true); // Activa la animación cuando entra en pantalla
+                    } else {
+                        setSlideBoxesDesktop(false); // Restablece si sale de pantalla
+                    }
+                });
+            },
+            { threshold: 0.5 } // Se activa cuando el 50% del elemento es visible
+        );
+
+        const slideBoxesElement = slideBoxesDesktopRef.current;
+        if (slideBoxesElement) {
+            observerSlideBoxesDesktop.observe(slideBoxesElement);
+        }
+
+        return () => {
+            if (slideBoxesElement) {
+                observerSlideBoxesDesktop.unobserve(slideBoxesElement);
+            }
+        };
+    }, []);
 
     // Inico deslice de cajas
     useEffect(() => {
@@ -354,6 +386,31 @@ function Home() {
             }
         };
     }, []);
+    //  deslice de cajas naranja desktop
+
+    useEffect(() => {
+        const observerStudioBoxDesktop = new IntersectionObserver((entries) => {
+            entries.forEach((entry) => {
+                if (entry.isIntersecting) {
+                    setSlideStudioBoxDesktop(true); // Activa el deslizamiento
+                } else {
+                    setSlideStudioBoxDesktop(false); // Restablece el estado cuando sale de pantalla
+                }
+            });
+        }, { threshold: 0.3 }); // Detecta cuando al menos el 50% es visible
+
+        const studioBoxElement = slideStudioBoxDesktopRef.current;
+        if (studioBoxElement) {
+            observerStudioBoxDesktop.observe(studioBoxElement);
+        }
+
+        return () => {
+            if (studioBoxElement) {
+                observerStudioBoxDesktop.unobserve(studioBoxElement);
+            }
+        };
+    }, []);
+    // Fin deslice de cajas naranja desktop
 
     useEffect(() => {
         const observerStudioBox = new IntersectionObserver((entries) => {
@@ -447,29 +504,29 @@ function Home() {
         };
     }, []);
     // Fin animación de cajas naranja
-// Inicio animación de cajas naranja 
+    // Inicio animación de cajas naranja 
 
-useEffect(() => {
-    const observerYellowBox = new IntersectionObserver((entries) => {
-        entries.forEach((entry) => {
-            if (entry.isIntersecting) {
-                setRotateYellowBoxDesktop((prev) => !prev); // Alterna el estado cada vez que entra en pantalla
-            }
-        });
-    }, { threshold: 1 }); // Detecta cuando el 80% del elemento es visible
+    useEffect(() => {
+        const observerYellowBox = new IntersectionObserver((entries) => {
+            entries.forEach((entry) => {
+                if (entry.isIntersecting) {
+                    setRotateYellowBoxDesktop((prev) => !prev); // Alterna el estado cada vez que entra en pantalla
+                }
+            });
+        }, { threshold: 1 }); // Detecta cuando el 80% del elemento es visible
 
-    const yellowBoxElement = yellowBoxDesktopRef.current;
-    if (yellowBoxElement) {
-        observerYellowBox.observe(yellowBoxElement);
-    }
-
-    return () => {
+        const yellowBoxElement = yellowBoxDesktopRef.current;
         if (yellowBoxElement) {
-            observerYellowBox.unobserve(yellowBoxElement);
+            observerYellowBox.observe(yellowBoxElement);
         }
-    };
-}, []);
-// Fin animación de cajas naranja
+
+        return () => {
+            if (yellowBoxElement) {
+                observerYellowBox.unobserve(yellowBoxElement);
+            }
+        };
+    }, []);
+    // Fin animación de cajas naranja
     // Inicio reinicio video
     const videoRef = useRef(null);
 
@@ -571,7 +628,7 @@ useEffect(() => {
             </div>
             {/* Seccion mobile */}
             <div className="full-square desktop-hide">
-                
+
                 <div className="parallax-wrapper">
                     <img
                         src={branding1}
@@ -625,9 +682,6 @@ useEffect(() => {
 
 
                 <div className="quadrant">
-
-
-
                     {/* Nueva sección horizontal para los contadores */}
                     <div className="horizontal-counter-section-new" ref={sectionCountersRef}>
                         <div className="horizontal-counter-item-new">
@@ -723,7 +777,10 @@ useEffect(() => {
 
             {/* fin seccion mobile */}
 
+
+
             {/* Seccion Desktop */}
+
             {/* caja doblea ancho */}
             <div className="full-square-desktop mobile-hide grid-container-uno">
                 <div className="container-one">
@@ -734,7 +791,7 @@ useEffect(() => {
                             className="parallax-image"
                             ref={brandingDesktopImageRef}
                             onClick={() => { goToProject(1) }}
-                            style={{ width: "70vw",  position: 'relative',left: '-17%' }}
+                            style={{ width: "70vw", position: 'relative', left: '-17%' }}
                         />
                         <div className="image-label-home-desktop">
                             {getFileName(branding1)}
@@ -743,8 +800,8 @@ useEffect(() => {
                             <img src={starImage} alt="Star" className="star-image-foto-desktop" onClick={goToAwardsAndPress} />
                         </div>
                     </div>
-                   
-                    <div className=" quadrant white-box-desktop box-two"  style={{position: 'relative',left: '75%'}}>
+
+                    <div className=" quadrant white-box-desktop box-two" style={{ position: 'relative', left: '75%', alignItems: "baseline" }}>
                         <span className="project-box-desktop">Inspiring</span> <br />
                         <span className="project-box-desktop">people</span>
                         <div className="moving-line" ref={line1Ref}></div>
@@ -752,55 +809,105 @@ useEffect(() => {
                 </div>
             </div>
 
-                {/*                 Van 3 cajas iguales en la misma fila ,   */}
-                <div className="row-2-desktop">
-    <div className="quadrant-row-2 white-box-desktop" onClick={goToProjects}>
-        <span className="project-box-desktop">To create</span>
-        <span className="project-box-desktop">exciting</span>
-        <span className="project-box-desktop">places</span>
-    </div>
-    <div className={`quadrant-row-2 yellow-box ${rotateYellowBoxDesktop ? 'rotate' : ''}`} 
-    ref={yellowBoxDesktopRef} 
-    onClick={goToProjects}>
-        <div className="flip-container">
-            <div className="front">
-                <img src={logoVertical} alt="Logo Vertical" className="logo-image" />
+            {/*                 Van 3 cajas iguales en la misma fila ,   */}
+            <div className="row-2-desktop">
+                <div className="quadrant-row-2 white-box-desktop" onClick={goToProjects} style={{ alignItems: "baseline" }}>
+                    <span className="project-box-desktop">To create</span>
+                    <span className="project-box-desktop">exciting</span>
+                    <span className="project-box-desktop">places</span>
+                </div>
+                <div className={`quadrant-row-2 yellow-box ${rotateYellowBoxDesktop ? 'rotate' : ''}`}
+                    ref={yellowBoxDesktopRef}
+                    onClick={goToProjects}>
+                    <div className="flip-container">
+                        <div className="front">
+                            <img src={logoVertical} alt="Logo Vertical" className="logo-image" />
+                        </div>
+                        <div className="back">
+                            <span className='back-item'>Design</span>
+                            <span className='back-item'>Architecture</span>
+                            <span className='back-item'>Branding</span>
+                        </div>
+                    </div>
+                </div>
+                {/* <div className="full-square">
+                    <div className="parallax-wrapper">
+                        <img
+                            src={arquitectura1}
+                            alt="Architecture 1"
+                            className="parallax-image"
+                            ref={arquitecturaImageRef}
+                            onClick={() => { goToProject(3) }}
+
+                        />
+                    </div>
+                    <div className="image-label-home">
+                        {getFileName(arquitectura1)}
+                    </div>
+                    <div className="image-label-star">
+                        <img src={starImage} alt="Star" className="star-image-foto" />
+                    </div>
+                </div> */}
+                <div className="quadrant-row-2 white-box-desktop " onClick={goToProjects}
+                >
+                    <img
+                        src={arquitectura1}
+                        alt="Architecture 1"
+                        onClick={() => { goToProject(3) }}
+                        style={{ width: "34vw", height: "39.55vw" }}
+                    />
+                </div>
             </div>
-            <div className="back">
-                <span className='back-item'>Design</span>
-                <span className='back-item'>Architecture</span>
-                <span className='back-item'>Branding</span>
+            {/* tercera linea*/}
+            <div className="full-square-desktop mobile-hide grid-container-uno">
+                <div className="container-one">
+                    <div className="parallax-wrapper home-parallax-desktop box-uno" >
+                        <img
+                            src={interiorismo1}
+                            alt="Interiorismo 1"
+                            className="parallax-image"
+                            ref={interiorismoDesktopImageRef}
+                            onClick={() => { goToProject(2) }}
+                            style={{ width: "70vw", position: 'relative', left: '-17%' }}
+                        />
+                        <div className="image-label-home-desktop">
+                            {getFileName(interiorismo1)}
+                        </div>
+                        <div className="image-label-star-desktop">
+                            <img src={starImage} alt="Star" className="star-image-foto-desktop" onClick={goToAwardsAndPress} />
+                        </div>
+                    </div>
+                    <div className=" quadrant blue-box-desktop box-two" ref={counterRef} style={{ position: 'relative', left: '101%', width: "35vw" }}>
+                        <span className="project-count">+{projectCount}</span>
+                        <span className="project-label">projects</span>
+                        <div className="moving-line" ref={line1Ref}></div>
+                    </div>
+                </div>
             </div>
-        </div>
-    </div>
-
-    <div className="quadrant-row-2 white-box-desktop" onClick={goToProjects}>
-        <span className="project-box-desktop">To create</span>
-        <span className="project-box-desktop">exciting</span>
-        <span className="project-box-desktop">places</span>
-    </div>
-</div>
-
-            <section className="image-and-quadrants mobile-hide">
-
-
-                <div className="quadrant mobile-hide">
-
-
-
+            {/* cuarta linea*/}
+            <div className="row-3-desktop">
+                <div>
+                    <img
+                        src={arquitectura1}
+                        alt="Architecture 1"
+                        onClick={() => { goToProject(3) }}
+                        style={{ width: "32vw", height: "60vw" }}
+                    />
+                </div>
+                <div className="quadrant mobile-hide" style={{ alignItems: "baseline", width: "32vw", height: "60vw" }}>
                     {/* Nueva sección horizontal para los contadores */}
-                    <div className="horizontal-counter-section-new mobile-hide" ref={sectionCountersRef}>
-                        <div className="horizontal-counter-item-new">
+                    <div className="horizontal-counter-section-new-desktop mobile-hide" ref={sectionCountersRef}>
+                        <div className="horizontal-counter-item-new-desktop">
                             <span className="horizontal-project-count-new">+{yearsCount}</span>
                             <br />
                             <span className="horizontal-project-label-new" style={{ paddingLeft: "30px" }}>years</span>
                         </div>
-                        <div className="horizontal-counter-item-new">
+                        <div className="horizontal-counter-item-new-desktop">
                             <span className="horizontal-project-count-new">+{countriesCount}</span>
                             <br />
                             <span className="horizontal-project-label-new" style={{ paddingLeft: "70px" }}>countries</span>
                         </div>
-                        <div className="horizontal-counter-item-new">
+                        <div className="horizontal-counter-item-new-desktop">
                             <span className="horizontal-project-count-new">+{citiesCount}</span>
                             <br />
                             <span className="horizontal-project-label-new" style={{ paddingLeft: "27px" }}>cities</span>
@@ -809,7 +916,26 @@ useEffect(() => {
                     </div>
 
                 </div>
-                <div className="full-square">
+                <div>
+
+                    <div className=" white-box-desktop " onClick={goToProjects}
+                    >
+                        <img
+                            src={arquitectura1}
+                            alt="Architecture 1"
+                            onClick={() => { goToProject(3) }}
+                            style={{ width: "34vw", height: "30vw" }}
+                        />
+                    </div>
+                    <div className="quadrant-row-2 white-box-desktop" onClick={goToProjects} style={{ alignItems: "baseline", width: "34vw", height: "27vw" }}>
+
+                    </div>
+                </div>
+            </div>
+            <section className="image-and-quadrants mobile-hide">
+                {/* 
+Cuarta Fila */}
+                {/*   <div className="full-square">
                     <div className="parallax-wrapper">
                         <img
                             src={interiorismo1}
@@ -819,7 +945,6 @@ useEffect(() => {
                             onClick={() => { goToProject(2) }}
 
                         />
-                        {/* Muestra el nombre del archivo */}
                     </div>
                     <div className="image-label-home">
                         {getFileName(interiorismo1)}
@@ -827,21 +952,71 @@ useEffect(() => {
                     <div className="image-label-star">
                         <img src={starImage} alt="Star" className="star-image-foto" onClick={goToAwardsAndPress} />
                     </div>
-                </div>
+                </div> */}
+                {/* tercera linea*/}
+                <div className="full-square-desktop mobile-hide grid-container-uno">
+                    <div className="container-one">
+                        <div className="parallax-wrapper home-parallax-desktop box-uno" >
+                            <img
+                                src={interiorismo1}
+                                alt="Interiorismo 1"
+                                className="parallax-image"
+                                ref={interiorismoDesktopImageRef}
+                                onClick={() => { goToProject(2) }}
+                                style={{ width: "70vw", position: 'relative', left: '-17%' }}
+                            />
+                            <div className="image-label-home-desktop">
+                                {getFileName(interiorismo1)}
+                            </div>
+                            <div className="image-label-star-desktop">
+                                <img src={starImage} alt="Star" className="star-image-foto-desktop" onClick={goToAwardsAndPress} />
+                            </div>
+                        </div>
 
-                <div className="new-quadrant-container" ref={slideBoxesRef} onClick={goToAwardsAndPress}>
+
+                        <div className="quadrant-star-desktop box-two-star-desktop" ref={slideBoxesDesktopRef}
+                            style={{ position: 'relative', left: '101%', width: "35vw", height: "33vw", overflow: "visible" }}>
+
+                            {/* Caja verde que se mueve */}
+                            <div className={`quadrant-row-2-star-desktop green-box-star-desktop ${slideBoxesDesktop ? 'slide-green-star-desktop' : ''}`}>
+                                <img src={starImage} alt="Star" className="star-image-star-desktop" onClick={goToAwardsAndPress} />
+                            </div>
+
+                            {/* Awards detrás de la caja verde */}
+                            <div className="quadrant-star-desktop white-box-estrella-star-desktop">
+                                <span className="text-Awards-desktop">Awards</span>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                {/* <div className="new-quadrant-container-desktop" ref={slideBoxesDesktopRef} onClick={goToAwardsAndPress}>
+                        <img
+                            src={interiorismo1}
+                            alt="Interiorismo 1"
+                            className="parallax-image"
+                            ref={interiorismoDesktopImageRef}
+                            onClick={() => { goToProject(2) }}
+                            style={{ width: "77vw", position: 'relative', left: '-17%' }}
+                        />
+                        <div className="image-label-home-desktop">
+                            {getFileName(interiorismo1)}
+                        </div>
+                        <div className="image-label-star-desktop">
+                            <img src={starImage} alt="Star" className="star-image-foto-desktop" onClick={goToAwardsAndPress} />
+                        </div>
                     <div
-                        className={`quadrant green-box ${slideBoxes ? 'slide-green' : ''}`}
+                        className={`quadrant-row-2 green-box-desktop ${slideBoxesDesktop ? 'slide-green-desktop' : ''}`}
                     >
                         <img src={starImage} alt="Star" className="star-image" onClick={goToAwardsAndPress} />
                     </div>
                     <div onClick={goToAwardsAndPress} className="quadrant white-box-estrella">
                         <span className="text-Awards">Awards</span>
                     </div>
-                </div>
+                </div> */}
 
 
-                <div className="full-square">
+                {/*     <div className="full-square">
                     <div className="parallax-wrapper">
                         <img
                             src={arquitectura1}
@@ -853,37 +1028,61 @@ useEffect(() => {
                         />
                     </div>
                     <div className="image-label-home">
-                        {getFileName(arquitectura1)}
+                    {getFileName(arquitectura1)}
                     </div>
                     <div className="image-label-star">
-                        <img src={starImage} alt="Star" className="star-image-foto" />
+                    <img src={starImage} alt="Star" className="star-image-foto" />
                     </div>
-                </div>
+                    </div> */}
 
-                <div className="custom-quadrant-container">
+                    <div className='row-box-studio'>
+
+                <div className="custom-quadrant-container-desktop" ref={slideStudioBoxDesktopRef}>
                     <div
-                        className={`custom-orange-box ${slideStudioBox ? 'custom-slide-orange' : ''}`}
-                        ref={slideStudioBoxRef} onClick={goToStudio}
+                        className={`custom-orange-box-desktop ${slideStudioBoxDesktop ? 'custom-slide-orange-desktop' : ''}`}
+                        onClick={goToStudio}
                     >
-                        <img src={groupImage} alt="Group Icon" className="icon-image" onClick={goToStudio} />
+                        <img src={groupImage} alt="Group Icon" className="star-image-star-desktop" onClick={goToStudio} />
 
                     </div>
                     <div onClick={goToStudio}
-                        className={` quadrant custom-white-box ${slideStudioBox ? 'custom-slide-team' : ''}`}
+                        className="quadrant-row-2 custom-white-box-desktop"
                     >
-                        {slideStudioBox && <span className="text-Awards">Our Studio</span>}
+                        {slideStudioBoxDesktop && <span className="text-Awards-desktop">Our Studio</span>}
                     </div>
                 </div>
 
+
+                    <div className="full-square-architecture">
+
+
+                    <div className="parallax-wrapper-architecture">
+                        <img
+                            src={arquitectura1}
+                            alt="Architecture 1"
+                            className="parallax-image-architecture"
+                            ref={arquitecturaDesktopImageRef}
+                            onClick={() => { goToProject(3) }}
+                        />
+                    </div>
+                    <div className="image-label-home-desktop">
+                        {getFileName(arquitectura1)}
+                    </div>
+                    <div className="image-label-star-architecture">
+                        <img src={starImage} alt="Star" className="star-image-foto-architecture" />
+                    </div>
+                </div>
+                </div>
                 <div className="horizontal-double-team" >
                     <img src={teamImage} alt="Team" className="horizontal-image-team" onClick={goToStudio} />
 
                 </div>
+
             </section>
             {/* fin seccion Desktop */}
             <section className="content-section">
                 <div className="button-container">
-                    <a className="custom-button-end">
+                    <a className="custom-button-end-desktop">
                         <span onClick={goToProjects}> check our  <strong> projects </strong></span>
                     </a>
                 </div>
