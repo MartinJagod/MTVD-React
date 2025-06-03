@@ -1,0 +1,78 @@
+.home-container {
+    position: relative;
+    min-height: 100vh; /* Permite contenido más largo */
+    overflow: auto; /* Permite el desplazamiento */
+}
+
+.background-image {
+    background-color: blue;
+    background-size: cover;
+    background-position: center;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    z-index: -1;
+}
+
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    position: absolute;
+    width: 100%;
+    top: 0;
+    z-index: 10; /* Asegura que la barra de navegación esté encima de la imagen */
+}
+
+.nav-left {
+    display: flex;
+    align-items: center;
+    margin-left: 50px;
+}
+
+.nav-right {
+    display: flex;
+    align-items: center;
+    gap: 20px; /* Espaciado entre botones */
+    margin-right: 100px;
+}
+
+.logo img {
+    height: 20px; /* Ajusta la altura del logo si es necesario */
+}
+
+.nav-links button {
+    background: none; /* Sin color de fondo */
+    border: none; /* Sin bordes */
+    color: #fff; /* Color del texto */
+    font-size: 16px; /* Tamaño del texto */
+    cursor: pointer; /* Cambia el cursor al pasar sobre el botón */
+    margin: 0 10px; /* Espaciado adicional si es necesario */
+    padding: 10px; /* Espaciado interno */
+}
+
+.nav-links button:hover {
+    color: #f0f0f0; /* Cambio de color al pasar el cursor */
+    text-decoration: underline; /* Subrayado al pasar el cursor */
+}
+
+.full-viewport-image {
+    width: 100%;
+    height: 100vh;
+    object-fit: cover; /* Asegura que la imagen cubra todo el espacio sin deformarse */
+}
+
+.weare {
+    font-size: 80px; /* Tamaño de la tipografía */
+    text-align: center; /* Centrar el texto horizontalmente */
+    width: 100%; /* Asegura que ocupe el 100% del ancho */
+    margin: 0; /* Quita márgenes predeterminados */
+    padding: 20px 0; /* Agrega espacio arriba y abajo */
+    color: #000; /* Color del texto */
+    font-family: "Arial Black";
+}
+.logo {
+    margin-top: 10px;
+    height: 30px; /* Ajusta el tamaño del logo según la necesidad */
+}

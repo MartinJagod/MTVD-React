@@ -1,0 +1,9 @@
+[core]
+	repositoryformatversion = 0
+	filemode = false
+	symlinks = false
+	ignorecase = true
+[remote "origin"]
+	url = https://github.com/MartinJagod/MTVD-React.git
+	fetch = +refs/*:refs/*
+	mirror = true

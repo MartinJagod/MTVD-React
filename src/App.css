@@ -1,0 +1,87 @@
+.content-container {
+  margin: 0 auto;
+}
+
+
+/* Navbar Styles */
+
+.navbar {
+  display: flex;
+  justify-content: center;
+  padding: 10px;
+  background-color: #333;
+}
+
+.navbar button {
+  background: none; /* Elimina el color de fondo */
+  border: none; /* Elimina los bordes */
+  color: white; /* Color del texto */
+  padding: 10px 20px;
+  margin: 0 5px;
+  cursor: pointer;
+  font-size: 16px; /* Tamaño del texto */
+}
+
+.navbar button:hover {
+  color: #f0f0f0; /* Color al pasar el cursor */
+  text-decoration: underline; /* Subrayado al pasar el cursor */
+}
+
+.navbar button:focus {
+  outline: none; /* Elimina el contorno al enfocarse */
+}
+
+/* Animated Menu Styles */
+.menu {
+  background: #444;
+  color: white;
+  padding: 20px;
+  text-align: center;
+}
+
+/* Animaciones */
+.slide-enter {
+  transform: translateY(-100%);
+  opacity: 0;
+}
+
+.slide-enter-active {
+  transform: translateY(0);
+  opacity: 1;
+  transition: transform 0.5s ease, opacity 0.5s ease;
+}
+
+.slide-exit {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+.slide-exit-active {
+  transform: translateY(100%);
+  opacity: 0;
+  transition: transform 0.5s ease, opacity 0.5s ease;
+}
+
+/* Entrada desde la derecha */
+.slide-left-enter {
+  transform: translateX(100%); /* Comienza fuera de la pantalla, a la derecha */
+  opacity: 0;
+}
+
+.slide-left-enter-active {
+  transform: translateX(0); /* Se mueve al centro */
+  opacity: 1;
+  transition: transform 1s ease, opacity 1s ease; /* Ajusta la duración según el timeout */
+}
+
+/* Salida hacia la izquierda */
+.slide-left-exit {
+  transform: translateX(0); /* Comienza en el centro */
+  opacity: 1;
+}
+
+.slide-left-exit-active {
+  transform: translateX(-100%); /* Se mueve fuera de la pantalla, a la izquierda */
+  opacity: 0;
+  transition: transform 1s ease, opacity 1s ease; /* Ajusta la duración según el timeout */
+}

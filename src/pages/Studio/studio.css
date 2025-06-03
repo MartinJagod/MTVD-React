@@ -1,0 +1,332 @@
+.studio-section {
+    font-family: Arial, sans-serif;
+    color: #333;
+    overflow: hidden;
+    font-family: "Montserrat", sans-serif;
+}
+
+.studio-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 100;
+}
+
+.studio-images {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 70px;
+    gap: 10px;
+    
+}
+
+.studio-image {
+    background-size: cover;
+    background-position: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+    position: relative;
+    border-radius: 15px;
+
+}
+
+.studio-image.expanded {
+    border-color: #000;
+}
+
+
+.image-label {
+    position: absolute;
+    bottom: 5px;
+    
+    color: white;
+    padding: 5px 5px;
+    font-size: 16px;
+    border-radius: 5px;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 4px;
+    font-weight: 800;
+    z-index: 2;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+    font-family: 'Montserrat', sans-serif;
+    /*transform: rotate(-90deg);  Rota el texto 90 grados hacia la izquierda 
+    transform-origin: left bottom;
+    transition: all 0.3s ease;  Suaviza la transición */
+}
+
+
+.studio-image.selected .image-label {
+    position: absolute;
+    bottom: 5px;
+    transform: rotate(0deg); /* Texto horizontal cuando está seleccionado */
+    transform-origin: left bottom;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+    color: white;
+    padding: 5px 10px;
+    border-radius: 4px;
+    font-weight: 800;
+    z-index: 2;
+    font-family: 'Montserrat', sans-serif;
+}
+
+
+.studio-text {
+    margin-top: 60px;
+    padding: 20px;
+    text-align: left;
+}
+
+.studio-title {
+    font-size: 3rem;
+    font-weight: 850;
+    margin-bottom: 1rem;
+
+}
+
+.studio-paragraph {
+    font-size: 0.9rem;
+    line-height: 1.5;
+    margin-bottom: 1rem;
+    padding: 10px;
+    text-align: justify;
+}
+
+.studio-highlight {
+    font-size: 32px;
+    font-weight: bold;
+    color: #555;
+    margin: 2rem 7rem;
+}
+
+.studio-team {
+    margin: 20px;
+    font-family: Arial, sans-serif;
+    color: #333;
+}
+
+.studio-team h2 {
+    text-align: left; /* Alineación a la izquierda */
+    margin-bottom: 20px;
+    font-size: 1.5em;
+    font-weight: bold;
+}
+
+.team-section {
+    margin-bottom: 5px;
+}
+
+.team-section h4 {
+    font-size: 1.2em;
+    text-align: left; /* Alineación a la izquierda */
+    margin-bottom: 2px;
+}
+
+.team-columns {
+    display: flex;
+    justify-content: flex-start; /* Alineación de columnas a la izquierda */
+    gap: 20px;
+}
+
+.team-column {
+    flex: 1;
+    text-align: left; /* Alineación a la izquierda */
+}
+
+.team-column h4 {
+    font-size: 1.2em;
+    margin-bottom: 10px;
+    font-weight: bold;
+}
+
+.team-column ul {
+    list-style: none; /* Elimina los puntos de la lista */
+    padding: 0;
+    margin: 0;
+}
+
+.team-column ul li {
+    margin-bottom: 5px;
+    font-size: 1em;
+    text-align: left; /* Alineación a la izquierda */
+}
+ul {
+    list-style: none; /* Elimina los puntos de la lista */
+    padding: 0;       /* Elimina el relleno predeterminado de las listas */
+    margin: 0;        /* Elimina el margen predeterminado de las listas */
+}
+.studio-footer {
+    margin-top: 20px;
+}
+.column {
+    display: flex;
+    justify-content: center; /* Centra horizontalmente */
+    align-items: center; /* Centra verticalmente */
+    height: 40vh; /* Asegura que ocupa todo el alto del contenedor */
+    position: relative; /* Base para los elementos posicionados */
+}
+
+.styled-quote {
+    position: relative;
+    font-family: "Montserrat", sans-serif;
+    font-size: 1.9em;
+    line-height: 1.5;
+    font-weight: bold;
+    color: #000;
+    width: 40%; /* Ocupa el 30% del ancho del contenedor */
+    text-align: left; /* Centra el texto dentro del blockquote */
+    padding: 10px 20px;
+}
+
+.styled-quote::before {
+    content: "“"; /* Comilla de apertura */
+    font-size: 7em;
+    color: #44b87e;
+    position: absolute;
+    top: -100px; /* Ajusta la posición vertical */
+    left: -10px; /* Ajusta la posición horizontal */
+    z-index: -1;
+}
+
+.styled-quote::after {
+    content: "”"; /* Comilla de cierre */
+    font-size: 3em;
+    color: #44b87e;
+    position: absolute;
+    bottom: -65px; /* Ajusta la posición vertical */
+    right: 20px; /* Ajusta la posición horizontal */
+}
+li {
+    margin-bottom: 5px;
+    font-size: 1em;
+    text-align: left;
+}
+.image-label {
+    text-shadow: 1px 2px 2px rgba(0, 0, 0, 0.4); /* Sombra negra semi-transparente */
+    font-size: 16px; /* Ajusta el tamaño según sea necesario */
+  }
+  .studio-mobile-column {
+    display: flex;
+    flex-direction: column;
+       gap: 10px;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+  @media (min-width: 768px) {
+    .studio-team{
+        display: none;
+    }
+    .studio-paragraph {
+        font-size: 1.5rem;
+        line-height: 1.2;
+        margin-bottom: 1rem;
+        padding: 10px;
+        text-align: justify;
+        max-width: 50%;
+        margin-left: 7%;
+    }
+    .studio-title {
+        font-size: 4rem;
+        font-weight: 850;
+        margin-bottom: 1rem;
+        margin-left: 7%;
+        padding-bottom: 3%;
+    
+    }
+    .studio-mobile-column {
+        display: flex;
+        flex-direction: row;
+           gap: 10px;
+        margin-left: 10px;
+        margin-right: 10px;
+
+    }
+    }
+
+    /* ---------- CONTENEDOR ---------- */
+.studio-images {
+    display: flex;
+    overflow: hidden;
+    width: 100%;
+  }
+  
+  /* mobile: columna vertical (default) */
+  .studio-mobile-column {
+    flex-direction: column;
+  }
+  
+  /* desktop ≥768 px: fila horizontal */
+  @media (min-width: 768px) {
+    .studio-images {
+      flex-direction: row;
+    }
+  }
+  
+  /* ---------- ITEM ---------- */
+  .studio-image {
+    background-size: cover;
+    background-position: center;
+    cursor: pointer;
+    /* transición doble para que funcione en ambos layouts */
+    transition: width 1s ease-in-out, height 1s ease-in-out;
+    /* tamaño MOBILE por defecto */
+    width: 90vw;
+    height: 4vh;
+    position: relative;
+  }
+  
+  /* etiqueta */
+  .image-label {
+    position: absolute;
+    bottom: 6px;
+    left: 8px;
+    font-size: .75rem;
+    padding: 2px 6px;
+    
+    color: #fff;
+    user-select: none;
+  }
+  
+  /* item seleccionado MOBILE */
+  .studio-image.selected {
+    height: 39vh;
+  }
+  
+  /* ---------- DESKTOP overrides ---------- */
+  @media (min-width: 768px) {
+    .studio-image          { width: 4.5vw;  height: 60vh; margin-top: 5%;}
+    .studio-image.selected { width: 41vw; height: 60vh; }
+    .image-label {
+        display: none;
+      }
+    .studio-image.selected .image-label {
+        display: inline;
+        text-shadow: 1px 2px 2px rgba(0, 0, 0, 0.4); /* Sombra negra semi-transparente */
+        font-size: 25px; /* Ajusta el tamaño según sea necesario */
+        margin-bottom: 3%;
+      }
+      .column {
+        /* display: flex
+    ; */
+        justify-content: center;
+        align-items: center;
+        height: 0px;
+        position: relative;
+        width: 29%;
+        margin-left: 60%;
+    }
+    .styled-quote {
+        position: relative;
+        font-family: "Montserrat", sans-serif;
+        font-size: 2.9em;
+        line-height: 1.2;
+        font-weight: bold;
+        color: #000;
+        width: 41%;
+        text-align: left;
+        padding: 53px 75px;
+    }
+  }

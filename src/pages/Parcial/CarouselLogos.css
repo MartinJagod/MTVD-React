@@ -1,0 +1,63 @@
+.carousel-container {
+  width: 100vw;
+  height: 30vw;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  position: relative;
+  background-color: #ffffff;
+}
+
+/* Track donde se desplazan los logos */
+.carousel-track {
+  display: flex;
+  gap: 20px;
+  white-space: nowrap;
+  transition: transform 0.5s ease-in-out;
+}
+
+/* Cada logo */
+.carousel-item {
+  flex: 0 0 auto;
+  width: 15vw;
+}
+
+/* Imágenes dentro del carrusel */
+.logo-image {
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+  user-select: none;
+}
+.carousel-container {
+  width: 100%;
+  overflow: hidden;
+  position: relative;
+}
+
+.carousel-track {
+  display: flex;
+  cursor: grab;
+  touch-action: pan-x;
+  will-change: transform;
+}
+.carousel-track {
+  touch-action: none; /* Evita el desplazamiento vertical */
+}
+.carousel-container {
+  overflow: hidden;
+  width: 100%;
+  position: relative;
+}
+
+.carousel-track {
+  display: flex;
+  align-items: center;
+  transition: transform 0.5s ease-in-out;
+}
+.carousel-track {
+  touch-action: pan-y;
+  cursor: grab;
+  display: flex;
+  transition: transform 0.3s ease-out;
+}

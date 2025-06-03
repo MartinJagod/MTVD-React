@@ -1,0 +1,406 @@
+.projects-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+}
+
+.logo-img {
+    max-width: 120px;
+}
+
+.search-bar {
+    position: relative;
+    display: flex;
+    align-items: center;
+    max-width: 300px;
+    margin-top: 10px;
+    width: 50vw;
+}
+
+.search-input {
+    width: 70%;
+    border: 1px solid #bbb;
+    border-radius: 20px;
+    outline: none;
+    background: none;
+    color: #444; /* Color de texto */
+    font-size: 16px;
+    padding: 2px;
+}
+div.search-bar{
+    margin-top: 0;
+    justify-content: right;
+    margin-right: 10px;
+}
+
+.search-icon-placeholder {
+    color: #bbb; /* Color del ícono */
+    font-size: 16px;
+    pointer-events: none; /* El ícono no interfiere con la interacción */
+   
+}
+
+.search-icon {
+    font-size: 16px;
+    color: #444;
+}
+
+.section-selector-projects {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 20px;
+    align-items: center;
+    margin-top: 4%;
+}
+
+.section-input-section {
+    font-family: "Montserrat";
+    width: 40vw;
+    border: 1px solid #bbb;
+    border-radius: 20px;
+    color: #444;
+    font-size: 13px;
+    font-weight: 800;
+    padding: 4px 0px 4px 30px;
+    text-align: center;
+    margin: 15px 15px -12px;
+    background: none;
+    outline: none;
+    text-decoration: none;
+    text-align: center;
+
+    
+    
+}
+
+.section-input-section-option {
+    font-family: "Montserrat";
+    color: #444;
+    font-size: 13px;
+    font-weight: 400;
+    text-align: center;
+    background-color: #3c3c3c;
+    border-radius: 20px;
+    display: flex;
+    color: #ffffff;
+    font-family: 'Montserrat';
+}
+.filter-selector {
+    border: 1px solid #ccc;
+    border-radius: 20px;
+    background-color: #ffffff;
+    font-size: 13px;
+    font-weight: 800;
+    color: #444;
+    text-align: center;
+    font-family: "Montserrat";
+    padding: 4px 25px;
+    margin: 15px 15px -12px;
+
+}
+
+.navbar-projects {
+    display: flex;
+    align-items: center;
+    margin: 0px;
+}
+
+.subcategories {
+    display: flex; /* Cambia block por flex */
+    flex-wrap: nowrap; /* Asegura que todo esté en una sola línea */
+    justify-content: space-evenly;
+    gap: 1px; /* Espaciado entre botones */
+    padding: 5px 20px; /* Mantén el padding si es necesario */
+    overflow: hidden; /* Oculta cualquier desbordamiento */
+    white-space: nowrap; /* Evita que el texto se rompa en varias líneas */
+}
+
+.subcategory-button {
+    font-family: "Montserrat";
+    padding:5px;
+    border: none;
+    background: none;
+    font-size: 11px;
+    cursor: pointer;
+    color: #333;
+    transition: color 0.3s;
+    flex-shrink: 1; /* Permite que los botones se encojan si es necesario */
+    min-width: 0; /* Asegura que el tamaño mínimo se ajuste */
+    /*text-overflow: ellipsis;  Agrega puntos suspensivos si el texto se corta */
+    overflow: hidden; /* Oculta texto desbordado */
+}
+
+.subcategory-button.active {
+    color: #444;
+    font-weight: 1000;
+}
+
+.image-grid {
+    display: flex;
+    gap: 5px;
+    padding: 20px;
+}
+
+.column-projects {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    height: auto;
+    display: flex    ;
+        justify-content: center;
+        align-items: center;
+        height: auto;
+        position: relative;
+}
+
+.project-image {
+    width: 100%;
+    object-fit: cover;
+    border-radius: 15px;
+    margin-bottom: 1px;
+}
+
+.divider-line {
+    border: 0;
+    border-top: 1px solid #333;
+    width: 80%;
+    margin: 20px auto;
+}
+
+.contact-section {
+    text-align: left;
+    padding-top: 20px;
+    padding-left: 30px;
+}
+
+.logo-slogan {
+    width: 120px;
+    margin-bottom: 20px;
+}
+
+.contact-details p {
+    font-size: 12px;
+}
+
+.social-icons {
+    display: flex;
+    color: #333;
+    justify-content: left;
+    gap: 5px;
+    margin-top: 15px;
+}
+.social-icon {
+    color: #333;
+}
+.menu-icon-project{
+    font-size: 29px;
+    color: #444;
+}
+
+.image-label-section {
+    position: absolute;
+    bottom: 10px; /* Distancia desde el borde superior */
+    left: 10px; /* Distancia desde el borde izquierdo */
+    color: white; /* Texto blanco */
+    padding: 5px 10px; /* Espaciado interno */
+    border-radius: 4px; /* Bordes redondeados */
+    font-size: 1rem; /* Tamaño del texto */
+    font-weight: 600;
+    z-index: 2; /* Asegura que esté sobre la imagen */
+    font-family: 'Montserrat', sans-serif;
+    text-shadow: 3px 3px 5px rgba(0, 0, 0, 0.9);
+    font-size: 16px;
+  }
+  .image-wrapper{
+    position: relative; /* Posición relativa para el contenedor */
+     /* Oculta el contenido que se desborda */
+    border-radius: 15px; /* Bordes redondeados */
+  }
+  .column-projects{
+    display: flex
+    ;
+        justify-content: center;
+        align-items: center;
+        position: relative;
+    
+  }.projects-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  background: #fff;
+}
+
+/* 2) Empuja todo el contenido justo debajo */
+.projects-section {
+  padding-top: 70px; /* igual al alto del navbar */
+}
+
+/* 3) Contenedor del carrusel con scroll interno */
+.carousel-container-projectsHome {
+  /* si quieres que ocupe casi todo el viewport menos el header: */
+  height: calc(100vh - 70px);
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  overflow-x: hidden;
+  gap: 10px;        /* separación entre slides o elementos internos */
+}
+ /* ──────────────────────────────────────────────────────────────────────────────
+   Sólo dentro de ProjectsSection
+   ────────────────────────────────────────────────────────────────────────────── */
+.projects-section {
+
+.masonry {
+  column-gap: 20px;                /* espacio entre columnas */
+}
+
+/* MOBILE: 2 columnas */
+@media (max-width: 767px) {
+  .carousel-container-projectsHome {
+
+  flex-direction: row;
+  
+}
+  .image-grid {                    /* el que usas en mobile */
+    display: block;                /* asegúrate de que no sea grid */
+  }
+  .image-grid.masonry {
+    column-count: 2;
+  }
+  .image-list-desktop {
+    display: none;
+  }
+  .image-wrapper {
+  display: inline-block;           /* necesario para el flujo multicolumna */
+  width: 100%;                     /* ancho al 100% de la columna */
+  margin-bottom: 0px;             /* separación vertical */
+  break-inside: avoid;             /* no partir entre columnas */
+  border-radius: 15px;
+  overflow: hidden;
+}
+.projects-scrollable-content .masonry {
+  column-gap: 10px;
+}
+}
+
+/* DESKTOP: 4 columnas */
+@media (min-width: 768px) {
+  .carousel-container-projectsHome {
+  /* si quieres que ocupe casi todo el viewport menos el header: */
+  height: calc(100vh - 70px);
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  overflow-x: hidden;
+  gap: 10px;        /* separación entre slides o elementos internos */
+}
+  .image-list-desktop {            /* el que usas en desktop */
+    display: block;                /* quita el display:grid */
+  }
+  .image-list-desktop.masonry {
+    column-count: 4;
+  }
+  .image-grid {
+    display: none;
+  }
+  
+  /* Cada item dentro de una columna */
+  .image-wrapper {
+      display: inline-block;           /* necesario para el flujo multicolumna */
+      width: 100%;                     /* ancho al 100% de la columna */
+      margin-bottom: 4px;             /* separación vertical */
+      break-inside: avoid;             /* no partir entre columnas */
+      border-radius: 15px;
+      overflow: hidden;
+    }
+    
+}
+/* La imagen conserva su proporción natural */
+.image-wrapper img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+}
+/* ------------------------------------------------------------
+   Contenedor general
+   ------------------------------------------------------------ */
+.projects-section {
+  height: 127vh;
+  display: flex;
+  flex-direction: column;
+  padding-top: 0%;
+}
+
+/* ------------------------------------------------------------
+   Zona fija (header + selector + subcats)
+   ------------------------------------------------------------ */
+.projects-fixed-top {
+  flex: 0 0 auto;          /* no crece / no encoge */
+  background: #fff;         /* fondo si necesitas */
+  z-index: 10;              /* sobre el contenido */
+}
+
+/* ------------------------------------------------------------
+   Zona scrollable: ocupa resto de la pantalla
+   ------------------------------------------------------------ */
+.projects-scrollable-content {
+  flex: 1 1 auto;           /* ocupa todo el espacio restante */
+  overflow-y: auto;
+}
+
+/* ------------------------------------------------------------
+   Masonry (igual que antes)
+   ------------------------------------------------------------ */
+.projects-scrollable-content .masonry {
+  column-gap: 10px;
+}
+
+@media (max-width: 767px) {
+  .carousel-container-projectsHome {
+    flex-direction: row;
+}
+  .projects-scrollable-content .image-grid.masonry {
+    column-count: 2;
+    column-gap: 5px
+  }
+  .image-wrapper {
+  margin-bottom: 1px;             /* separación vertical */
+ 
+}
+  .projects-scrollable-content .image-list-desktop {
+    display: none;
+  }
+}
+
+@media (min-width: 768px) {
+  .projects-scrollable-content .image-grid {
+    display: none;
+  }
+  .projects-scrollable-content .image-list-desktop.masonry {
+    column-count: 4;
+    margin: 0 2%;
+  }
+  
+}
+
+/* ------------------------------------------------------------
+   Item wrapper
+   ------------------------------------------------------------ */
+/* .image-wrapper {
+  display: inline-block;
+  width: 100%;
+  margin-bottom: 20px;
+  break-inside: avoid;
+}
+.image-wrapper img {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 15px;
+}
+ */

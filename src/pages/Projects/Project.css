@@ -1,0 +1,1724 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');;
+body {
+  margin: 0;
+  font-family: 'Montserrat', sans-serif;
+}
+
+.home {
+  display: flex;
+  flex-direction: column;
+}
+
+/* 1. Primera sección: Encabezado */
+
+.header-navbar {
+  position: fixed; /* Fija el header al viewport */
+  top: 0;
+  left: 0;
+  width: 100vw;
+  z-index: 1005;
+  padding: 5px;
+  background: linear-gradient(to bottom, rgb(78, 76, 76), rgba(226, 220, 220, 0)); /* Degradado de negro a transparente */
+  transition: background 0.3s ease;
+}
+/* Degradado para el home */
+.navbar-home {
+  background: linear-gradient(to bottom, rgb(78, 76, 76), rgba(226, 220, 220, 0)); /* Degradado de negro a transparente */
+  transition: background 0.3s ease;
+}
+
+/* Fondo fijo para otras páginas */
+.navbar-other {
+  background: linear-gradient(to bottom, rgb(255, 255, 255, 0.5), rgba(255, 255, 255, 0)); /* Degradado de negro a transparente */
+  transition: background 0.3s ease;
+}
+
+/* Clase que elimina el degradado (si necesitas desactivarlo) */
+.header-navbar.no-gradient {
+  background: none;
+}
+
+/* Contenido del header */
+.header-content {
+  position: relative;
+  z-index: 1; /* Coloca el contenido dentro del header por encima del fondo */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 5px 20px;
+  color: #ffffff; /* Color del texto dentro del header */
+}
+
+
+.logo {
+  font-size: 24px;
+  font-weight: bold;
+}
+.logo-img {
+  margin-top: 5px;
+  width: 100px; /* Ancho de la imagen */
+  height: auto; /* Mantiene la proporción de la imagen */
+  
+}
+
+
+.icons .icon {
+  margin-left: 15px;
+  font-size: 24px;
+  cursor: pointer;
+}
+
+
+
+/* 3. Segunda parte: Imagen cuadrada y cuadrantes */
+.image-and-quadrants {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.square-image {
+  background-position: center center;
+  background-size: auto 200%;
+  object-fit: cover; /* Ajusta la imagen para cubrir el contenedor sin distorsionarse */
+  position: absolute; /* Asegura que ocupe todo el espacio del contenedor */
+  background-attachment: fixed; /* Crea el efecto parallax */
+}
+
+
+.full-square {
+  width: 100vw; /* 100% del ancho de la ventana */
+  height: 100vw; /* Igual al ancho para formar un cuadrado */
+  display: flex; /* Flexbox para centrar el contenido si es necesario */
+  justify-content: center; /* Centra horizontalmente */
+  align-items: center; /* Centra verticalmente */
+  overflow: hidden; /* Oculta lo que sobresale */
+  position: relative; /* Para controlar la posición del contenido interno */
+  background-color: #ffffff; /* Color de fondo opcional */
+}
+
+
+.quadrant-container {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  width: 100%; /* Ancho completo */
+}
+.half-quadrant-container {
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  grid-template-rows: repeat(1, 1fr);
+  width: 100%; /* Ancho completo */
+}
+.quadrant-project {
+  display: flex;
+  flex-direction: column; /* Alinea los elementos verticalmente */
+  justify-content: center;
+  align-items: center;
+  font-size: 18px;
+  font-weight: 600;
+  color: #000000;
+  height: calc(100vw / 2); /* La altura es la mitad del ancho, menos el espacio del gap */
+  
+}
+.quadrant {
+  position: relative; /* Asegura que la línea esté dentro del cuadrante */
+}
+.quadrant-blue-project {
+  display: flex;
+  flex-direction: column; /* Alinea los elementos verticalmente */
+  justify-content: center;
+  align-items: center;
+  font-size: 18px;
+  font-weight: 600;
+  color: #000000;
+  height: calc(100vw); /* La altura es la mitad del ancho, menos el espacio del gap */
+  
+}
+.white-box-project {
+  background-color: #ffffff;
+  color: #333;
+  padding-top: 0px;
+  font-size: 20px; /* Tamaño de fuente más pequeño para la palabra "projects" */
+  align-items: start; 
+  margin: 0 auto;
+  width: 80%;
+}
+.yellow-box {
+  background-color: #ffffff;
+  
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  perspective: 1000px; /* Añade un efecto 3D */
+  cursor: pointer; /* Indica que es interactivo */
+}
+
+.flip-container {
+  background-color: #ffffff;
+  
+  width: 100%;
+  height: 100%;
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform 1s; /* Controla la duración de la rotación */
+}
+
+.yellow-box.rotate .flip-container {
+  transform: rotateY(180deg); /* Gira 180 grados y se detiene mostrando la parte trasera */
+}
+
+.front,
+.back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: left;
+  font-size: 20px;
+  font-weight: bold;
+  gap: 8px;
+  background-color: #ffffff;
+}
+
+.back-item{
+  padding-left: 41px ;  
+}
+
+.front {
+  background-color: #FEC93A; /* Amarillo */
+}
+
+.back {
+  
+  background-color: #FEC93A; /* Amarillo */
+  
+  transform: rotateY(180deg);
+  flex-direction: column;
+  color: #ffffff;
+}
+
+
+.logo-image {
+  max-width: 100%; /* Ajusta el tamaño según tus preferencias */
+  max-height: 100%; /* Evita que la imagen sobrepase el tamaño del contenedor */
+}
+
+@keyframes rotateLogo {
+  0% {
+    transform: rotateY(0deg); /* Empieza sin rotación */
+  }
+  100% {
+    transform: rotateY(360deg); /* Completa una rotación completa */
+  }
+}
+.blue-box-project {
+  background-color: #3B76f3; /* Azul */
+  color: #ffffff;
+  width: 100%;
+}
+
+.project-count-project {
+  font-size: 50px; /* Tamaño de fuente más grande para los números */
+  font-weight: 600;
+}
+
+.project-label-project {
+  font-size: 15px; /* Tamaño de fuente más pequeño para la palabra "projects" */
+  font-weight: 400;
+  margin: 0;
+
+}
+
+.project-box-project {
+  font-family: "Montserrat";
+  font-size: 20px;
+  font-weight: 700;
+  /* padding-left: 27px; */
+}
+
+.search-container {
+  overflow: hidden;
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 50vw;
+  min-height: 30vh; /* Ocupa la mitad del ancho de la pantalla */
+  background-color: #3c3c3c; /* Fondo gris oscuro */
+  border-bottom-left-radius: 20px;
+  padding: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  z-index: 2000;
+  /* Inicialmente fuera de la pantalla */
+  transform: translatex(100%);
+  transition: transform 0.1s ease-in-out; /* Transición suave */
+}
+.search-container.search-open {
+  transform: translatex(0); /* Mueve la barra hacia dentro */
+}
+.search-bar {
+  display: flex;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.search-input {
+  width: 100%;
+  border: 1px solid #bbb; /* Borde gris claro */
+  border-radius: 8px;
+  outline: none;
+  background: none;
+  color: #bbb; /* Letras gris claro */
+  padding: 4px;
+  font-size: 16px;
+}
+
+.close-icon {
+  color: #bbb; /* Letras gris claro */
+  cursor: pointer;
+  margin-left: 10px;
+}
+
+
+.search-menu {
+  background-color: #000000; /* Fondo gris oscuro */
+  color: #bbb; /* Letras gris claro */
+  border-radius: 5px;
+  margin-top: 10px;
+  max-height: 150px; /* Altura máxima con scroll */
+  overflow-y: auto; /* Scroll si excede la altura */
+}
+
+.search-menu ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.search-menu li {
+  padding: 8px 0;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.search-menu li:hover {
+  background-color: #444; /* Color más oscuro al pasar el mouse */
+}
+
+.text-Awards{
+  font-size: 23px;
+  font-weight: 700;
+}
+.no-results {
+  font-size: 14px;
+  color: #bbb; /* Letras gris claro */
+  text-align: center;
+}
+
+.moving-line-project {
+  position: absolute;
+  bottom: -150px; /* Ajusta la posición vertical dentro del cuadrante */
+  right: 0; /* Comienza desde la izquierda */
+  width: 30px; /* Ancho de la línea */
+  height: 5px; /* Altura de la línea */
+  background-color: #FD7E40; /* Color de la línea */
+  animation: moveLine-project 3s linear forwards; /* Animación de la línea */
+ 
+  z-index: 2000;
+}
+
+@keyframes moveLine-project {
+  0% {
+    transform: translateX(10vw); /* Comienza desde la derecha de la pantalla */
+  }
+  100% {
+    transform: translateX(-88vw); /* Se mueve hasta el extremo derecho de la pantalla */
+  }
+}
+
+.moving-line1-project {
+  position: relative;
+  bottom: 0px; /* Ajusta la posición vertical dentro del cuadrante */
+  right: 0; /* Comienza desde la izquierda */
+  width: 30px; /* Ancho de la línea */
+  height: 5px; /* Altura de la línea */
+  background-color: #44B87E; /* Color de la línea */
+  animation: moveLine1-project 1s linear forwards; /* Animación de la línea */
+  
+}
+
+@keyframes moveLine1-project  {
+  0% {
+    transform: translateX(-43vw); /* Comienza desde la derecha de la pantalla */
+  }
+  100% {
+    transform: translateX(18.5vw); /* Se mueve hasta el extremo derecho de la pantalla */
+  }
+}
+
+.moving-line2 {
+  position: absolute;
+  bottom: 20px; /* Ajusta la posición vertical dentro del cuadrante */
+  right: 0; /* Comienza desde la izquierda */
+  width: 30px; /* Ancho de la línea */
+  height: 5px; /* Altura de la línea */
+  background-color: #44B87E; /* Color de la línea */
+  animation: moveLine2 1s linear forwards; /* Animación de la línea */
+  
+}
+
+@keyframes moveLine2 {
+  0% {
+    transform: translateX(-43vw); /* Comienza desde la derecha de la pantalla */
+  }
+  100% {
+    transform: translateX(18.5vw); /* Se mueve hasta el extremo derecho de la pantalla */
+  }
+}
+
+.moving-line3 {
+  position: relative;
+  bottom: -20px; /* Ajusta la posición vertical dentro del cuadrante */
+  right: 0; /* Comienza desde la izquierda */
+  width: 30px; /* Ancho de la línea */
+  height: 5px; /* Altura de la línea */
+  background-color: #44B87E; /* Color de la línea */
+  animation: moveLine3 2s linear forwards; /* Animación de la línea */
+  
+}
+
+@keyframes moveLine3 {
+  0% {
+    transform: translateX(-50vw); /* Comienza desde la derecha de la pantalla */
+  }
+  100% {
+    transform: translateX(4vw); /* Se mueve hasta el extremo derecho de la pantalla */
+  }
+}
+
+
+
+
+@media (max-width: 768px) {
+  .square-image {
+    background-attachment: scroll; /* Desactiva el efecto parallax en pantallas pequeñas */
+  }
+}
+
+.parallax-logo {
+  position: relative;
+  overflow: hidden; /* Asegura que la imagen no salga del contenedor */
+}
+
+.parallax-logo img {
+  width: 100%; /* Ajusta el tamaño de la imagen al contenedor */
+  transform: translateZ(0);
+  animation: parallaxEffect 5s ease-in-out infinite; /* Aplica la animación */
+}
+
+@keyframes parallaxEffect {
+  0% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-20px); /* Ajusta este valor para un mayor o menor desplazamiento */
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+.module-box {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 50vw; /* 50% del ancho del viewport */
+  height: 50vw; /* 50% de la altura del viewport */
+  background-color: #ffffff; /* Color de fondo para visibilidad */
+}
+
+.module-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* Asegura que la imagen se ajuste al tamaño del contenedor sin deformarse */
+}
+.module-box,
+.vertical-double {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #ffffff;
+  overflow: hidden;
+}
+
+.module-box {
+  width: 50vw;
+  height: 50vw;
+}
+
+.vertical-double {
+  width: 50vw;
+  height: 100vw; /* Doble altura */
+}
+
+.module-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* Ajusta la imagen al tamaño del contenedor sin deformarla */
+}
+.green-box-project {
+  background-color: #44B87E;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  overflow: hidden;
+  transition: transform 0.5s ease-in-out;
+}
+
+.green-box.slide {
+  transform: translateX(100%);
+}
+
+.white-box-estrella {
+  background-color: #ffffff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  transition: transform 0.5s ease-in-out;
+}
+
+.white-box-estrella.slide-left {
+  transform: translateX(-100%);
+}
+
+.star-image-project {
+  width: 50px;
+  height: 50px;
+}
+
+.green-box-project {
+  background-color: #44B87E; /* Color verde */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  overflow: hidden;
+  transition: transform 0.5s ease-in-out;
+}
+.orange-box-project {
+  background-color: #FD7E40; /* Color verde */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  overflow: hidden;
+  transition: transform 0.5s ease-in-out;
+}
+.yellow-box-project {
+  background-color: #FEC93A; /* Color verde */
+  color: #ffffff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  overflow: hidden;
+  transition: transform 0.5s ease-in-out;
+}
+
+.green-box.slide-green {
+  transform: translateX(100%); 
+}
+.orange-box.slide-green {
+  transform: translateX(100%); 
+}
+
+ .white-box-estrella {
+  background-color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  overflow: hidden;
+  transition: transform 0.5s ease-in-out;
+} 
+.white-box-estrella-project {
+  background-color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 50vw; /* Ajusta el ancho del cuadro blanco según sea necesario */
+  height: 50vw; /* Ocupa toda la altura del contenedor */
+  cursor: pointer;
+  overflow: hidden;
+  z-index: -1; /* Asegura que se coloque correctamente en la jerarquía visual */
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2); /* Opcional: agrega un ligero sombreado */
+  transform: translateX(-100%); /* Desliza el cuadro blanco hacia la izquierda */
+  
+}
+
+.white-box-estrella.slide-white {
+  transform: translateX(-100%); /* Desliza el cuadro blanco hacia la izquierda */
+}
+
+.star-image {
+  width: 70px;
+  height: 70px;
+}
+
+.green-box-text {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: white;
+  font-weight: bold;
+  font-size: 20px;
+}
+.counters-box-project {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  align-items: center;
+  background-color: #ffffff; /* Ajusta el color de fondo si es necesario */
+}
+
+.counter-item-project {
+  text-align: center;
+}
+
+.project-count-project {
+  font-size: 50px; /* Tamaño de fuente para los números */
+  font-weight: 600;
+  color: #ffffff;
+}
+
+.project-label-project {
+  font-size: 15px;
+  font-weight: 600;
+  color: #ffffff;
+
+}
+.project-label-project2 {
+  font-size: 15px;
+  font-weight: 600;
+  margin-left: -85px;
+}
+.project-label-small {
+  font-size: 14px;
+  font-weight: 600;
+  margin-left: 20px;
+}
+.project-label-normal {
+  font-size: 16px;
+  font-weight: 600;
+  margin-left: 20px;
+
+}
+.vertical-double-container {
+  display: flex;
+  flex-direction: column;
+  width: 50vw; /* Ajusta el tamaño según sea necesario */
+  height: 100vw; /* Doble altura */
+  overflow: hidden;
+  position: relative;
+  cursor: pointer;
+  transition: transform 0.5s ease-in-out;
+}
+.horizontal-double-container {
+  display: flex;
+  flex-direction: column;
+  width: 100vw; /* Ajusta el tamaño según sea necesario */
+  height: 50vw; /* Doble altura */
+  overflow: hidden;
+  position: relative;
+  cursor: pointer;
+  transition: transform 0.5s ease-in-out;
+}
+
+.vertical-box {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 50%; /* La mitad de la altura del contenedor */
+  transition: transform 0.5s ease-in-out;
+}
+
+.white-box-studio {
+  background-color: white;
+  color: #000000;
+  font-weight: bold;
+  font-size: 20px;
+}
+
+.orange-box-studio {
+  background-color: #FD7E40; /* Naranja */
+}
+
+.vertical-double-container.slide-active .white-box-studio {
+  transform: translateY(100%); /* Baja la caja blanca */
+}
+
+.vertical-double-container.slide-active .orange-box-studio {
+  transform: translateY(-100%); /* Sube la caja naranja */
+}
+
+.icon-image {
+  width: 100px; /* Ajusta el tamaño de la imagen */
+}
+.horizontal-double-team {
+  width: 100vw;
+  height: 50vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  z-index: 0;
+}
+
+.horizontal-image-team {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.button-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 60px; /* Ajusta el espacio superior e inferior */
+}
+.button-container-clients {
+  display: flex;
+  justify-content: center;
+  margin-top: 30px;
+}
+.custom-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0px 20px;
+  border: 1px solid #000000; /* Color del borde */
+  border-radius: 50px; /* Borde redondeado */
+  text-decoration: none; /* Elimina el subrayado */
+  color: #000000; /* Color del texto */
+  font-size: 18px;
+  font-weight: 400;
+  transition: background-color 0.3s, color 0.3s;
+  background-color: #ffffff;
+}
+
+.custom-button strong {
+  font-weight: 700; /* Negrita para la palabra "projects" */
+}
+
+.custom-button:hover {
+  background-color: #FEC93A; /* Fondo al hacer hover */
+  color: #000000; /* Color del texto al hacer hover */
+}
+
+.divider-line {
+  border: 0;
+  border-top: 1px solid #000000; /* Color de la línea */
+  width: 80%; /* Ajusta el ancho de la línea */
+  margin: 20px auto; /* Centra la línea y ajusta el espacio superior e inferior */
+}
+
+.contact-section-home {
+  position: relative;
+  text-align: left;
+  margin-top: 20px;
+  padding-left: 40px;
+  background-color: #ffffff;
+  z-index: 1002;
+  width: 100%;
+}
+.contact-section-footer {
+  position: relative;
+  text-align: left;
+  padding-left: 40px;
+  background-color: #ffffff;
+  z-index: 1002;
+  width: 100%;
+
+}
+.divider-line-home {
+  border: 0;
+  border-top: 1px solid #000000;
+  width: 100%;
+  margin-bottom: 50px;
+}
+.logo-slogan {
+  width: 120px; /* Ajusta el tamaño del logo-slogan */
+  margin-bottom: 20px;
+}
+
+.contact-details p {
+  margin: 15px 0;
+  font-size: 14px;
+}
+
+.social-icons {
+  display: flex;
+  color:#333;
+  justify-content:left;
+  gap: 25px; /* Espacio entre los íconos */
+  margin-top: 15px;
+}
+.social-icons-black {
+  display: flex;
+  color:#000000;
+  justify-content:left;
+  gap: 34px; /* Espacio entre los íconos */
+  margin-top: 30px;
+}
+
+.icon {
+  font-size: 18px;
+  color: #ffffff;
+  cursor: pointer;
+  transition: color 0.3s;
+}
+.horizontal-counter-section-new {
+  display: flex;
+  justify-content: space-around; /* Espacio uniforme entre los elementos */
+  align-items: center; /* Centrar verticalmente los elementos */
+  width: 100vw; /* Ancho total de la pantalla */
+  height: 50vw; /* Altura proporcional al ancho */
+  background-color: #ffffff; /* Fondo opcional */
+  border-radius: 10px; /* Bordes redondeados opcionales */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra opcional */
+  padding: 0.5rem; /* Espaciado interno */
+  box-sizing: border-box; /* Incluye padding en el tamaño total */
+}
+
+.horizontal-counter-item-new {
+  text-align: center;
+  flex: 1; /* Distribuye el espacio uniformemente entre los elementos */
+}
+
+.horizontal-project-count-new {
+  font-size: 3rem; /* Tamaño grande para los números */
+  font-weight: bold;
+  color: #222; /* Color del texto */
+}
+
+.horizontal-project-label-new {
+  font-size: 20px; /* Tamaño más pequeño para las etiquetas */
+  color: #444;
+}
+.half-screen-container {
+  display: flex;
+  height: 50vh; /* Mitad superior de la pantalla */
+  width: 100vw; /* Ancho completo de la pantalla */
+}
+
+.half-screen-container .green-box,
+.half-screen-container .white-box-estrella {
+  flex: 1; /* Cada elemento ocupa el 50% del ancho */
+  display: flex;
+  justify-content: center; /* Centra el contenido horizontalmente */
+  align-items: center; /* Centra el contenido verticalmente */
+}
+
+.green-box {
+  background-color: #44B87E; /* Fondo único para el primer cuadrante */
+}
+
+.white-box-estrella {
+  background-color: #ffffff; /* Fondo único para el segundo cuadrante */
+}
+.new-quadrant-container {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  width: 100%; /* Ancho completo */
+}
+
+
+.new-green-box,
+.new-white-box {
+  flex: 1; /* Cada cuadro ocupa la misma proporción del espacio */
+  max-width: 50vw; /* Limita cada cuadro a la mitad del ancho */
+  height: 50vw; /* Ocupan la altura completa del contenedor */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.new-green-box {
+  background-color: #44B87E; /* Color de fondo del cuadro verde */
+}
+
+.new-white-box {
+  background-color: #ffffff; /* Color de fondo del cuadro blanco */
+}
+
+.custom-quadrant-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 50vw; /* Altura personalizada */
+  width: 100vw; /* Ancho completo */
+  overflow: hidden; /* Oculta el contenido desplazado */
+  position: relative; /* Necesario para controlar el desplazamiento */
+}
+
+.custom-orange-box,
+.custom-white-box {
+  flex: 1;
+  height: 50vw; /* Ocupan toda la altura del contenedor */
+  width: 50vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: transform 0.5s ease-in-out; /* Transición suave */
+  
+}
+
+.custom-orange-box {
+  background-color: #FD7E40; /* Color naranja */
+  position: absolute;
+  left: 0;
+  z-index: 1;
+  
+}
+
+.custom-white-box {
+  background-color: #ffffff; /* Color blanco */
+  position: absolute;
+  right: 0;
+  transform: translateX(-100%);
+  z-index: 0;
+}
+
+.custom-slide-orange {
+  transform: translateX(100%); /* Mueve hacia la derecha completamente */
+}
+
+.custom-slide-team {
+  transform: translateX(-100%); /* Mueve hacia la izquierda completamente */
+}
+
+.logo-image {
+  max-height: 100%; /* Ajusta la altura de los logos */
+  max-width: 100%;
+  object-fit: contain; /* Escala los logos proporcionalmente */
+  margin: auto 0;
+ }
+
+.phrase-section {
+  position: relative;
+  z-index: 0;
+  padding: 20px;
+  background-color: #ffffff; /* Fondo claro */
+  text-align: center;
+  font-weight: 600;
+  color: #000000;
+  height: auto; /* Ajusta automáticamente la altura */
+  display: flex;
+  flex-direction: row; /* Alineación horizontal por defecto */
+  justify-content: center; /* Centra horizontalmente */
+  align-items: center; /* Centra verticalmente */
+  flex-wrap: nowrap; /* Evita saltos de línea por defecto */
+}
+
+.phrase-line {
+  font-size: 9vw; /* Tamaño inicial del texto */
+  font-weight: 800;
+  color: #000000;
+  white-space: nowrap; /* Evita saltos de línea */
+  margin: 0 0.5rem; /* Agrega espacio horizontal entre frases */
+}
+
+@media (max-width: 767px) {
+  .phrase-section {
+    flex-direction: column; /* Cambia a alineación vertical en móviles */
+    flex-wrap: wrap; /* Permite que los elementos salten a la siguiente línea */
+  }
+
+  .phrase-line {
+    white-space: normal; /* Permite saltos de línea */
+    font-size: 9vw; /* Ajusta el tamaño del texto para móviles */
+  }
+}
+
+@media (min-width: 467px) and (max-width: 767px) {
+  .phrase-line {
+    font-size: 7vw; /* Ajusta tamaño en pantallas medianas */
+  }
+}
+
+@media (min-width: 767px) {
+  .phrase-line {
+    font-size: 6vw; /* Ajusta tamaño en pantallas más grandes */
+  }
+}
+
+@media (min-width: 1100px) {
+  .phrase-line {
+    font-size: 3.9vw; /* Incremento del 30% respecto a 3vw */
+    white-space: nowrap; /* Asegura que el texto permanezca en una línea */
+    margin: 0 1rem; /* Aumenta el espacio horizontal en escritorio */
+  }
+  .project-box {
+    font-size: 3vw;
+    font-weight: 700;
+    /* padding-left: 27px; */
+}
+.horizontal-project-count-new {
+  font-size: 5vw;
+
+}
+
+.horizontal-project-label-new {
+  font-size: 2vw;
+  color: #444;
+  margin-left: 35px;
+}
+.project-count {
+  font-size: 5vw;
+  font-weight: 600;
+}
+.project-label {
+  font-size: 2vw;
+  font-weight: 600;
+  margin-left: 40%;
+
+}
+
+.text-Awards {
+  font-size: 5vw;
+  font-weight: 700;
+}
+.star-image {
+  width: 100px;
+  height: 100px;
+}
+.front, .back {
+  font-size: 3vw;
+  gap: 4%;
+  align-items: flex-start;
+  width: 33.5vw;
+}
+.carousel-container {
+  width: 100vw;
+  height: 10vw;
+  overflow: hidden;}
+  
+}
+
+/* Animación para desplazamiento continuo */
+@keyframes scroll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-100%);
+  }
+}
+/* Fondo del menú */
+
+
+/* Encabezado del menú */
+.menu-header {
+  display: flex;
+  justify-content: flex-end;
+  width: 100%;
+}
+
+.menu-close {
+  font-size: 22px;
+  cursor: pointer;
+  color: #fff;
+}
+
+/* Links del menú */
+.menu-items {
+  
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 40px;
+}
+
+.menu-link {
+  text-decoration: none;
+  color: #fff;
+  font-size: 1.2rem;
+  transition: color 0.3s ease;
+}
+
+.menu-link:hover {
+  color: orange;
+}
+
+/* Footer del menú con el logo */
+.menu-footer {
+  text-align: right;
+}
+
+.menu-logo {
+  width: 120px;
+}
+@media (max-width: 768px) {
+  .hamburger-menu {
+    width: 30vw;
+    height: 40vh;
+    border-bottom-left-radius: 0;
+  }
+  .menu-link {
+    font-size: 23px;
+  }
+}
+
+
+/* Animaciones de cambio de color */
+@keyframes colorToGreen {
+  0% { color: #ffffff; }
+  100% { color: #44B87E; }
+}
+
+@keyframes colorToOrange {
+  0% { color: #ffffff; }
+  100% { color: #FD7E40; }
+}
+
+@keyframes colorToYellow {
+  0% { color: #ffffff; }
+  100% { color: #FEC93A; }
+}
+
+@keyframes colorToBlue {
+  0% { color: #ffffff; }
+  100% { color: #3B76F3; }
+}
+
+/* Animación para volver al blanco */
+@keyframes colorToWhite {
+  0% { color: inherit; } /* Mantén el color actual */
+  100% { color: #ffffff; }
+}
+
+/* Estilos base */
+.menu-link {
+  color: #ffffff; /* Blanco inicial */
+  text-decoration: none;
+  font-size: 23px;
+  font-family: 'Montserrat', sans-serif;
+  transition: color 0.5s ease;
+}
+
+/* Colores específicos al hover */
+.menu-link.projects:hover {
+  animation: colorToGreen 0.3s forwards, colorToWhite 0.3s 0.3s forwards;
+}
+
+.menu-link.press-awards:hover {
+  animation: colorToOrange 0.3s forwards, colorToWhite 0.3s 0.3s forwards;
+}
+
+.menu-link.studio:hover {
+  animation: colorToYellow 0.3s forwards, colorToWhite 0.3s 0.3s forwards;
+}
+
+.menu-link.contact:hover {
+  animation: colorToBlue 0.3s forwards, colorToWhite 0.3s 0.3s forwards;
+}
+/* Estilos base */
+.menu-link {
+  font-weight: 400;
+  color: #ffffff;
+  text-decoration: none;
+  font-size: 23px;
+  font-family: 'Montserrat', sans-serif;
+  transition: color 0.1s ease;
+}
+
+/* Colores específicos para la animación */
+.menu-link.projects.animate-color {
+  color: #44B87E; /* Verde */
+}
+
+.menu-link.press-awards.animate-color {
+  color: #FD7E40; /* Naranja */
+}
+
+.menu-link.studio.animate-color {
+  color: #FEC93A; /* Amarillo */
+}
+
+.menu-link.contact.animate-color {
+  color: #3B76F3; /* Azul */
+}
+/* Estilo base para el guion */
+.menu-dash {
+  color: #ffffff; /* Blanco inicial */
+  font-size: 60px;
+  font-family: 'Montserrat', sans-serif;
+  text-align: center;
+  display: block;
+  transition: color 0.3s ease;
+}
+
+/* Colores específicos sincronizados */
+.menu-dash.projects {
+  color: #44B87E; /* Verde */
+}
+
+.menu-dash.press-awards {
+  color: #FD7E40; /* Naranja */
+}
+
+.menu-dash.studio {
+  color: #FEC93A; /* Amarillo */
+}
+
+.menu-dash.contact {
+  color: #3B76F3; /* Azul */
+}
+
+.search-icon-home {
+  color: #ffffff; /* Color del ícono */
+  font-size: 18px;
+}
+
+.background-video {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: -1; /* Coloca el video detrás del contenido */
+}
+.mute-button {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  background-color: rgba(0, 0, 0, 0.5);
+  color: white;
+  border: none;
+  padding: 10px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 20px;
+  z-index: 10;
+  transition: background-color 0.3s ease;
+}
+
+.mute-button:hover {
+  background-color: rgba(0, 0, 0, 0.7);
+}
+
+.parallax-image-project {
+  width: 160vw;
+  position: relative; /* Asegura que el contenedor esté posicionado */
+  left: -30%; /* Mueve el contenedor hacia el centro */
+  top: -10%;
+  background-position: center center; /* Centra la imagen de fondo */
+  transform: translateY(0); /* Escala inicial ligeramente mayor */
+  transition: transform 0.1s ease-out; /* Suavidad en el movimiento */
+  will-change: transform; /* Optimización para animaciones */
+  
+}
+
+.parallax-wrapper {
+  overflow: hidden;
+  /*   position: relative;
+  width: 100%;
+  height: 100%; */
+  perspective: 1px; /* Simula profundidad */
+}
+
+.hamburger-menu {
+  overflow: hidden;
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 50vw;
+  height: 50vh;
+  background-color: #3c3c3c;
+  border-bottom-left-radius: 20px;
+  z-index: 999; /* Asegura que esté por encima de todo */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 20px;
+  color: #ffffff;
+  font-family: 'Montserrat', sans-serif;
+  /* Inicialmente fuera de la pantalla */
+  transform: translatex(100%);
+  transition: transform 0.1s ease-in-out; /* Transición suave */
+}
+
+.hamburger-menu.menu-open {
+  max-width: 240px;
+  transform: translatex(0); /* Mueve el menú hacia dentro */
+}
+
+.hamburger-menu.menu-close {
+  transform: translatex(100%); /* Mueve el menú hacia fuera */
+}
+
+
+/* Green box */
+.green-box {
+  background-color: #44B87E;
+  top: 0;
+  right: 0vw; /* Inicialmente en la derecha */
+  z-index: 0; /* Encima del white-box */
+}
+
+.slide-green {
+  transform: translateX(-100vw); /* Mueve hacia la izquierda */
+}
+
+/* White box */
+.white-box-estrella-project {
+  background-color: white;
+  top: 0;
+  right: -50vw; /* Siempre a la derecha */
+  z-index: 1; /* Detrás del green-box */
+}
+.star-image-foto {
+  width: 20px;
+  height: 20px;
+}
+.image-label-star {
+  position: absolute;
+  top: 10px; /* Distancia desde el borde superior */
+  right: 10px; /* Distancia desde el borde izquierdo */
+  color: white; /* Texto blanco */
+  padding: 5px 10px; /* Espaciado interno */
+  border-radius: 4px; /* Bordes redondeados */
+  font-size: 1.2rem; /* Tamaño del texto */
+  font-weight: 800;
+  z-index: 2; /* Asegura que esté sobre la imagen */
+  font-family: 'Montserrat', sans-serif;
+}
+
+.image-label-home {
+  position: absolute;
+  top: 10px; /* Distancia desde el borde superior */
+  left: 10px; /* Distancia desde el borde izquierdo */
+  color: white; /* Texto blanco */
+  padding: 5px 10px; /* Espaciado interno */
+  border-radius: 4px; /* Bordes redondeados */
+  font-size: 1.2rem; /* Tamaño del texto */
+  font-weight: 800;
+  z-index: 2; /* Asegura que esté sobre la imagen */
+  font-family: 'Montserrat', sans-serif;
+}
+
+.carousel-container {
+  width: 100vw;
+  height: 30vw;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  position: relative;
+  background-color: #ffffff; 
+}
+
+.carousel-track {
+  display: flex;
+  animation: scroll 100s linear infinite;
+  width: max-content; 
+}
+
+.carousel-item {
+  flex: 0 0 auto;
+  width: 30vw;
+  margin-right: 20px;
+}
+.header-navbar {
+
+  transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
+}
+
+.navbar-slide-up {
+  transform: translateY(-100%);
+  opacity: 0;
+}
+.menu-close-icon{
+  color: #bbb;
+  padding: 4px;
+  font-size: 16px;
+  z-index: 1002;
+}
+.container-image-small-projet{
+  width: 50vw;
+  height: 50vw;
+}
+.image-small-projet{
+  width: 50vw;
+  height: 50vw;
+  object-fit: cover;
+  background-position: center center; /* Centra la imagen de fondo */
+
+} 
+
+
+.vertical-half-square {
+  width: 50vw;
+  height: 100vw;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow: hidden;
+  position: relative;
+  background-color: #ffffff;
+}
+.half-parallax-image {
+  width: 120vw;
+  position: relative; /* Asegura que el contenedor esté posicionado */
+  left: -15%; /* Mueve el contenedor hacia el centro */
+  top: -30%;
+  transform: translateY(0); /* Escala inicial ligeramente mayor */
+  transition: transform 0.1s ease-out; /* Suavidad en el movimiento */
+  will-change: transform; /* Optimización para animaciones */
+  
+}
+
+.half-parallax-wrapper {
+  overflow: hidden;
+  /*   position: relative;
+  width: 100%;
+  height: 100%; */
+  perspective: 1px; /* Simula profundidad */
+}
+.project-title {
+  font-size: 4.5vw;
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+
+.project-text {
+  margin-top: 20px;
+  padding: 20px;
+  text-align: left;
+}
+
+.project-box-frase{
+  padding: 20px;
+  font-size: 4.5vw;
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+
+.moving-line5 {
+  position: absolute;
+  z-index: 2000;
+  bottom: 20px; /* Ajusta la posición vertical dentro del cuadrante */
+  right: 0; /* Comienza desde la izquierda */
+  width: 30px; /* Ancho de la línea */
+  height: 4px; /* Altura de la línea */
+  background-color: #FD7E40; /* Color de la línea */
+  animation: moveLine5 2s linear forwards; /* Animación de la línea */
+  
+}
+
+@keyframes moveLine5 {
+  0% {
+    transform: translateX(-10vw); /* Comienza desde la derecha de la pantalla */
+  }
+  100% {
+    transform: translateX(-40vw); /* Se mueve hasta el extremo derecho de la pantalla */
+  }
+}
+.gallery {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.thumbnail {
+  width: 150px;
+  height: auto;
+  cursor: pointer;
+  transition: transform 0.2s ease-in-out;
+}
+
+.thumbnail:hover {
+  transform: scale(1.1);
+}
+
+.popup-modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 80%;
+  max-width: 800px;
+  border-radius: 10px;
+  z-index: 1000;
+  border: none;
+}
+
+.close-btn {
+  position: absolute;
+ right: 10px;
+ top:-20px; 
+  color: black;
+  border: none;
+  cursor: pointer;
+  font-size: 20px;
+}
+
+.carousel-image {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+  border:none;
+}
+.swiper-wrapper {
+  border: none;
+} 
+.swiper-slide {
+  border: none;
+  border-radius: 15px;
+
+} 
+
+.swiper {
+  border: none;
+  border-radius: 15px;
+
+} 
+/* Asegura que el modal no tenga bordes ni fondo */
+.popup-modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 80%;
+  max-width: 800px;
+  background: transparent !important; /* 🔹 Hace que el modal no tenga fondo */
+  padding: 0;
+  border: none !important;
+  box-shadow: none !important;
+  outline: none !important; /* 🔹 Elimina cualquier borde del modal */
+  border-radius: 15px;
+
+}
+
+/* Asegura que el Swiper no tenga bordes ni fondo negro */
+.swiper {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  border-radius: 15px;
+display: grid;
+}
+
+/* Centra el contenido del Swiper en la pantalla */
+.swiper-slide {
+  display: flex;
+  justify-content: center; /* 🔹 Centra horizontalmente */
+  align-items: center; /* 🔹 Centra verticalmente */
+  height: 100%; /* 🔹 Ajusta la altura del carrusel */
+  background: transparent !important;
+  border-radius: 15px;
+
+}
+
+/* Ajusta la imagen para que se centre y no se deforme */
+.carousel-image {
+  max-width: 100%;
+  max-height: 100%;
+
+  object-fit: contain; /* 🔹 Evita que la imagen se recorte */
+  border-radius: 15px;
+}
+/* Estilos para desktop */
+@media (min-width: 1024px) {
+  .desktop-menu {
+    display: block;
+
+  }
+  .desktop-menu nav {
+    display: flex;
+    justify-content: flex-end; /* Ubica los items a la derecha */
+    align-items: center;
+    flex-direction: row;
+    margin-right: 50px;
+    color: #222;
+  }
+  /* .desktop-menu .menu-link {
+    color: #222;
+    font-size: 21px;
+
+  } */
+  /* Oculta la hamburguesa y el ícono en desktop */
+  .hamburger-menu, .icons .icon {
+    display: none;
+  }
+  .desktop-hide{
+    display: none;
+  }
+  .menu-items{
+    padding: 0px;
+  }
+  .logo-img{
+    width: 200px;
+    margin-top: 30px;
+    margin-left: 100px;
+  }
+  .phrase-line {
+    font-size: 4.5vw;}
+  
+}
+
+
+/* Estilos para mobile */
+@media (max-width: 1023px) {
+  .desktop-menu {
+    display: none;
+  }
+
+
+  .mobile-hide{
+  display: none;
+  }
+  
+  .hamburger-menu, .icons .icon {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+}
+@media (min-width: 2400px) {
+
+  .logo-img{
+    width: 300px;
+    margin-top: 30px;
+    margin-left: 100px;
+  }}
+/* 🔹 Oculto por defecto */
+#overlay-blur {
+  position: fixed;
+  inset: 0;
+  backdrop-filter: blur(8px);      /* ⬅️ El blur */
+  background: rgba(0,0,0,.25);     /* velo semitransparente */
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .3s ease;
+  z-index: 900;                    /* debajo del modal (1000) */
+}
+
+#overlay-blur.active {
+  opacity: 1;
+  pointer-events: all;
+}
+body.no-scroll {
+  overflow: hidden;          /* bloquea scroll vertical y horizontal */
+  touch-action: none;        /* evita el scroll táctil en iOS/Android */
+  overscroll-behavior: none; /* impide el “pull-to-refresh” en móviles */
+}
+#overlay-blur.active {
+  pointer-events: all;   /* ya lo tienes */
+  touch-action: none;    /* evita scroll táctil sobre el overlay */
+}
+.project-paragraph {
+        font-size: 1.5rem;
+        line-height: 1.2;
+        margin-bottom: 1rem;
+        padding: 10px;
+        text-align: justify;
+        max-width: 50%;
+        margin-left: 7%;
+    }
+    .project-paragraph {
+        font-size: 1rem;
+        line-height: 1.2;
+        padding: 0 10px;
+        text-align: justify;
+        max-width: 90%;
+        margin-left: 4%;
+        margin-top: -10%;
+        margin-bottom: 20%;
+    }
+    .project-title {
+        font-size: 1.4rem;
+        font-weight: 850;
+        
+        margin-left: 7%;
+       margin-top: 0;
+    
+    }
+@media (min-width: 768px) {
+  .project-box-project {
+    font-family: "Montserrat";
+    font-size: 4rem;
+    font-weight: 700;
+    /* padding-left: 27px; */
+}
+ 
+.project-count-project {
+    font-size: 11rem;
+    font-weight: 600;
+    color: #ffffff;
+}
+.project-label-project{
+    font-size: 4rem;
+    font-weight: 600;
+    color: #ffffff;
+    /* text-align: left; */
+    margin-left: -30%;
+}
+.project-label-project2 {
+    font-size: 4rem;
+    font-weight: 600;
+    margin-left: -30%;
+}
+.project-label-small {
+    font-size: 2.5rem;
+    font-weight: 600;
+    margin-left: 10%;
+}
+.project-label-normal {
+    font-size: 4rem;
+    font-weight: 600;
+    margin-left: 10%;
+}
+ 
+ 
+    .project-paragraph {
+        font-size: 1.5rem;
+        line-height: 1.2;
+        margin-bottom: 1rem;
+        padding: 10px;
+        text-align: justify;
+        max-width: 87%;
+        margin-left: 6%;
+        margin-top: 0;
+
+    }
+        .project-title {
+        font-size: 3vw;
+        font-weight: 700;
+        text-align: justify;
+        margin: 0 7%;
+    }
+    .button-container-clients {
+    display: flex
+;
+    justify-content: center;
+    margin-top: 30px;
+    width: 100%;
+}
+.project-box-frase {
+    padding: 10%;
+    font-size: 4.5vw;
+    font-weight: 700;
+    margin-bottom: 1rem;
+}
+    .phrase-line {
+        font-size: 5.5vw
+    }
+}

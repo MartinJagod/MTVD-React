@@ -1,0 +1,54 @@
+# ⛔ Archivos de dependencias
+/node_modules/
+/.pnp
+.pnp.js
+public/assets/images/
+src/assets/images/
+# ✅ Compilación y producción
+/build/
+dist/
+
+# ✅ Testing
+/coverage/
+
+# 🍏 MacOS & Windows
+.DS_Store
+Thumbs.db
+
+# ⚙️ Entornos y configuración local
+.env
+.env.*
+!.env.example
+
+# ⚠️ Logs y debugging
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# 🚫 Archivos de diseño o grandes que no deben subirse
+*.psd
+*.ai
+*.eps
+*.tif
+*.tiff
+*.sketch
+*.xd
+*.zip
+*.rar
+*.7z
+
+# 🎯 Tus archivos pesados específicos
+src/assets/images/Web MTVD Mobile FINALES.ai
+
+# ⚙️ Configuración de sistema
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# 💥 Archivos temporales del sistema operativo o editores
+*.swp
+*.bak
+*.tmp
+*.orig
+public/assets/images/

@@ -1,0 +1,144 @@
+.contact-page {
+    font-family: Arial, sans-serif;
+    color: #333;
+    margin: 0 auto;
+    padding: 20px;
+    max-width: 1200px;
+}
+
+.contact-header {
+    margin-bottom: 20px;
+}
+
+.contact-main {
+    margin-top: 30px;
+    text-align: left;
+}
+
+.contact-title {
+    margin-top: 90px;
+    font-size: 1.4rem;
+    margin-bottom: 20px;
+    line-height: 1.1;
+    font-weight: 850;
+}
+
+
+
+.form-section-title-contact {
+    font-size: 1rem;
+    font-weight: bold;
+    margin-bottom: 3%;
+    margin-top: 10px
+}
+
+.contact-form-contact {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.form-group-contact input,
+.form-group-contact textarea {
+    width: 85%;
+    padding: 8px;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 20px;
+    transition: border-color 0.3s ease;
+    font-size: 14px;
+    padding-left: 20px ;
+    margin: 0 auto;
+    margin-bottom: 3%;
+}
+
+.form-group-contact input:focus,
+.form-group-contact textarea:focus {
+    outline: none;
+    border-color: #f56c26; /* Color del borde al enfocar */
+    box-shadow: 0 0 5px rgba(245, 108, 38, 0.5);
+}
+
+textarea {
+    resize:vertical;
+    height: 15vw;
+}
+
+.form-note-contact {
+    font-size: 0.7rem;
+    color: #666;
+    margin-top: -10px;
+    margin-bottom: 15px;
+}
+
+.form-submit-contact button {
+    background-color: #333;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 1rem;
+    cursor: pointer;
+    border-radius: 25px;
+    transition: background-color 0.3s;
+    width: 200px;
+    text-transform: uppercase;
+}
+
+.form-submit-contact button:hover {
+    background-color: #d8571d;
+}
+.form-group-contact input::placeholder,
+.form-group-contact textarea::placeholder {
+    color: #333; /* Cambia el color aquí para hacerlo más tenue */
+    font-size: 0.9rem; /* Ajusta el tamaño si es necesario */
+    opacity: 0.3; /* Controla la opacidad del placeholder */
+}
+/* —— contenedor de columnas —— */
+.form-columns-contact {
+    display: flex;
+    flex-direction: column;   /* mobile: una sola columna */
+    gap: 24px;
+  }
+  .desktop-hide-contact{
+    display: none;
+    }
+    .mobile-hide-contact{
+        display: block;
+        }
+
+  /* —— desktop (>900 px) —— */
+  @media (min-width: 900px) {
+    .mobile-hide-contact{
+        display: none;
+        }
+        .desktop-hide-contact{
+            display: block;
+            }
+    /* dos columnas lado a lado */
+    .form-columns-contact {
+        margin-top: 20%;
+      flex-direction: row;     /* dos columnas lado a lado */
+      align-items: flex-start; /* alinear arriba */
+      gap: 10%;
+      width: 100%;
+    }
+  
+    .left-column-contact,
+    .right-column-contact {
+      flex: 1;                 /* cada una ocupa 50 % aprox. */
+    
+    }
+  
+    /* los campos ocupan todo el ancho disponible */
+    .left-column-contact .form-group-contact input,
+    .right-column-contact .form-group-contact textarea {
+      width: 100%;
+    }
+  
+    /* que el textarea crezca un poco más cómodo en desktop */
+    .right-column-contact textarea {
+      height: 20rem;
+      width: 50%;
+    }
+  }
+  

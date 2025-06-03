@@ -1,0 +1,77 @@
+.proyectos-container {
+    display: grid;
+    grid-template-columns: repeat(7, minmax(150px, 1fr)); /* Ajusta el número de columnas según tu diseño */
+    gap: 15px;
+    padding: 20px;
+    background-color: black; /* Fondo negro */
+  }
+  
+  .proyecto-wrapper {
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    transition: transform 0.5s ease-in-out, opacity 0.5s ease-in-out, filter 0.5s ease-in-out; /* Añadimos la transición del filtro */
+    height: 150px; /* Límite de altura */
+  }
+  
+  .proyecto-wrapper img {
+    width: 100%;
+    height: 100%; /* Llenar el contenedor */
+    object-fit: cover; /* Recortar la imagen sin distorsión */
+    border-radius: 8px;
+    filter: grayscale(80%); /* Filtro blanco y negro por defecto */
+  }
+  
+  .proyecto-wrapper.selected img {
+    filter: grayscale(0%); /* Imagen seleccionada en color */
+  }
+  
+  .proyecto-wrapper.dimmed {
+    opacity: 1; /* Opacidad reducida */
+  }
+  
+  .proyecto-wrapper.selected {
+    transform: scale(2); /* Escala al 2x el contenedor seleccionado */
+    z-index: 10; /* Asegura que el seleccionado esté al frente */
+    opacity: 1; /* Mantener la opacidad al 100% */
+  }
+  
+  .proyecto-wrapper.surrounding {
+    transition: transform 0.5s ease-in-out, opacity 0.5s ease-in-out; /* Aplica animación a los circundantes */
+  }
+  
+  /* Transformaciones específicas para mover los elementos circundantes */
+  .proyecto-wrapper.surrounding[data-direction="top-left"] {
+    transform: translate(-150px, -150px); /* Mover arriba a la izquierda */
+  }
+  
+  .proyecto-wrapper.surrounding[data-direction="top"] {
+    transform: translate(0, -150px); /* Mover hacia arriba */
+  }
+  
+  .proyecto-wrapper.surrounding[data-direction="top-right"] {
+    transform: translate(150px, -150px); /* Mover arriba a la derecha */
+  }
+  
+  .proyecto-wrapper.surrounding[data-direction="left"] {
+    transform: translate(-150px, 0); /* Mover a la izquierda */
+  }
+  
+  .proyecto-wrapper.surrounding[data-direction="right"] {
+    transform: translate(150px, 0); /* Mover a la derecha */
+  }
+  
+  .proyecto-wrapper.surrounding[data-direction="bottom-left"] {
+    transform: translate(-150px, 150px); /* Mover abajo a la izquierda */
+  }
+  
+  .proyecto-wrapper.surrounding[data-direction="bottom"] {
+    transform: translate(0, 150px); /* Mover hacia abajo */
+  }
+  
+  .proyecto-wrapper.surrounding[data-direction="bottom-right"] {
+    transform: translate(150px, 150px); /* Mover abajo a la derecha */
+  }
+  
