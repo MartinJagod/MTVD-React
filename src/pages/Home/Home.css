@@ -1,5 +1,10 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
-
+html, body {
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden; /* 🔒 evita scroll horizontal */
+  width: 100%;
+}
 
 body {
   margin: 0;
@@ -946,7 +951,7 @@ body {
   height: 100px;
 }
 .front, .back {
-  font-size: 5vw;
+  font-size: 4vw;
   gap: 40px;
 }
 .carousel-container {
@@ -1141,15 +1146,15 @@ body {
 }
 .mute-button {
   position: absolute;
-  bottom: 20px;
+  top: 92vw;
   right: 20px;
   background-color: rgba(0, 0, 0, 0.5);
   color: white;
   border: none;
-  padding: 10px;
+  padding: 6px;
   border-radius: 50%;
   cursor: pointer;
-  font-size: 20px;
+  font-size: 14px;
   z-index: 10;
   transition: background-color 0.3s ease;
 }
@@ -1157,7 +1162,24 @@ body {
 .mute-button:hover {
   background-color: rgba(0, 0, 0, 0.7);
 }
+.full-button {
+  position: absolute;
+  top: 92vw;
+  right: 53px;
+  background-color: rgba(0, 0, 0, 0.5);
+  color: white;
+  border: none;
+  padding: 6px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 14px;
+  z-index: 10;
+  transition: background-color 0.3s ease;
+}
 
+.full-button:hover {
+  background-color: rgba(0, 0, 0, 0.7);
+}
 .parallax-image {
     width: 120vw;
     position: relative;
@@ -1382,6 +1404,21 @@ body {
     display: block;
 
   }
+  .front {
+  background-color: #f5a623; /* Amarillo */
+ width: 33.5vw; 
+
+}
+
+.back {
+  
+  background-color: #f5a623; /* Amarillo */
+ width: 33.vw; 
+  transform: rotateY(180deg);
+  flex-direction: column;
+  color: #ffffff;
+  margin-left: -3px;
+}
   .search-icon-home-desktop {
     color: #ffffff;
     font-size: 24px;
@@ -1537,7 +1574,7 @@ margin-top: -2%;
   color: white;
   padding: 5px 10px;
   border-radius: 4px;
-  font-size: 2.2rem;
+  font-size: 1.2rem;
   font-weight: 800;
   z-index: 1;
   font-family: 'Montserrat', sans-serif;
@@ -1679,7 +1716,7 @@ margin-top: -2%;
 /* Imagen dentro de la caja verde */
 .star-image-star-desktop {
   width: 44%;
-  height: 33%;
+  height: auto;
 }
 .project-count-desktop {
   font-size: 10vw;
@@ -1695,7 +1732,7 @@ margin-top: -2%;
 .full-square-architecture {
   position: absolute;
   right: -13%; /* Alineado a la derecha */
-  width: 79.5vw;
+  width: 79.4vw;
   height: 80vw; /* Mismo alto y ancho */
   background-color: #f8f8f8; /* Opcional */
   overflow: hidden;
@@ -1763,36 +1800,36 @@ margin-top: -2%;
 
 .custom-white-box-desktop {
   background-color: #ffffff;
-  position: absolute;
-  right: 0px;
-  top: 0px;
-  width: 35vw;
-  height: 28vw;
+ 
+  width: 33vw;
+  height: 33vw;
   z-index: 0;
 }
 .custom-orange-box-desktop {
   background-color: #FD7E40;
   position: absolute;
   left: 0;
-  width: 33vw;
+  width: 33.5vw;
   height: 33vw;
   z-index: 1;
 }
 .custom-quadrant-container-desktop{
   display: flex;
-  
-  height: 66vw; /* Altura personalizada */
+  height: 33vw; /* Altura personalizada */
   width: 33vw; /* Ancho completo */
   position: relative; /* Necesario para controlar el desplazamiento */
-  top:33vw
+  top: 33vw;
+  right: 0;
+   /* Alineado a la derecha */
 }
 .custom-orange-box-desktop {
   flex: 1;
-  height: 33vw; /* Ocupan toda la altura del contenedor */
-  width: 33vw;
+  height: 32.1vw; /* Ocupan toda la altura del contenedor */
+  width: 33w;
   display: flex;
   justify-content: center;
   align-items: center;
+  padding-left: 10px;
   transition: transform 0.5s ease-in-out; /* Transición suave */
   
 }
@@ -1845,7 +1882,10 @@ margin-top: -2%;
   font-size: 1.5rem;
 
 }
-
+.carousel-item{
+  max-width: 50%;
+  max-height: 50%;
+}
 }
 /* Estilos para mobile */
 @media (max-width: 1023px) {
@@ -1914,6 +1954,7 @@ margin-top: -2%;
   margin-top: 30px;
   margin-left: 100px;
 }
+/* Contenedor principal que ocupa 60vw de ancho a la derecha */
 
 
 }
@@ -1943,7 +1984,7 @@ modificacion video */
 .videoHome-home {
   background-color: #000;
   width: 100vw;
-  height: 100vh;
+  height: 100vw;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -1962,10 +2003,97 @@ modificacion video */
   
   /* ¡muy importante! */
   width: auto;
-  height: auto;
-  max-width: 100%;
+  height: 100vw;
   max-height: 100%;
   
   /* centra el cuadro de vídeo si usa object-fit */
   object-position: center center;
+}
+
+@media (min-width: 767px) {
+ .background-video-home {
+  /* conserva la proporción original, sin recortar */
+  object-fit: contain;
+  
+  /* ¡muy importante! */
+  width: 100%;
+  height: auto;
+  /* 
+  max-width: 100vw; */ /* Ajusta el ancho máximo al ancho de la pantalla */  
+  /* max-height: 100%; */
+  
+  /* centra el cuadro de vídeo si usa object-fit */
+  object-position: center center;
+}
+.videoHome-home {
+  background-color: #000;
+  width: 100vw;
+  height: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden; /* por si el vídeo es más grande */
+}
+.full-square-architecture {
+  position: absolute;
+  right: -13%; /* Alineado a la derecha */
+  width: 78.85vw;
+  height: 80vw; /* Mismo alto y ancho */
+  background-color: #f8f8f8; /* Opcional */
+  overflow: hidden;
+
+}
+.mute-button {
+  position: absolute;
+  top: 47vw;
+  right: 20px;
+  background-color: rgba(0, 0, 0, 0.5);
+  color: white;
+  border: none;
+  padding: 6px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 14px;
+  z-index: 10;
+  transition: background-color 0.3s ease;
+}
+.full-button {
+  position: absolute;
+  top: 47vw;
+  right: 53px;
+  background-color: rgba(0, 0, 0, 0.5);
+  color: white;
+  border: none;
+  padding: 6px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 14px;
+  z-index: 10;
+  transition: background-color 0.3s ease;
+}
+
+.full-button:hover {
+  background-color: rgba(0, 0, 0, 0.7);
+}
+}
+.wrapper-star-custom {
+  position: relative;
+  left: -26px;
+  width: 33vw;
+  height: 33vw;
+  overflow: visible;
+}
+
+@media (min-width:2000px) {
+  /* Contenedor principal que ocupa 60vw de ancho a la derecha */
+.full-square-architecture {
+  position: absolute;
+  right: -13%; /* Alineado a la derecha */
+  width: 79.1vw;
+  height: 80vw; /* Mismo alto y ancho */
+  background-color: #f8f8f8; /* Opcional */
+  overflow: hidden;
+
+}
+  
 }

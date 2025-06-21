@@ -22,11 +22,16 @@ const folders = [
  *  projectName  →  "Anik"   (sin extensión)
  */
 export const importImagesProject = (category, projectName) => {
+  // 1️⃣  sanitizamos: string, trim y minúsculas
+  const safeCategory = String(category).trim().toLowerCase();
+
+  // 2️⃣  armamos el nombre del archivo
   const file = `${projectName}.jpg`;
 
+  // 3️⃣  construimos el objeto con reduce
   return folders.reduce((acc, folder) => {
     acc[folder] = {
-      [file]: `/assets/images/PaginaProyecto/${category}/${folder}/${file}`,
+      [file]: `/assets/images/PaginaProyecto/${safeCategory}/${folder}/${file}`,
     };
     return acc;
   }, {});

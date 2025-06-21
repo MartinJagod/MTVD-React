@@ -110,6 +110,7 @@ body{
     .carousel-image-projectsHome {
         height: 100%; /* La imagen se adapta al nuevo alto */
     }
+
 }
 .section-input {
     width: 40vw;
@@ -240,8 +241,8 @@ body{
       padding: 4px 0;
       text-decoration: none;
       font-family: "Montserrat";
-      margin-top: 4%;
-      margin-bottom: 13%;
+      margin-top: 1%;
+      margin-bottom: 4%;
       appearance: none;
       -webkit-appearance: none;
     }
@@ -317,11 +318,12 @@ max-width: 800px;
   }
 
   .menu-link-desktop.active {
-    font-weight: 800;
+    font-size: 1.4rem;
   }
 
   .menu-link-desktop:hover {
-    background-color: #eee;
+    font-weight: 1200;
+   
   }
   .desktop-menu-projetcs nav{
     display: flex;
@@ -387,7 +389,7 @@ overflow: hidden;
     text-align: center;
     color: #444;
   }
-  .image-label-section {
+/*   .image-label-section {
     position: absolute;
     bottom: 76%;
     left: 36%;
@@ -395,6 +397,20 @@ overflow: hidden;
     z-index: 2;
     font-family: 'Montserrat', sans-serif;
     text-shadow: none;
+} */
+ .image-label-section {
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 4px;
+    font-size: 1rem;
+    font-weight: 600;
+    z-index: 2;
+    font-family: 'Montserrat', sans-serif;
+    text-shadow: 3px 3px 5px rgba(0, 0, 0, 0.9);
+    font-size: 16px;
 }
 }
 .carousel-container-projectsHome {
@@ -403,4 +419,24 @@ overflow: hidden;
 }
 
   }
- 
+ /* mobile: horizontal */
+.carousel-container-projectsHome {
+  display: flex;
+  flex-direction: row;
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+/* desktop: vertical */
+@media (min-width: 1024px) {
+  .carousel-container-projectsHome {
+    flex-direction: column;
+    overflow-y: auto;
+    overflow-x: hidden;
+    height: 500px; /* o el alto que necesites */
+  }
+      .projects-content {
+
+    margin-top: -1%;
+}
+}

@@ -124,8 +124,8 @@ export const dataProjects = {
     "archivo": "tokinVillaAllende1.jpg"
   },
   "32": {
-    "nombreProyecto": "Lobby Hotel Azur",
-    "archivo": "lobbyHotelAzur1.jpg"
+    "nombreProyecto": "Hotel Azur Lobby",
+    "archivo": "HotelAzurLobby.jpg"
   },
   "33": {
     "nombreProyecto": "Blend Oficinas",

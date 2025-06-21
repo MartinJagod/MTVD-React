@@ -1,96 +1,208 @@
-const express = require("express");
-const cors = require("cors");
-const fs = require("fs");
-const path = require("path");
+/* ────────────────────────────────────────────────────────────────── */
+/*  server/index.js                                                  */
+/* ────────────────────────────────────────────────────────────────── */
+const express = require('express');
+const cors    = require('cors');
+const fs      = require('fs');
+const path    = require('path');
 
-const app = express();
-const PORT = process.env.PORT || 5000;
-const SERVER_IP = "193.203.182.77"; // 🔹 Usamos la IP FIJA del servidor
+const app       = express();
+const PORT      = process.env.PORT || 5000;
+const SERVER_IP = '193.203.182.77';          // IP pública o localhost
 
-// 🔹 Habilitar CORS para acceso desde cualquier dispositivo
-app.use(cors({ origin: "*" }));
+/* ------------------------------------------------------------------ */
+/* 1. Configuración básica                                            */
+/* ------------------------------------------------------------------ */
+app.use(cors({ origin: '*' }));              // CORS abierto
 
-// 🔹 Definir la ruta donde están las imágenes
-const IMAGES_PATH = path.join(__dirname, "../build/assets/images");
-const FOLDERS = ["design", "architecture", "branding"];
+const BUILD_PATH  = path.join(__dirname, '../build');
+const IMAGES_ROOT = path.join(BUILD_PATH, 'assets', 'images');
 
-console.log(`✅ Servidor corriendo en: http://${SERVER_IP}:${PORT}`);
-console.log(`📁 Directorio de imágenes: ${IMAGES_PATH}`);
+/* Carpetas usadas por las APIs “antiguas” */
+const LEGACY_FOLDERS = ['design', 'architecture', 'branding'];
 
-// ✅ 1. API para obtener imágenes de una carpeta específica
-app.get("/api/images/:folder", (req, res) => {
-    try {
-        let folder = decodeURIComponent(req.params.folder).replace(/\s+/g, "").trim();
-        console.log(`🛠 (DEV) Buscando imágenes en la carpeta: "${folder}"`);
-        const directoryPath = path.join(IMAGES_PATH, folder);
+/* Relación categoría → carpeta física nueva dentro de IMAGES_ROOT */
+const CATEGORY_DIR = {
+  design:       'FotosDesign',
+  architecture: 'FotoArchitecture',
+  branding:     'FotoBranding',
+  Design:       'FotosDesign',
+  Architecture: 'FotoArchitecture',
+  Branding:     'FotoBranding',
+};
+const CATEGORY_DIR2 = {
+  Design:       'FotosDesign',
+  Architecture: 'FotoArchitecture',
+  Branding:     'FotoBranding',
+};
 
-        if (!fs.existsSync(directoryPath)) {
-            console.warn(`⚠ La carpeta ${folder} no existe.`);
-            return res.status(404).json({ error: "Carpeta no encontrada." });
-        }
+/* Extensiones válidas */
+const VALID_EXT = new Set(['.jpg', '.jpeg', '.png', '.webp']);
 
-        const files = fs.readdirSync(directoryPath);
-        const validExtensions = [".jpg", ".jpeg", ".png", ".webp"];
-        const images = files
-            .filter(file => validExtensions.includes(path.extname(file).toLowerCase()))
-            .map(file => `http://${SERVER_IP}:${PORT}/assets/images/${folder}/${encodeURIComponent(file)}`);
+/* ------------------------------------------------------------------ */
+/* 2. Helper recursivo: devuelve URLs de todas las imágenes del dir    */
+/* ------------------------------------------------------------------ */
+function readImagesRec(dir) {
+  if (!fs.existsSync(dir)) return [];
 
-        console.log(`📸 ${images.length} imágenes encontradas en ${folder}`);
-        res.json({ images });
-    } catch (error) {
-        console.error("❌ Error en /api/images:", error);
-        res.status(500).json({ error: "Error al leer la carpeta." });
+  const dirents = fs.readdirSync(dir, { withFileTypes: true });
+  let result = [];
+
+  dirents.forEach((d) => {
+    const full = path.join(dir, d.name);
+
+    if (d.isDirectory()) {
+      result = result.concat(readImagesRec(full));
+      return;
     }
+
+    if (!VALID_EXT.has(path.extname(d.name).toLowerCase())) return;
+
+    /* Ruta relativa a /assets/images/, convertida a URL */
+    const rel = path
+      .relative(IMAGES_ROOT, full)
+      .split(path.sep)
+      .map(encodeURIComponent)
+      .join('/');
+
+    result.push(`http://${SERVER_IP}:${PORT}/assets/images/${rel}`);
+  });
+
+  return result;
+}
+
+/* ------------------------------------------------------------------ */
+/* 3. NUEVA API – popup                                               */
+/*    /api/images/popup/:category/:project                            */
+/* ------------------------------------------------------------------ */
+app.get('/api/images/popup/:category/:project', (req, res) => {
+  try {
+    const { category, project } = req.params;
+ console.log(`🔍 Buscando imágenes para ${category}/${project}`);
+    /* Carpeta según la categoría */
+    const catDir = CATEGORY_DIR[category];
+    if (!catDir) {
+      return res.status(400).json({ error: 'Categoría inválida.' });
+    }
+
+    /* Nombre de proyecto “safe” (sin espacios) */
+    /* const safeProject = decodeURIComponent(project).replace(/\s+/g, '').trim(); */
+    const safeProject = project;
+
+
+    /* Ruta base:  FotoDesign/AlgoGrosso/Fotos/Editadas */
+    const basePath = path.join(
+      IMAGES_ROOT,
+      catDir,
+      safeProject,
+      'Fotos',
+      'Editadas'
+    );
+
+    if (!fs.existsSync(basePath)) {
+      return res.status(404).json({ error: 'Proyecto no encontrado.' });
+    }
+
+    /* Mobile + Desktop */
+    const images = [
+      ...readImagesRec(path.join(basePath, 'Mobile')),
+      ...readImagesRec(path.join(basePath, 'Desktop')),
+    ];
+
+    console.log(`📸 ${images.length} imágenes para ${category}/${project}`);
+    res.json({ images });
+  } catch (err) {
+    console.error('❌ Error en /api/images/popup/:category/:project', err);
+    res.status(500).json({ error: 'Error al leer imágenes.' });
+  }
+});
+/* ------------------------------------------------------------------ */
+/* 4. API LEGACY – /api/images/:folder                                */
+/* ------------------------------------------------------------------ */
+app.get('/api/images/:folder', (req, res) => {
+  try {
+    const folder = decodeURIComponent(req.params.folder)
+      .replace(/\s+/g, '')
+      .trim();
+
+    const dir = path.join(IMAGES_ROOT, folder);
+    if (!fs.existsSync(dir)) {
+      return res.status(404).json({ error: 'Carpeta no encontrada.' });
+    }
+
+    const images = fs
+      .readdirSync(dir)
+      .filter((f) => VALID_EXT.has(path.extname(f).toLowerCase()))
+      .map(
+        (f) =>
+          `http://${SERVER_IP}:${PORT}/assets/images/${folder}/${encodeURIComponent(
+            f
+          )}`
+      );
+
+    res.json({ images });
+  } catch (err) {
+    console.error('❌ Error en /api/images/:folder', err);
+    res.status(500).json({ error: 'Error al leer la carpeta.' });
+  }
 });
 
-// ✅ 2. API para obtener imágenes de `design`, `architecture` y `branding`
-app.get("/api/projects-home", (req, res) => {
-    try {
-        let result = {};
+/* ------------------------------------------------------------------ */
+/* 5. API LEGACY – /api/projects-home                                 */
+/* ------------------------------------------------------------------ */
+app.get('/api/projects-home', (req, res) => {
+  try {
+    const result = {};
 
-        FOLDERS.forEach(folder => {
-            const directoryPath = path.join(IMAGES_PATH, folder);
+    LEGACY_FOLDERS.forEach((folder) => {
+      const dir = path.join(IMAGES_ROOT, folder);
 
-            if (!fs.existsSync(directoryPath)) {
-                console.warn(`⚠ La carpeta ${folder} no existe.`);
-                result[folder] = { hits: [] };
-                return;
-            }
+      if (!fs.existsSync(dir)) {
+        result[folder] = { hits: [] };
+        return;
+      }
 
-            const files = fs.readdirSync(directoryPath);
-            const validExtensions = [".jpg", ".jpeg", ".png", ".webp"];
-            const images = files
-                .filter(file => validExtensions.includes(path.extname(file).toLowerCase()))
-                .map(file => `http://${SERVER_IP}:${PORT}/assets/images/${folder}/${encodeURIComponent(file)}`);
+      const images = fs
+        .readdirSync(dir)
+        .filter((f) => VALID_EXT.has(path.extname(f).toLowerCase()))
+        .map(
+          (f) =>
+            `http://${SERVER_IP}:${PORT}/assets/images/${folder}/${encodeURIComponent(
+              f
+            )}`
+        );
 
-            console.log(`📸 ${images.length} imágenes en ${folder}`);
-            result[folder] = { hits: images };
-        });
-
-        res.json(result);
-    } catch (error) {
-        console.error("❌ Error en /api/projects-home:", error);
-        res.status(500).json({ error: "Error al leer las carpetas." });
-    }
-});
-
-// 🔹 Servir archivos estáticos sin afectar las rutas de la API
-app.use("/assets/images", express.static(IMAGES_PATH, { redirect: false }));
-
-// 🔹 Servir React solo cuando no es una API o imagen
-app.get("*", (req, res, next) => {
-    if (req.url.startsWith("/api/") || req.url.startsWith("/assets/images/")) {
-        return next(); // No servir `index.html` para API ni imágenes
-    }
-    res.sendFile(path.join(__dirname, "../build", "index.html"), (err) => {
-        if (err) {
-            console.error("❌ Error cargando el frontend:", err);
-            res.status(500).send("Error cargando el frontend.");
-        }
+      result[folder] = { hits: images };
     });
+
+    res.json(result);
+  } catch (err) {
+    console.error('❌ Error en /api/projects-home', err);
+    res.status(500).json({ error: 'Error al leer las carpetas.' });
+  }
 });
 
-// 🔹 Iniciar el servidor en `0.0.0.0` para acceso desde cualquier dispositivo
-app.listen(PORT, "0.0.0.0", () => {
-    console.log(`✅ Servidor corriendo en: http://${SERVER_IP}:${PORT}`);
+/* ------------------------------------------------------------------ */
+/* 6. Estáticos + fallback a React                                    */
+/* ------------------------------------------------------------------ */
+app.use('/assets/images', express.static(IMAGES_ROOT, { redirect: false }));
+
+app.get('*', (req, res, next) => {
+  if (req.url.startsWith('/api/') || req.url.startsWith('/assets/images/')) {
+    return next();                     // 👉 no servir index.html a peticiones API
+  }
+  res.sendFile(path.join(BUILD_PATH, 'index.html'));
+});
+
+/* ------------------------------------------------------------------ */
+/* 7. Levantar servidor                                               */
+/* ------------------------------------------------------------------ */
+app.listen(PORT, '0.0.0.0', () => {
+  console.log(`✅ API    : http://${SERVER_IP}:${PORT}`);
+  console.log(`📁 Images : ${IMAGES_ROOT}`);
+});
+app.use(express.static(path.join(__dirname, 'build'))); // carpeta build
+
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'build', 'index.html'));
 });

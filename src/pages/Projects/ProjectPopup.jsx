@@ -1,136 +1,264 @@
-import React, { useEffect, useState, useRef } from "react";
-import Modal from "react-modal";
-import { Swiper, SwiperSlide } from "swiper/react";
-import { Navigation, Pagination, Autoplay } from "swiper/modules";
-import "swiper/css";
-import "swiper/css/navigation";
-import "swiper/css/pagination";
-import "swiper/css/autoplay";
+import React, { useEffect, useState, useRef } from 'react';
+import Modal from 'react-modal';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Navigation, Pagination, Autoplay } from 'swiper/modules';
+import 'swiper/css';
+import 'swiper/css/navigation';
+import 'swiper/css/pagination';
+import 'swiper/css/autoplay';
 
-// 🔹 Verificar si `#root` existe antes de definirlo como AppElement
-const rootElement = document.getElementById("root");
-if (rootElement) {
-    Modal.setAppElement(rootElement);
-} else {
-    console.warn("⚠ No se encontró #root en el DOM. Verifica index.html.");
-}
+const root = document.getElementById('root');
+if (root) Modal.setAppElement(root);
 
-const ProjectPopup = ({ isOpen, onClose, initialImage, projectName }) => {
-    if (projectName =="Che Mono" ){projectName = projectName.replace(/\s+/g, "").trim()}
-    const [initialIndex, setInitialIndex] = useState(0);
-    const [images, setImages] = useState([]);
-    const modalRef = useRef(null);
-    const normalizeProjectName = (name) => {
-        return name.replace(/\s+/g, " ").trim();  // 🔹 Reemplaza múltiples espacios y recorta bordes
-    };
-    console.log("🟢 1. Modal abierto. Proyecto seleccionado:", projectName);
-    projectName = projectName.trim()
-    console.log("🟡 Estado inicial de projectName:", projectName.trim());
+const API_BASE = 'http://193.203.182.77:5000/api/images/popup/';
 
-    useEffect(() => {
-        if (!projectName || normalizeProjectName(projectName) === "") {
-            console.warn("⚠ No se ejecuta el fetch porque `projectName` es:", projectName);
-            return;
-        }
-
-        console.log("🟠 2. Ejecutando fetch con:", projectName);
-        fetchImages();
-    }, [projectName]);
-
-    const fetchImages = async () => {
-        console.log("🔵 3. Se llamó a fetchImages()");
-    
-        if (!projectName) {
-            console.warn("⚠ No se ejecuta el fetch porque `projectName` es:", projectName);
-            return;
-        }
-    
-        try {
-            const API_URL = "http://193.203.182.77:5000/api/images/";
-            const formattedProjectName = normalizeProjectName(projectName);
-
-            console.log( `Fetch a la url= ${API_URL}${formattedProjectName}`);
-            
-            const fullURL = `${API_URL}${formattedProjectName}`;
-    
-            console.log(`🔍 4. Intentando obtener imágenes de: ${fullURL}`);
-    
-            const response = await fetch(fullURL);
-            console.log("🔵 5. Respuesta HTTP recibida:", response.status, response);
-    
-            if (!response.ok) throw new Error(`❌ Error HTTP: ${response.status}`);
-    
-            const data = await response.json();
-            console.log("✅ 6. Imágenes recibidas de la API en React:", data);
-    
-            if (!data || !data.images || !Array.isArray(data.images)) {
-                console.error("⚠ 7. La API no devolvió un array válido:", data);
-                return;
-            }
-    
-            console.log("🟢 8. Procesando imágenes...");
-            const formattedImages = data.images.map(img => encodeURI(img));
-            console.log("✅ 9. Imágenes después de formatear:", formattedImages);
-    
-            setImages(formattedImages);
-        } catch (error) {
-            console.error("❌ 10. Error cargando imágenes:", error);
-            setImages([]);
-        }
-    };
-
-    console.log("📸 11. Imágenes en el estado después del fetch:", images);
-
-    useEffect(() => {
-        if (initialImage && images.length > 0) {
-            const index = images.findIndex(img => img.includes(initialImage));
-            console.log(`🔄 12. Configurando imagen inicial: ${initialImage}, índice encontrado: ${index}`);
-            setInitialIndex(index !== -1 ? index : 0);
-        }
-    }, [initialImage, images]);
-
-    // 🔹 Evitar que el modal se renderice si no está abierto
-    if (!isOpen) return null;
-
-    return (
-        <Modal
-            isOpen={isOpen}
-            onRequestClose={onClose} // 🔹 Maneja el cierre al hacer clic fuera
-            className="popup-modal"
-            overlayClassName="popup-overlay" // 🔹 Aplicar el fondo para el clic externo
-            shouldCloseOnOverlayClick={true} // 🔹 Habilita el cierre al hacer clic fuera
-        >
-            <div className="popup-content" ref={modalRef}>
-                <button className="close-btn" onClick={onClose}>×</button>
-
-                {images && images.length > 0 ? (
-                    <Swiper
-                        className="custom-swiper"
-                        modules={[Navigation, Pagination, Autoplay]}
-                        navigation
-                        pagination={{ clickable: true }}
-                        spaceBetween={0}
-                        slidesPerView={1}
-                        initialSlide={initialIndex}
-                        loop={true}
-                        zoom={true}
-                    >
-                        {images.map((image, index) => {
-                            console.log(`🖼 13. Renderizando imagen ${index}:`, image);
-                            return (
-                                <SwiperSlide key={index}>
-                                    <img src={image} alt={`Imagen ${index + 1}`} className="carousel-image" />
-                                </SwiperSlide>
-                            );
-                        })}
-                    </Swiper>
-                ) : (
-                    <p>⚠ No hay imágenes disponibles para este proyecto.</p>
-                )}
-            </div>
-        </Modal>
-    );
+// Estilos para el modal responsive
+const modalStyles = {
+  overlay: {
+    position: 'fixed',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: 'rgba(255, 255, 255, 0.1)',
+    backdropFilter: 'blur(10px)',
+    WebkitBackdropFilter: 'blur(10px)',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    zIndex: 1000,
+   
+  },
+  content: {
+    position: 'relative',
+    width: '90vw',
+    height: '85vh',
+    maxWidth: '95vw',
+    maxHeight: '95vh',
+   /*  minWidth: '320px',
+    minHeight: '400px', */
+    background: 'rgba(255, 255, 255, 0.95)',
+    backdropFilter: 'blur(20px)',
+    WebkitBackdropFilter: 'blur(20px)',
+    borderRadius: '12px',
+    outline: 'none',
+    border: '1px solid rgba(255, 255, 255, 0.2)',
+    padding: 0,
+    margin: 0,
+    overflow: 'hidden',
+    boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)'
+  }
 };
 
-export default ProjectPopup;
+const popupContentStyles = {
+  width: '100%',
+  height: '100%',
+  display: 'flex',
+  flexDirection: 'column',
+  position: 'relative',
+  overflow: 'hidden'
+};
 
+const closeBtnStyles = {
+  position: 'absolute',
+  top: '15px',
+  right: '15px',
+  background: 'rgba(255, 255, 255, 0.9)',
+  backdropFilter: 'blur(10px)',
+  WebkitBackdropFilter: 'blur(10px)',
+  color: '#333',
+  border: '1px solid rgba(255, 255, 255, 0.3)',
+  borderRadius: '50%',
+  width: '40px',
+  height: '40px',
+  fontSize: '20px',
+  cursor: 'pointer',
+  zIndex: 10,
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  transition: 'all 0.2s ease',
+  fontWeight: 'bold'
+};
+
+const swiperStyles = {
+  width: '100%',
+  height: '100%',
+  display: 'flex',
+  alignItems: 'center'
+};
+
+const slideStyles = {
+  display: 'flex !important',
+  alignItems: 'center',
+  justifyContent: 'center',
+  width: '100%',
+  height: '100%',
+  backgroundColor: 'transparent'
+};
+
+const imageStyles = {
+  maxWidth: '90%',
+  maxHeight: '90%',
+  width: 'auto',
+  height: 'auto',
+  objectFit: 'contain',
+  display: 'block',
+  margin: 'auto'
+};
+
+const noImagesStyles = {
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  height: '100%',
+  fontSize: '18px',
+  color: '#666'
+};
+
+export default function ProjectPopup({
+  isOpen,
+  onClose,
+  initialImage,
+  projectName,
+  category,
+}) {
+  console.log('🔍 ProjectPopup props:', { isOpen, projectName, category, initialImage });
+
+  /* Utilidades */
+  const normalize = (str = '') => str.replace(/\s+/g, '').trim();
+  const formattedProject = normalize(projectName);
+
+  /* Estados */
+  const [images, setImages] = useState([]);
+  const [initialIndex, setIndex] = useState(0);
+  const modalRef = useRef(null);
+
+  /* Fetch cuando cambia proyecto o categoría */
+  useEffect(() => {
+    console.log('⚙️ useEffect ejecutado con:', { formattedProject, category });
+
+    if (!formattedProject || !category) {
+      console.warn('⚠️ formattedProject o category no definidos:', { formattedProject, category });
+      setImages([]);
+      return;
+    }
+
+    async function load() {
+      const url = `${API_BASE}${category}/${projectName}`;
+      console.log('🌐 Intentando fetch a:', url);
+
+      try {
+        const res = await fetch(url);
+        console.log('📥 Estado respuesta:', res.status);
+
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+
+        const data = await res.json();
+        console.log('📦 Datos recibidos:', data);
+
+        if (Array.isArray(data.images) && data.images.length) {
+          setImages(data.images.map(src => encodeURI(src)));
+        } else {
+          console.warn('⚠️ No se recibieron imágenes válidas:', data);
+          setImages([]);
+        }
+      } catch (err) {
+        console.error('❌ Error en el fetch:', err);
+        setImages([]);
+      }
+    }
+
+    load();
+  }, [formattedProject, category, isOpen]);
+
+  /* Slide inicial */
+  useEffect(() => {
+    if (!initialImage || !images.length) return;
+    const idx = images.findIndex(i => i.includes(initialImage));
+    setIndex(idx !== -1 ? idx : 0);
+  }, [initialImage, images]);
+
+  /* Cerrar con tecla Escape */
+  useEffect(() => {
+    const handleEscape = (e) => {
+      if (e.key === 'Escape') onClose();
+    };
+
+    if (isOpen) {
+      document.addEventListener('keydown', handleEscape);
+      // Prevenir scroll del body cuando el modal está abierto
+      document.body.style.overflow = 'hidden';
+    }
+
+    return () => {
+      document.removeEventListener('keydown', handleEscape);
+      document.body.style.overflow = 'unset';
+    };
+  }, [isOpen, onClose]);
+
+  /* No render si modal cerrado */
+  if (!isOpen) return null;
+
+  /* Renderizado */
+  return (
+    <Modal
+      isOpen={isOpen}
+      onRequestClose={onClose}
+      style={modalStyles}
+      shouldCloseOnOverlayClick
+      shouldCloseOnEsc
+    >
+      <div style={popupContentStyles} ref={modalRef}>
+        <button 
+          style={closeBtnStyles}
+          onClick={onClose}
+          onMouseEnter={(e) => {
+            e.target.style.background = 'rgba(255, 255, 255, 1)';
+            e.target.style.transform = 'scale(1.1)';
+          }}
+          onMouseLeave={(e) => {
+            e.target.style.background = 'rgba(255, 255, 255, 0.9)';
+            e.target.style.transform = 'scale(1)';
+          }}
+        >
+          ×
+        </button>
+
+        {images.length ? (
+          <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center' }}>
+            <Swiper
+              style={swiperStyles}
+              modules={[Navigation, Pagination, Autoplay]}
+              navigation
+              pagination={{ 
+                clickable: true,
+                dynamicBullets: true 
+              }}
+              slidesPerView={1}
+              initialSlide={initialIndex}
+              loop={images.length > 1}
+              zoom={{ maxRatio: 3 }}
+              spaceBetween={0}
+              centeredSlides={true}
+            >
+              {images.map((src, i) => (
+                <SwiperSlide key={i} style={slideStyles}>
+                  <img 
+                    src={src} 
+                    alt={`Imagen ${i + 1}`} 
+                    style={imageStyles}
+                  />
+                </SwiperSlide>
+              ))}
+            </Swiper>
+          </div>
+        ) : (
+          <div style={noImagesStyles}>
+            <p>⚠ No hay imágenes disponibles para este proyecto.</p>
+          </div>
+        )}
+      </div>
+    </Modal>
+  );
+}

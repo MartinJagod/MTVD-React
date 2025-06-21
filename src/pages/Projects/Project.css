@@ -45,8 +45,10 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 5px 20px;
+  padding: 5px;
   color: #ffffff; /* Color del texto dentro del header */
+  margin-right: 60px;
+  margin-top: 8px;
 }
 
 
@@ -289,7 +291,7 @@ body {
   color: #bbb; /* Letras gris claro */
   border-radius: 5px;
   margin-top: 10px;
-  max-height: 150px; /* Altura máxima con scroll */
+  max-height: 29vh; /* Altura máxima con scroll */
   overflow-y: auto; /* Scroll si excede la altura */
 }
 
@@ -600,12 +602,12 @@ body {
   font-size: 15px;
   font-weight: 600;
   color: #ffffff;
-
+    margin-left: -34%;
 }
 .project-label-project2 {
   font-size: 15px;
   font-weight: 600;
-  margin-left: -85px;
+  margin-left: -34%;
 }
 .project-label-small {
   font-size: 14px;
@@ -738,7 +740,7 @@ body {
 .contact-section-footer {
   position: relative;
   text-align: left;
-  padding-left: 40px;
+  padding-left: 30px;
   background-color: #ffffff;
   z-index: 1002;
   width: 100%;
@@ -940,7 +942,7 @@ body {
 
   .phrase-line {
     white-space: normal; /* Permite saltos de línea */
-    font-size: 9vw; /* Ajusta el tamaño del texto para móviles */
+    font-size: 8vw; /* Ajusta el tamaño del texto para móviles */
   }
 }
 
@@ -1195,24 +1197,7 @@ body {
   object-fit: cover;
   z-index: -1; /* Coloca el video detrás del contenido */
 }
-.mute-button {
-  position: absolute;
-  bottom: 20px;
-  right: 20px;
-  background-color: rgba(0, 0, 0, 0.5);
-  color: white;
-  border: none;
-  padding: 10px;
-  border-radius: 50%;
-  cursor: pointer;
-  font-size: 20px;
-  z-index: 10;
-  transition: background-color 0.3s ease;
-}
 
-.mute-button:hover {
-  background-color: rgba(0, 0, 0, 0.7);
-}
 
 .parallax-image-project {
   width: 160vw;
@@ -1399,7 +1384,7 @@ body {
 
 .project-text {
   margin-top: 20px;
-  padding: 20px;
+ /*  padding: 20px; */
   text-align: left;
 }
 
@@ -1408,6 +1393,7 @@ body {
   font-size: 4.5vw;
   font-weight: 700;
   margin-bottom: 1rem;
+  padding-left: 25px;
 }
 
 .moving-line5 {
@@ -1495,8 +1481,8 @@ body {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 80%;
-  max-width: 800px;
+  width: 98%;
+  
   background: transparent !important; /* 🔹 Hace que el modal no tenga fondo */
   padding: 0;
   border: none !important;
@@ -1566,7 +1552,7 @@ display: grid;
   .logo-img{
     width: 200px;
     margin-top: 30px;
-    margin-left: 100px;
+    margin-left: 30px;
   }
   .phrase-line {
     font-size: 4.5vw;}
@@ -1640,17 +1626,37 @@ body.no-scroll {
         text-align: justify;
         max-width: 90%;
         margin-left: 4%;
+        margin-right: 4%;
+
         margin-top: -10%;
         margin-bottom: 20%;
     }
     .project-title {
         font-size: 1.4rem;
         font-weight: 850;
-        
+  
         margin-left: 7%;
+        margin-right: 7%;
        margin-top: 0;
     
     }
+    .full-square-primero-foto {
+  width: 100vw; /* 100% del ancho de la ventana */
+  height: 100vw; /* Igual al ancho para formar un cuadrado */
+  display: flex; /* Flexbox para centrar el contenido si es necesario */
+  justify-content: center; /* Centra horizontalmente */
+  align-items: center; /* Centra verticalmente */
+  overflow: hidden; /* Oculta lo que sobresale */
+  position: relative; /* Para controlar la posición del contenido interno */
+  background-color: #ffffff; /* Color de fondo opcional */
+}
+.primer-foto{
+  
+    width: 130vw;
+   
+    background-position: center center;
+
+}
 @media (min-width: 768px) {
   .project-box-project {
     font-family: "Montserrat";
@@ -1721,4 +1727,71 @@ body.no-scroll {
     .phrase-line {
         font-size: 5.5vw
     }
+    .carousel-item {
+  flex: 0 0 auto;
+  width: 14vw;
+  margin-right: 40px;
+}
+    .logo-image {
+  max-height: 100%; /* Ajusta la altura de los logos */
+  max-width: 100%;
+  object-fit: contain; /* Escala los logos proporcionalmente */
+  margin: auto 0;
+ }
+ .moving-line5 {
+    animation: moveLine5 2s linear forwards;
+    background-color: #fd7e40;
+    bottom: 20px;
+    height: 10px;
+    position: absolute;
+    right: 0;
+    width: 50px;
+    z-index: 2000;
+}
+.moving-line3 {
+    animation: moveLine3 2s linear forwards;
+    background-color: #44b87e;
+    bottom: -20px;
+    height: 10px;
+    position: relative;
+    right: 0;
+    width: 50px;
+}
+.full-square-primero-foto {
+  width: 100vw; /* 100% del ancho de la ventana */
+  height: 100vh; /* Igual al ancho para formar un cuadrado */
+  display: flex; /* Flexbox para centrar el contenido si es necesario */
+  justify-content: center; /* Centra horizontalmente */
+  align-items: center; /* Centra verticalmente */
+  overflow: hidden; /* Oculta lo que sobresale */
+  position: relative; /* Para controlar la posición del contenido interno */
+  background-color: #ffffff; /* Color de fondo opcional */
+}
+.primer-foto{
+  
+    width: 100vw;
+    position: relative;
+    /* top: -30vh; */
+    background-position: center center;
+
+}
+.header-content {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px;
+    color: #ffffff;
+    margin-right: 30px;
+    margin-top: -30px;
+}
+}
+.projects-general{
+      display: flex
+;
+    flex-direction: column;
+ 
+    min-height: 100vh;
+    overflow-x: hidden;
 }

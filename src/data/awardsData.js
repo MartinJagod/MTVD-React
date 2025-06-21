@@ -6,7 +6,7 @@
 /* ---------- Encabezados de año ---------- */
 export const yearHighlights = {
     '2014': 'MTVD Design Studio is born',
-    '2015': 'We expand our work in Córdoba, Buenos Aires, Santiago de Chile, and counting',
+    '2015': 'Our work begin to expand',
     '2016': 'We take our designs beyond borders for the first time',
     '2017': 'Creators of Brands',
     '2018': 'Bigger Studio, Bigger Projects',

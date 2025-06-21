@@ -25,7 +25,7 @@ const ContactFooterDesktop = () => {
     
     <div style={{width:"100%"}}>
 
-    <div class="linea-separadora" style={{width:"100%" ,height:"2px", backgroundColor:"#000000", marginLeft:"5%", width:"90%", marginTop:"4%", marginBottom:"4%"}}></div>
+    <div class="linea-separadora" style={{width:"100%" ,height:"1px", backgroundColor:"#000000", width:"100%", marginTop:"4%", marginBottom:"4%"}}></div>
     <div
   className="contact-section-footer"
   style={{

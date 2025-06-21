@@ -1,6 +1,9 @@
-import React, { useEffect, useState, useRef, useCallback } from 'react';
+import React, { useEffect, useState, useRef, useCallback, useContext } from 'react';
+import { LanguageContext } from '../../context/LanguageContext';
 import { useParams } from "react-router-dom";
 import projectsData from './projectsData';
+import projectsDataES from './projectsDataES';
+
 import ProjectPopup from "./ProjectPopup";
 import { getIdByProjectName } from './projectUtils';
 import './Project.css';
@@ -17,8 +20,12 @@ function Project() {
     const interiorismo1 = '/assets/images/PaginaProyecto/proyecto3/CheMono.jpg';
     /* const { id } = useParams(); */ // 🔹 Obtiene el ID desde la URL
     const { category, projectName } = useParams();
-    const imagesPrincipal = importImagesProject(); // 🔹 Carga todas las imágenes del proyecto
+    const { lang } = useContext(LanguageContext);  // EN | ES
 
+    // 🔹 Dataset por idioma
+    const dataset = lang === 'ES' ? projectsDataES : projectsData;
+
+    const imagesPrincipal = importImagesProject();
 
     /* const projectNames = {
         1:"CheMono.jpg",
@@ -34,7 +41,11 @@ function Project() {
     const PhraseLineSelected = projectName;                // AlgoGrosso
     const images = importImagesProject(category, projectName);
     const id = getIdByProjectName(PhraseLineSelected);
-    const projectData = id ? projectsData[id] : {};
+    const projectData =
+  id
+    ? (dataset[id] ?? projectsData[id])   // ← intenta ES, si no existe cae a EN
+    : {};
+
 
 
     console.log("📂 Imágenes importadas:", images);
@@ -54,7 +65,7 @@ function Project() {
       const miniatura2 = require(`../../assets/images/PaginaProyecto/miniatura2/${imageName}`);
    */
     const [projectCount, setProjectCount] = useState(0);
-    const [yearsCount, setYearsCount] = useState(0);
+    const [yearsCount, setYearsCount] = useState(2000);
     const [countriesCount, setCountriesCount] = useState(0);
     const [citiesCount, setCitiesCount] = useState(0);
     const [showInput, setShowInput] = useState(false);
@@ -80,10 +91,15 @@ function Project() {
     // inicio carousel
     /*  const images = importImages("CheMono"); */ // 🔹 Se puede cambiar a otra carpeta en el futuro
 
-
     const openPopup = (image) => {
-        setSelectedImage(image);
-        setModalOpen(true);
+        if (modalOpen) {
+            // El modal ya está abierto → sólo actualizo la imagen
+            setSelectedImage(image);
+        } else {
+            // El modal está cerrado → abro y seteo imagen
+            setSelectedImage(image);
+            setModalOpen(true);
+        }
     };
     // fin carousel
 
@@ -278,23 +294,23 @@ function Project() {
     //fin carousel
 
     //Inicio contador animado
-  const animateCounter = useCallback((setter, target, duration) => {
-    let count = 0; // ⬅️ Empieza en 0
-    const frameTime = 16; // ~60 FPS
-    const steps = duration / frameTime;
-    const increment = target / steps;
+    const animateCounter = useCallback((setter, target, duration) => {
+        let count = 0; // ⬅️ Empieza en 0
+        const frameTime = 16; // ~60 FPS
+        const steps = duration / frameTime;
+        const increment = target / steps;
 
-    const interval = setInterval(() => {
-        count += increment;
-        if (count >= target) {
-            count = target;
-            setter(Math.ceil(count));
-            clearInterval(interval);
-        } else {
-            setter(Math.ceil(count));
-        }
-    }, frameTime);
-}, []);
+        const interval = setInterval(() => {
+            count += increment;
+            if (count >= target) {
+                count = target;
+                setter(Math.ceil(count));
+                clearInterval(interval);
+            } else {
+                setter(Math.ceil(count));
+            }
+        }, frameTime);
+    }, []);
 
 
     const startCountingProjects = useCallback(() => {
@@ -340,15 +356,15 @@ function Project() {
                     // Inicia el conteo en secuencia
                     const delay = 50; // 1 segundo entre contadores
 
-                    setYearsCount(199);
-               
+                    setYearsCount(2000);
+
                     animateCounter(setYearsCount, Number(projectData.contador2), 4000); // Primer contador
 
-                  
+
                 } else {
                     // Reinicia los contadores al salir de pantalla
-                    setYearsCount(0);
-                
+                    setYearsCount(2000);
+
                 }
             });
         }, { threshold: 0.5 });
@@ -540,15 +556,26 @@ function Project() {
             body.classList.remove('no-scroll');
         };
     }, [modalOpen]);
+    // Al cerrar el modal liberamos el scroll
+    const closePopup = () => {
+        setModalOpen(false);
+        setSelectedImage(null);          // (opcional) evita “imagen parpadeo”
+    };
+
+    const isVideo = (filename) => {
+        return /\.(mp4|webm|ogg)$/i.test(filename);
+    };
+
+    const principalMedia = images.principal[imageName];
 
     return (
-        <div className="home">
+        <div className="projects-general">
             <div id="overlay-blur" className={modalOpen ? 'active' : ''}></div>
 
 
             {/* Imagen  de fondo */}
             <header className="projet-header">
-                <div className="full-square">
+                {/*    <div className="full-square">
                     <div className="parallax-wrapper">
                         <img
                             src={images.principal[imageName]}
@@ -563,8 +590,34 @@ function Project() {
                     <div className="image-label-star">
                         <img src={starImage} alt="Star" className="star-image-foto" />
                     </div>
-                </div>
+                </div> */}
+                <div className="full-square-primero-foto">
+                    <div className='primer-foto'>
+                        {isVideo(principalMedia) ? (
+                            <video
+                                src={principalMedia}
+                                className="parallax-image-project"
+                                autoPlay
+                                muted
+                                loop
+                                playsInline
+                                onClick={() => openPopup(principalMedia)}
+                            />
+                        ) : (
+                            <img
+                                src={principalMedia}
+                                alt="Principal"
+                                className='primer-foto'
+                                ref={brandingImageRef}
+                                onClick={() => openPopup(principalMedia)}
+                            />
+                        )}
+                    </div>
 
+                    <div className="image-label-star">
+                        <img src={starImage} alt="Star" className="star-image-foto" />
+                    </div>
+                </div>
                 <Navbar
                     isSliding={isSliding}
                     menuOpen={menuOpen}
@@ -637,7 +690,7 @@ function Project() {
                         <span className="project-label-normal" style={{ marginBottom: "10px" }}>{projectData.contador1}</span>
 
                         <span className="project-label-small">Area</span>
-                        <span className="project-label-normal">{projectData.contador2 +" "+ projectData.nombre2 }</span>
+                        <span className="project-label-normal">{projectData.contador2 + " " + projectData.nombre2}</span>
                         <div className="moving-line3" ref={line3Ref} data-animation="moveLine3"></div>
                     </div>
                 </div>
@@ -715,24 +768,26 @@ function Project() {
                         {projectData.parrafo2}
                     </p>
                 </div>
+                <ProjectPopup
+                    isOpen={modalOpen}
+                    onClose={closePopup}
+                    initialImage={selectedImage}
+                    projectName={PhraseLineSelected}
+                    category={category}
+                />
             </section>
-<div className="button-container-clients mobile-hide">
-    <ContactFooterDesktop />
-</div>
- <section className="content-section desktop-hide">
+            <div className="button-container-clients mobile-hide">
+                <ContactFooterDesktop />
+            </div>
+            <section className="content-section desktop-hide">
                 <ContactFooter />
             </section>
-            <ProjectPopup
-                isOpen={modalOpen}
-                onClose={() => setModalOpen(false)}
-                initialImage={selectedImage}
-                projectName={PhraseLineSelected}
-            />
+
 
         </div>
     );
 }
 
- 
+
 
 export default Project;

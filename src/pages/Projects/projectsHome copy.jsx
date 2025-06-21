@@ -1,13 +1,10 @@
-import React, { useEffect, useState, useRef, useContext } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useNavigate } from "react-router-dom";
 import './projectsHome.css';
 import Navbar from '../Parcial/Navbar';
 import ContactFooter from '../Parcial/ContactFooter';
 import Carousel from './Carouseli';
 import projectsData from './projectsData';
-import ContactFooterDesktop from '../Parcial/ContactFooterDesktop'; // Ajusta la ruta según tu estructura de carpetas
-
-import { LanguageContext } from "../../context/LanguageContext";
 
 /* ---------- helpers fuera del componente ---------- */
 const easeInOutCubic = t =>
@@ -77,7 +74,6 @@ function ProjectsHome() {
     const [imagenesColumna1, setImagenesColumna1] = useState([]);
     const [imagenesColumna2, setImagenesColumna2] = useState([]);
     const [imagenesColumna3, setImagenesColumna3] = useState([]);
-    const { lang, toggleLang } = useContext(LanguageContext);
 
     // Inicio animación de menú
     const [showInput, setShowInput] = useState(false);
@@ -222,19 +218,19 @@ const easeInOutCubic = t =>
             <main className="projects-content">
                 <div id="carousel-design" className="carousel-wrapper-projectsHome">
                     <Carousel
-                        title={lang === 'ES' ? 'Diseño' : 'Design'}
+                        title="Design"
                         images={imagenesColumna1}
                         goToProject={goToProject}
-                        category="Design"
+                        category={"design"}
                     />
                 </div>
 
                 <div id="carousel-architecture" className="carousel-wrapper-projectsHome">
                     <Carousel
-                        title= {lang === 'ES' ? 'Arquitectura' : 'Architecture'}
+                        title="Architecture"
                         images={imagenesColumna2}
                         goToProject={goToProject}
-                        category="Architecture"
+                        category={"architecture"}
                     />
                 </div>
 
@@ -243,7 +239,7 @@ const easeInOutCubic = t =>
                         title="Branding"
                         images={imagenesColumna3}
                         goToProject={goToProject}
-                        category="Branding"
+                        category={"branding"}
                     />
                 </div>
             </main>
@@ -253,13 +249,7 @@ const easeInOutCubic = t =>
                 <br />
                 <br />
                 <br />
-                <footer className="studio-footer mobile-hide">
-                <ContactFooterDesktop />
-            </footer>
-            {/* Pie de página */}
-            <footer className="studio-footer desktop-hide">
                 <ContactFooter />
-            </footer>
             </footer>
         </div>
     );

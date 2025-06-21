@@ -1,6 +1,7 @@
-import React, { useRef, useEffect, useState } from "react";
+import React, { useRef, useEffect, useState, useContext } from "react";
 import { Link } from "react-router-dom";
 import "./projectsHome.css";
+import { LanguageContext } from "../../context/LanguageContext";
 
 const Carousel = ({ title, images, goToProject  }) => {
   const carouselRef = useRef(null);
@@ -11,6 +12,7 @@ const Carousel = ({ title, images, goToProject  }) => {
   const animationFrame = useRef(null);
   const [isDesktop, setIsDesktop] = useState(window.innerWidth >= 1024);
 const sectionCategory = title.toLowerCase();
+    const { lang, toggleLang } = useContext(LanguageContext);
 
   
    /* ─── helper: extrae categoría y proyecto ─── */
@@ -25,7 +27,7 @@ const getProjectName = (url) => {
   
     const element = carouselRef.current;
     const totalDistance = 1000; // distancia total que queremos bajar en total
-    const bounces = 3; // cantidad de rebotes (ida y vuelta)
+    const bounces = 1; // cantidad de rebotes (ida y vuelta)
     const stepDistance = totalDistance / bounces;
     const stepDuration = 300;
   
@@ -51,7 +53,7 @@ const getProjectName = (url) => {
   
           if (currentBounce < bounces * 2) {
             // Seguimos rebotando
-            setTimeout(animateBounce, 50);
+            setTimeout(animateBounce, 60);
           } else {
             // 🚨 Último movimiento hacia abajo para frenar en posición final
             smoothScrollTo(element, element.scrollTop + stepDistance, 500);

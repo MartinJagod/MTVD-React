@@ -386,7 +386,7 @@ const projectsData = {
 }
 ,
   28: {
-  nombreproyecto: "Suite House Cariló",
+  nombreproyecto: "Suite House Carilo",
   frase1: "A reimagined coastal hotel embracing nature's essence.",
   frase2: "Light, texture, and nature shaping coastal hospitality.",
   contador1: 2022,
@@ -401,7 +401,7 @@ const projectsData = {
 }
 ,
 29: {
-  nombreproyecto: "Mercé",
+  nombreproyecto: "Merce",
   frase1: "Designed for calm and reflection in the city.",
   frase2: "Textures and light shaping an immersive, engaging space.",
   contador1: 2023,
@@ -446,7 +446,7 @@ const projectsData = {
 }
 ,
 32: {
-  nombreproyecto: "Lobby Hotel Azur ",
+  nombreproyecto: "Hotel Azur Lobby",
   frase1: "Exhibited at Casa FOA, redefining hotel lobby design.",
   frase2: "A sensory journey through water, light, and texture.",
   contador1: 2024,
@@ -506,7 +506,7 @@ const projectsData = {
 }
  ,
 36: {
-  nombreproyecto: "Ñu Posta Urbana",
+  nombreproyecto: "Nu Posta Urbana",
   frase1: "Fire, texture, and ritual shaping urban dining.",
   frase2: "Material warmth guiding the entire dining sequence.",
   contador1: 2021,
@@ -551,7 +551,7 @@ const projectsData = {
 }
 ,
 39: {
-  nombreproyecto: "La Maquinita Co. Quilmes",
+  nombreproyecto: "La Maquinita Co Quilmes",
   frase1: "Fourth collaboration with La Maquinita coworking brand.",
   frase2: "Flexible design for contemporary work environments.",
   contador1: 2024,
@@ -795,7 +795,7 @@ const projectsData = {
 }
 ,
 55: {
-  nombreproyecto: "Barilatte O'Higgins",
+  nombreproyecto: "Barilatte OHiggins",
   frase1: "Fourth time designing joy with Barilatte",
   frase2: "Architecture echoing flavor, laughter, and everyday celebration",
   contador1: 2023,
@@ -886,7 +886,7 @@ const projectsData = {
 }
 ,
 5005: {
-  nombreproyecto: "Cañuelas Village",
+  nombreproyecto: "Canuelas Village",
   frase1: "Void as structure, nature as spatial protagonist.",
   frase2: "Concrete and wood shaping inhabited silence.",
   contador1: 2021,
@@ -918,7 +918,7 @@ const projectsData = {
 
 ,
 5007: {
-  nombreproyecto: "La Luisita 2",
+  nombreproyecto: "La Luisita",
   frase1: "Geometry and light organize life with precision.",
   frase2: "Volumes open to light, time, and growth.",
   contador1: 2022,
@@ -966,7 +966,7 @@ const projectsData = {
 
 ,
 5010: {
-  nombreproyecto: "Homes & Co.",
+  nombreproyecto: "Homes Co",
   frase1: "Designed to foster family life and community bonds.",
   frase2: "Space that connects, celebrates simplicity, and comfort.",
   contador1: 2021,
@@ -995,7 +995,7 @@ const projectsData = {
 }
 ,
 5012: {
-  nombreproyecto: "Puerto Náutico",
+  nombreproyecto: "Puerto Nautico",
   frase1: "A design focused on nautical logistics and nature.",
   frase2: "A nautical village enhancing Potrero's lakefront view.",
   contador1: 2023,
@@ -1009,7 +1009,7 @@ const projectsData = {
   parrafo2: "The project prioritizes two key slopes: one for loading and unloading nautical elements, with a 5% gradient, and another, more pronounced 20% slope that separates the modules. The design of each module reinterprets the surrounding topography, with roofs that slope in different directions, blending into the landscape. The material palette combines a solid concrete base for earth containment with a lightweight metal structure and simple sheet metal cladding, providing functional and visual harmony with the natural environment. The result is a space that seamlessly integrates into the club’s lakeside setting, minimizing its visual footprint."
 }
 ,5013: {
-  nombreproyecto: "Club Náutico",
+  nombreproyecto: "Club Nautico",
   frase1: "A lakeside village enhancing connection with nature.",
   frase2: "Harmonizing architecture and landscape for timeless living.",
   contador1: 2021,
@@ -1023,7 +1023,7 @@ const projectsData = {
   parrafo2: "The material palette was chosen to reflect the surrounding environment. Dark, pure volumes are paired with sloped roofs and stone bases, grounding the buildings in the landscape. Inside, the warmth of wood contrasts with the starkness of the exteriors, creating an inviting and harmonious interior space. The overall layout is designed to foster interaction, with a series of interconnected spaces. These include a lobby that bridges the club house and hotel developments, a restaurant offering panoramic lake views, a spa, meeting areas, an outdoor pool, fire pits, a dock, and a promenade that ties the different elements of the community together. This architectural composition fosters a sense of belonging while embracing the natural beauty of its surroundings."
 },
 5014: {
-  nombreproyecto: "Casa Cañuelas Chico",
+  nombreproyecto: "Casa Canuelas Chico",
   frase1: "A home of simplicity, awarded for thoughtful design.",
   frase2: "Shaping tranquility through light, space, and material.",
   contador1: 2023,
@@ -1093,18 +1093,18 @@ const projectsData = {
   parrafo2: "The program is structured around a mutual relationship with vegetation. Upon entry, circulation breaks between social and private functions, led by a skylit hall that opens into a living and dining space fully immersed in the patio and pool area. Private spaces unfold around courtyards, including two ensuite bedrooms and a secluded playroom. A rooftop terrace offers sweeping views of the Balinese mountains and sea. Materials such as stone, masonry, and wood, drawn from local tradition, were composed with restraint and elegance to respect and elevate the site."
 },
 5019: {
-  nombreproyecto: "Housing Bali",
-  frase1: "Inspired by Bali’s temple-house spatial traditions.",
-  frase2: "Gradient of space from social to intimate.",
+  nombreproyecto: "Viarava",
+  frase1: "A neighborhood immersed in the Sierras Chicas landscape.",
+  frase2: "An organic, nature-driven design embracing the terrain.",
   contador1: 2023,
-  nombre1: "Year",
-  contador2: 14316,
+  nombre1: "year",
+  contador2: 116136.3,
   nombre2: "ft²",
-  location: "Bali, Indonesia",
-  frase3: "Crafted around light, vegetation, and sacred geometry.",
-  encabezado: "A spatial narrative shaped by Balinese architecture.",
-  parrafo1: "In its design, we drew inspiration from the spatial logic of Balinese temples and homes, where each room stands independently but exists in harmony with nature. Housing Bali translates this cultural essence into a contemporary layout that transitions from open and shared areas to secluded, private zones—balancing the ceremonial with the everyday. The architecture creates a journey of discovery, offering varied moments of light, material, and landscape along the way.",
-  parrafo2: "The program is structured around a mutual relationship with vegetation. Upon entry, circulation breaks between social and private functions, led by a skylit hall that opens into a living and dining space fully immersed in the patio and pool area. Private spaces unfold around courtyards, including two ensuite bedrooms and a secluded playroom. A rooftop terrace offers sweeping views of the Balinese mountains and sea. Materials such as stone, masonry, and wood, drawn from local tradition, were composed with restraint and elegance to respect and elevate the site."
+  location: "Villa Allende, Córdoba, Argentina",
+  frase3: "A seamless integration with the natural surroundings.",
+  encabezado: "A neighborhood inspired by the Sierras Chicas landscape.",
+  parrafo1: "Viarava is a neighborhood designed to integrate seamlessly with the natural beauty of the Sierras Chicas. Inspired by the local landscape, the design emphasizes organic forms and materials that evoke the region's inherent beauty. Community spaces and pathways utilize stone and gabions, reflecting a rustic aesthetic that connects with the environment. The project’s architecture aims to preserve the existing vegetation and highlight the natural topography, allowing residents to experience the land's true essence.",
+  parrafo2: "The neighborhood's layout was conceived as a response to the natural landscape, with forms resembling tree masses and organic shapes that blend effortlessly into the terrain. The entrance mimics the shadow of a grove, creating a warm and inviting atmosphere. This approach fosters a strong connection between the built environment and the surrounding landscape, offering a peaceful, authentic place to live and experience the essence of nature."
 },
 5020: {
   nombreproyecto: "Casas Campo Chico",
@@ -1177,7 +1177,7 @@ const projectsData = {
   parrafo2: "In its design, we aimed to create a functional ecosystem that adapts to multiple rhythms. With over 178,000 square feet, Puerto 53 includes offices, commercial spaces, coworking areas, a logistics park, dining options, and healthcare services. Surrounded by the native landscape of the sierras, the complex offers flexibility for both short visits and extended use, accommodating everything from business meetings to casual breaks. The architecture prioritizes fluid access, clear zoning, and environmental integration."
 },
 5026: {
-  nombreproyecto: "Casa Rústica",
+  nombreproyecto: "Casa Rustica",
   frase1: "Part of the Casas Pioneras experimental housing series.",
   frase2: "Architecture shaped by terrain and material honesty.",
   contador1: 2022,
@@ -1262,7 +1262,7 @@ const projectsData = {
   parrafo2: "The house unfolds across a single natural level, organized into two primary zones, social and private, linked by a central hall that defines circulation and connection. A flexible transition space supports different lifestyles, from work to leisure, while a linear arrangement of bedrooms offers privacy and potential for future reconfiguration. The stepped form creates not only visual rhythm but also a tactile sequence of experiences as one moves through the home."
 },
 5032: {
-  nombreproyecto: "Casa Galería",
+  nombreproyecto: "Casa Galeria",
   frase1: "Designed to frame nature, light and silence",
   frase2: "Part of our Casas Pioneras series",
   contador1: 2022,
@@ -1276,7 +1276,7 @@ const projectsData = {
   parrafo2: "Built on a single natural level, the layout separates private and social areas with a central hall that frames the transition between them. This transition space can adapt over time to fit the evolving needs of its inhabitants. It can become a playroom, office, studio or guest area. The linear arrangement of bedrooms emphasizes privacy while maintaining flexibility to open or close their connection to each other and the rest of the house."
 },
 5033: {
-  nombreproyecto: "Casa Gavión",
+  nombreproyecto: "Casa Gavion",
   frase1: "Material simplicity shaping expressive architectural volumes",
   frase2: "Part of the Casas Pioneras series",
   contador1: 2022,
@@ -1318,7 +1318,7 @@ const projectsData = {
   parrafo2: "Set on a single natural level, the house is divided into two functional zones. A central hall connects the social and private areas and becomes a moment of pause within the interior path. The private side includes a flexible room intended to evolve with the family’s needs. Bedrooms run along a corridor that separates them from the service areas, allowing for both continuity and privacy."
 },
 5036: {
-  nombreproyecto: "CasaMirador",
+  nombreproyecto: "Casa Mirador",
   frase1: "Immersed in the landscape through elevation and view",
   frase2: "A high point in our Casas Pioneras vision",
   contador1: 2022,
@@ -1332,7 +1332,7 @@ const projectsData = {
   parrafo2: "The program unfolds on a single natural level, divided into two main zones. A central hall acts as the connector, defining both entry and spatial flow. The private section includes a versatile space that can become a studio, gym, guest room or play area. Bedrooms follow a linear logic, arranged along a corridor that separates them from service areas and enhances their independence."
 },
 5037: {
-  nombreproyecto: "CasaNegra",
+  nombreproyecto: "Casa Negra",
   frase1: "Dark geometry rising above natural gradients",
   frase2: "An icon within our Casas Pioneras landscape",
   contador1: 2022,
@@ -1361,7 +1361,7 @@ const projectsData = {
 }
 ,
 5039: {
-  nombreproyecto: "CasaPetrea",
+  nombreproyecto: "Casa Petrea",
   frase1: "Stone volumes designed for views and light",
   frase2: "Built within our Casas Pioneras exploration",
   contador1: 2022,
@@ -1376,7 +1376,7 @@ const projectsData = {
 },
 
 5040: {
-  nombreproyecto: "CasasTechos",
+  nombreproyecto: "Casa Techos",
   frase1: "Horizontal rhythm shaped by layered rooflines",
   frase2: "One of our most dynamic Casas Pioneras",
   contador1: 2022,
@@ -1390,7 +1390,7 @@ const projectsData = {
   parrafo2: "Organized on a single natural level, the house is split into two main zones for public and private use. A central hall connects both areas while acting as the entry threshold. The private wing includes a multipurpose room that adapts to the needs of the household over time. Bedrooms are arranged in a sequence that emphasizes privacy and flexible connections along a buffered corridor."
 },
 5041: {
-  nombreproyecto: "CasaVentana",
+  nombreproyecto: "Casa Ventana",
   frase1: "Framing nature through pure architectural volumes",
   frase2: "A visual experiment within Casas Pioneras series",
   contador1: 2022,
@@ -1404,7 +1404,7 @@ const projectsData = {
   parrafo2: "The layout is resolved on a single natural level, organized around two wings for public and private uses. A central hall acts as a point of articulation between both programs. The private area includes a flexible room designed to support changing family needs. Bedrooms follow a linear layout, separated from the service areas by a corridor that adds privacy and acoustic distance."
 },
 5042: {
-  nombreproyecto: "CasaSanMiguel",
+  nombreproyecto: "Casa San Miguel",
   frase1: "Brick, vegetation and texture define the space",
   frase2: "A crafted balance of raw and natural materials",
   contador1: 2022,
@@ -1418,7 +1418,7 @@ const projectsData = {
   parrafo2: "The house is organized across a single natural level, separating private and social spaces while linking them through a central transition zone. Each material was selected to respond to the use and atmosphere of its location, turning construction into a narrative of habitation. Here, living and enjoying coexist by design."
 }
 ,5043: {
-  nombreproyecto: "ClubHouse",
+  nombreproyecto: "Club House",
   frase1: "Fire and landscape shape this social experience",
   frase2: "A space designed for energy and intimacy",
   contador1: 2022,
@@ -1432,7 +1432,7 @@ const projectsData = {
   parrafo2: "The arrangement of volumes acts as a threshold between the residential neighborhood and this distinct moment of encounter. The natural materials and immersive textures offer a shift in rhythm, encouraging guests to pause, engage and fully inhabit the moment. It is a space that transforms with its users, designed to adapt to celebration, calm or community."
 }
 ,5044: {
-  nombreproyecto: "CabañasTierraAlta",
+  nombreproyecto: "Cabanas Tierra Alta",
   frase1: "Elevated cabins designed for slow living",
   frase2: "A cinematic take on landscape and silence",
   contador1: 2015,
@@ -1446,7 +1446,7 @@ const projectsData = {
   parrafo2: "The design focuses on stillness, using materials and proportions to slow time and emphasize the vastness of the site. The architectural rhythm was inspired by jazz and the expressive cadence of art. Every detail invites visitors to inhabit the present. This is a place not just to stay, but to experience life in a different key."
 },
 5045: {
-  nombreproyecto: "CasaHotelNómada",
+  nombreproyecto: "Casa Hotel Nomada",
   frase1: "Stone walls anchor a contemplative hotel experience",
   frase2: "Inspired by Jesuit estancias and slow architecture",
   contador1: 2021,
@@ -1460,7 +1460,7 @@ const projectsData = {
   parrafo2: "Two programmatic wings unfold across the site, connected by a central entry that works as both threshold and anchor. The social wing faces the golf course and is filtered by existing vegetation, while the private wing rests on the northern boundary to optimize thermal orientation. These areas interact intermittently, allowing for independence or connection depending on use. Whether for gathering or introspection, the architecture holds space for both."
 }
 ,5047: {
-  nombreproyecto: "CasaFirenze",
+  nombreproyecto: "Casa Firenze",
   frase1: "A dock anchors space and landscape experience",
   frase2: "A lakeside home for pause and presence",
   contador1: 2023,
@@ -1474,7 +1474,7 @@ const projectsData = {
   parrafo2: "Robust and rustic materials define the house’s exterior, creating a quiet and introverted presence from the street. Toward the lake, however, the design opens up to light, air and interaction. Every space is meant to support relaxation, contemplation and connection with nature. This is a home conceived for both introspection and celebration."
 }
 ,5048: {
-  nombreproyecto: "BarrioTrina",
+  nombreproyecto: "Barrio Trina",
   frase1: "Designing community with ecological intention and care",
   frase2: "Urban planning rooted in regional sustainability",
   contador1: 2022,
@@ -1545,7 +1545,7 @@ const projectsData = {
 }
 
 ,8002: {
-  nombreproyecto: "BrevetCC",
+  nombreproyecto: "Brevet CC",
   frase1: "Crafted for cycling culture and specialty coffee lovers.",
   frase2: "Design inspired by community, speed, and stories.",
   contador1: 2023,
@@ -1674,7 +1674,7 @@ const projectsData = {
   parrafo2: "With an open kitchen, a carefully curated selection of wood-smoked flavors, and a design that reflects the authenticity of fire cooking, Homa Smokehouse creates an immersive dining experience. It’s a celebration of the art of barbecue, where time is the main ingredient."
 },
 8011: {
-  nombreproyecto: "Süss",
+  nombreproyecto: "Suss",
   frase1: "Magic, stories and fresh-baked bread.",
   frase2: "A refuge in the heart of Villa General Belgrano.",
   contador1: 2025,

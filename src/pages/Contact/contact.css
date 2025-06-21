@@ -106,6 +106,10 @@ textarea {
         display: block;
         }
 
+        .linea-separadora{
+            width: 100vw;
+            margin-left: -10%;
+        }
   /* —— desktop (>900 px) —— */
   @media (min-width: 900px) {
     .mobile-hide-contact{

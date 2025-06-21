@@ -290,11 +290,29 @@
 .timeline-horizontal {
   scroll-behavior: smooth;
 }
-
+/* ---------- Flechas ----------- */
+.timeline-flecha-nav {
+  position: absolute;
+  top: 53%;
+  transform: translateY(-50%);
+  width: 30px;
+  height: 150px;
+  background: rgba(0,0,0,.30);
+  border: none;
+  color: #fff;
+  font-size: 3.75rem;        /* ≈60 px */
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background .25s, font-size .25s;
+  z-index: 20;
+}
 @media (min-width: 768px) {
 
   .timeline-horizontal {
-  margin-top: 1%;
+  margin-top: 0;
 }
   .timeline-container {
     width: 753%;
@@ -308,13 +326,14 @@
     position: absolute; /* Permite el movimiento */
     top: 0;
     left: 0;
-  width: 50%; /* Cubre todo el ancho de la línea de tiempo */
+  width: 200%; /* Cubre todo el ancho de la línea de tiempo */
   height: 550px; /* Ocupa toda la altura del viewport */
   background-size: auto 100%; /* Mantiene la proporción de la imagen */
   background-repeat: repeat-x; /* Repetición horizontal */
   z-index: -1; /* Envía el fondo detrás del contenido */
   opacity: 0.1; /* Transparencia */
 }
+
   .timeline-line {
     position: absolute;
     height: 1px;
@@ -329,18 +348,83 @@
         width: 0; /* Comienza sin ancho */
     }
     to {
-        width: 230%; /* Se extiende al tamaño deseado */
+        width: 1150%; /* Se extiende al tamaño deseado */
     }
 }
 .timeline-horizontal {
   position: relative;
   overflow-x: scroll;
   white-space: nowrap; /* Asegura que los hijos estén en línea horizontal */
-  width: auto; /* Amplía el contenedor para habilitar el scroll */
+  width: 1340px; /* Amplía el contenedor para habilitar el scroll */
 }
 
 }
 .timeline-horizontal {
   overflow-x: auto;
   /* scroll-behavior: auto;  ← implícito, pero verifica que no quede ‘smooth’ */
+}
+@media (min-width: 2000px) {
+ .timeline-horizontal {
+    overflow-x: auto;
+    width: 3003px;
+} 
+
+
+}
+
+@media (min-width: 1400px) {
+ .timeline-horizontal {
+  margin-top: 80px;
+    overflow-x: auto;
+    width: 12703px;
+} 
+.timeline-line {
+  position: absolute;
+  height: 1px;
+  width: 0; /* inicia en 0 */
+  background-color: #333;
+  top: 50%;
+  z-index: -1;
+  animation: drawLine 1s ease-in-out forwards;
+}
+
+@keyframes drawLine {
+  from { width: 0; }
+  to { width: 210%; } /* ajusta según tu diseño */
+}
+/* ---------- Flechas ----------- */
+.timeline-flecha-nav {
+  position: absolute;
+  top: 43%;
+  transform: translateY(-50%);
+  width: 30px;
+  height: 150px;
+  background: rgba(0,0,0,.30);
+  border: none;
+  color: #fff;
+  font-size: 3.75rem;        /* ≈60 px */
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background .25s, font-size .25s;
+  z-index: 20;
+}
+
+}
+
+
+.timeline-flecha-nav--left  { left: 0;  border-radius: 0 4px 4px 0;  }
+.timeline-flecha-nav--right { right: 0; border-radius: 4px 0 0 4px; }
+
+/* Hover feedback */
+.timeline-flecha-nav:hover {
+  background: rgba(0,0,0,.55);
+  font-size: 4.25rem;        /* leve zoom de la flecha */
+}
+
+/* Oculta en pantallas táctiles (sin hover) */
+@media (hover:none) {
+  .timeline-flecha-nav { display: none; }
 }

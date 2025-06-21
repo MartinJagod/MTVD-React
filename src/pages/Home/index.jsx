@@ -1,5 +1,6 @@
-import React, { useEffect, useState, useRef, useCallback } from 'react';
+import React, { useEffect, useState, useRef, useCallback, useMemo, useContext } from 'react';
 import { useNavigate } from "react-router-dom";
+import { LanguageContext } from '../../context/LanguageContext';
 
 import './Home.css';
 import '@fortawesome/fontawesome-free/css/all.min.css';
@@ -17,25 +18,39 @@ import { FaSearch } from 'react-icons/fa';
 import logoSlogan from '../../assets/images/logo-slogan.png';
 import { FaLinkedin, FaPinterest, FaYoutube, FaInstagram } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
-import { FaVolumeMute, FaVolumeUp } from 'react-icons/fa';
+import { FaExpand, FaVolumeMute, FaVolumeUp } from 'react-icons/fa';
+
 import ContactFooter from '../Parcial/ContactFooter'; // Ajusta la ruta según tu estructura de carpetas
 import Navbar from '../Parcial/Navbar'; // Ajusta la ruta según tu estructura de carpetas
 import CarouselLogos from "../Parcial/CarouselLogos";
 import ContactFooterDesktop from '../Parcial/ContactFooterDesktop'; // Ajusta la ruta según tu estructura de carpetas
+import projectsData from '../Projects/projectsData';
+
+/* rango → categoría */
+const getCategoryById = id =>
+    id <= 5000 ? 'design'
+        : id <= 8000 ? 'architecture'
+            : 'branding';
+
 
 function Home() {
+    const { lang } = useContext(LanguageContext);  // EN | ES
 
-const [showIntro, setShowIntro] = useState(!sessionStorage.getItem('seenIntro'));
+    const [showIntro, setShowIntro] = useState(!sessionStorage.getItem('seenIntro'));
 
+    const branding2 = "/assets/images/PaginaProyecto/principal/CheMono2.jpg";
     const branding1 = "/assets/images/PaginaProyecto/principal/CheMono.jpg";
-    const branding2 = "/assets/images/PaginaProyecto/principal/CienFuegos.jpg";
     const interiorismo1 = "/assets/images/PaginaProyecto/principal/Valpo1.jpg";
-    const interiorismo2 = "/assets/images/PaginaProyecto/principal/COC.jpg";
-    const arquitectura1 = "/assets/images/PaginaProyecto/principal/CafeMTVD.jpg";
-    const arquitectura3 = "/assets/images/PaginaProyecto/principal/ElMercadillo.jpg";
-    const arquitectura2 = "/assets/images/PaginaProyecto/principal/CordiezMixo.jpg";
+    const interiorismoVideo1 = "/assets/images/PaginaProyecto/principal/video1.mp4";
 
-    const arquitectura4 = "/assets/images/PaginaProyecto/principal/LobbyAzur.jpg";
+    const interiorismo2 = "/assets/images/PaginaProyecto/principal/Barilatte.jpg";
+    const arquitectura1 = "/assets/images/PaginaProyecto/principal/Soberana.jpg";
+    /*  const arquitectura3 = "/assets/images/PaginaProyecto/principal/ElMercadillo.jpg"; */
+    const arquitectura3 = "/assets/images/PaginaProyecto/principal/Valpo1.jpg";
+
+    const arquitectura2 = "/assets/images/PaginaProyecto/principal/HotelAzurLobby.jpg";
+
+    const arquitectura4 = "/assets/images/PaginaProyecto/principal/CentralClub.jpg";
 
 
     const [projectCount, setProjectCount] = useState(0);
@@ -73,43 +88,75 @@ const [showIntro, setShowIntro] = useState(!sessionStorage.getItem('seenIntro'))
     const [isMuted, setIsMuted] = useState(true);
     const navigate = useNavigate();
 
-//Inicio Fullscreen
-// Dentro de tu componente Home, justo después de `const videoRef = useRef(null);`
 
-const enterFullScreen = async () => {
-  const v = videoRef.current;
-  if (!v) return;
+    /* ── índice global de búsqueda, solo se calcula 1 vez ── */
+    const searchIndex = useMemo(() =>
+        Object.entries(projectsData).map(([idStr, p]) => {
+            const id = Number(idStr);
+            const category = getCategoryById(id);
 
-  // 1. fullscreen (estándar o prefijos)
-  if (v.requestFullscreen) {
-    await v.requestFullscreen();
-  } else if (v.webkitEnterFullScreen) {
-    // Safari / iOS
-    v.webkitEnterFullScreen();
-  } else if (v.mozRequestFullScreen) {
-    v.mozRequestFullScreen();
-  } else if (v.msRequestFullscreen) {
-    v.msRequestFullscreen();
-  }
+            const fullText = [
+                p.nombreproyecto,
+                p.frase1, p.frase2, p.frase3,
+                p.location,
+                p.encabezado,
+                p.parrafo1, p.parrafo2,
+                p.nombre1, p.nombre2,
+                p.contador1?.toString(),
+                p.contador2?.toString()
+            ]
+                .filter(Boolean)
+                .join(' | ')
+                .normalize('NFD').replace(/\p{Diacritic}/gu, '')
+                .toLowerCase();
 
-  // 2. bloquear orientación en landscape
- if (window.screen?.orientation?.lock) {
-    window.screen.orientation.lock('landscape').catch(() => {;
-      // algunos navegadores ignoran si no es iniciado por usuario
-    });
-  }
-};
-useEffect(() => {
-  const onFullscreenChange = () => {
-     if (!document.fullscreenElement) {
-      window.screen?.orientation?.unlock?.();
-    }
-  };
-  document.addEventListener('fullscreenchange', onFullscreenChange);
-  return () => document.removeEventListener('fullscreenchange', onFullscreenChange);
-}, []);
+            return { label: p.nombreproyecto, projectName: p.nombreproyecto, category, fullText };
+        })
+        , []);
 
-// fin Fullscreen
+    const handleSelectProject = (item) => {
+        const slug = encodeURIComponent(item.projectName.replace(/\s+/g, ''));
+        navigate(`/project/${item.category}/${slug}`);
+        setShowInput(false);
+    };
+    //Inicio Fullscreen
+    // Dentro de tu componente Home, justo después de `const videoRef = useRef(null);`
+
+    const enterFullScreen = async () => {
+        const v = videoRef.current;
+        if (!v) return;
+
+        // 1. fullscreen (estándar o prefijos)
+        if (v.requestFullscreen) {
+            await v.requestFullscreen();
+        } else if (v.webkitEnterFullScreen) {
+            // Safari / iOS
+            v.webkitEnterFullScreen();
+        } else if (v.mozRequestFullScreen) {
+            v.mozRequestFullScreen();
+        } else if (v.msRequestFullscreen) {
+            v.msRequestFullscreen();
+        }
+
+        // 2. bloquear orientación en landscape
+        if (window.screen?.orientation?.lock) {
+            window.screen.orientation.lock('landscape').catch(() => {
+                ;
+                // algunos navegadores ignoran si no es iniciado por usuario
+            });
+        }
+    };
+    useEffect(() => {
+        const onFullscreenChange = () => {
+            if (!document.fullscreenElement) {
+                window.screen?.orientation?.unlock?.();
+            }
+        };
+        document.addEventListener('fullscreenchange', onFullscreenChange);
+        return () => document.removeEventListener('fullscreenchange', onFullscreenChange);
+    }, []);
+
+    // fin Fullscreen
 
 
     //inicio headermover
@@ -133,18 +180,16 @@ useEffect(() => {
     const goToHome = () => {
         navigate("/"); // Cambia a la ruta
     }
-   /* Navega a /project/{category}/{projectName} */
-const goToProject = (category, projectName) => {
-  navigate(`/project/${category}/${projectName}`);
-};
+    /* Navega a /project/{category}/{projectName} */
+    const goToProject = (category, projectName) => {
+        navigate(`/project/${category}/${projectName}`);
+    };
 
-useEffect(() => {
-  if (!showIntro) {
-    // Forzá un pequeño scroll para disparar los observers
-    window.scrollBy(0, 1);
-    setTimeout(() => window.scrollBy(0, -1), 10);
-  }
-}, [showIntro]);
+    React.useEffect(() => {
+        if (!sessionStorage.getItem('seenIntro')) {
+            navigate('/intro', { replace: true });
+        }
+    }, [navigate]);
 
     useEffect(() => {
         const handleUserActivity = () => {
@@ -204,6 +249,10 @@ useEffect(() => {
     const arquitecturaImageRef = useRef(null);
     const brandingDesktopImageRef = useRef(null);
     const interiorismoDesktopImageRef = useRef(null);
+    const interiorismo2DesktopImageRef = useRef(null);
+    const arquitectura1DesktopImageRef = useRef(null);
+
+    const interiorismoVideoDesktopRef = useRef(null);
     const arquitecturaDesktopImageRef = useRef(null);
     const arquitectura4DesktopImageRef = useRef(null);
 
@@ -212,13 +261,14 @@ useEffect(() => {
 
     useEffect(() => {
         const imageRefs = [
-            { ref: brandingImageRef, speed: 0.15 },
-            { ref: interiorismoImageRef, speed: 0.15 },
-            { ref: arquitecturaImageRef, speed: 0.15 },
-            { ref: brandingDesktopImageRef, speed: 0.15 },
-            { ref: interiorismoDesktopImageRef, speed: 0.20 },
-            { ref: arquitecturaDesktopImageRef, speed: 0.25 },
-            { ref: arquitectura4DesktopImageRef, speed: 0.2 },
+            { ref: brandingImageRef, speed: 0.1 },
+            { ref: interiorismoImageRef, speed: 0.1 },
+            { ref: arquitecturaImageRef, speed: 0.1 },
+            { ref: brandingDesktopImageRef, speed: 0.1 },
+            { ref: interiorismoDesktopImageRef, speed: 0.10 },
+            { ref: arquitecturaDesktopImageRef, speed: 0.15 },
+            { ref: arquitectura4DesktopImageRef, speed: 0.1 },
+            { ref: interiorismo2DesktopImageRef, speed: 0.1 },
 
         ];
 
@@ -284,7 +334,6 @@ useEffect(() => {
     const slideBoxesDesktopRef = useRef(null);
     const slideStudioBoxRef = useRef(null);
     const slideStudioBoxDesktopRef = useRef(null);
-
     const counterDesktopRef = useRef(null);
     const sectionCountersDesktopRef = useRef(null);
 
@@ -351,32 +400,32 @@ useEffect(() => {
         setHasStartedCountingSectionDesktop(true);
     }, [animateCounter]);
 
-  useEffect(() => {
-  const projectCounterRef = counterRef.current;
-  if (!projectCounterRef) return;
+    useEffect(() => {
+        const projectCounterRef = counterRef.current;
+        if (!projectCounterRef) return;
 
-  const observerProjects = new IntersectionObserver((entries) => {
-    entries.forEach((entry) => {
-      if (entry.isIntersecting) {
-        startCountingProjects();
-      } else {
-        setProjectCount(0);
-      }
-    });
-  }, { threshold: 0.5 });
+        const observerProjects = new IntersectionObserver((entries) => {
+            entries.forEach((entry) => {
+                if (entry.isIntersecting) {
+                    startCountingProjects();
+                } else {
+                    setProjectCount(0);
+                }
+            });
+        }, { threshold: 0.5 });
 
-  observerProjects.observe(projectCounterRef);
+        observerProjects.observe(projectCounterRef);
 
-  // 🚀 Revisión inicial (en caso de que ya esté visible)
-  const rect = projectCounterRef.getBoundingClientRect();
-  if (rect.top < window.innerHeight && rect.bottom > 0) {
-    startCountingProjects();
-  }
+        // 🚀 Revisión inicial (en caso de que ya esté visible)
+        const rect = projectCounterRef.getBoundingClientRect();
+        if (rect.top < window.innerHeight && rect.bottom > 0) {
+            startCountingProjects();
+        }
 
-  return () => {
-    observerProjects.unobserve(projectCounterRef);
-  };
-}, [startCountingProjects]);
+        return () => {
+            observerProjects.unobserve(projectCounterRef);
+        };
+    }, [startCountingProjects]);
 
 
     useEffect(() => {
@@ -692,12 +741,28 @@ useEffect(() => {
 
 
     useEffect(() => {
-        if (videoRef.current) {
-            videoRef.current.muted = true; // Mute el video inicialmente
-            videoRef.current.play().catch((err) => {
-                console.error("Autoplay blocked: ", err);
+        const v = videoRef.current;
+        if (!v) return;
+
+        // Mantenerlo silenciado desde el inicio
+        v.muted = true;
+        setIsMuted(true);
+
+        const onLoaded = () => {
+            if (v.duration > 4) {
+                v.currentTime = 4; // Salta a 4 s
+            }
+            v.play().catch(err => {
+                console.warn("Autoplay bloqueado:", err);
             });
-        }
+        };
+
+        // Cuando ya estén disponibles los metadatos, ejecuto onLoaded
+        v.addEventListener("loadedmetadata", onLoaded);
+
+        return () => {
+            v.removeEventListener("loadedmetadata", onLoaded);
+        };
     }, []);
 
     const handleVideoEnd = () => {
@@ -716,32 +781,33 @@ useEffect(() => {
     };
     // Fin reinicio video
 
-// 4️⃣ Reanudar playback al salir de fullscreen
-useEffect(() => {
-  const v = videoRef.current;
-  if (!v) return;
+    // 4️⃣ Reanudar playback al salir de fullscreen
+    useEffect(() => {
+        const v = videoRef.current;
+        if (!v) return;
 
-  const resumePlayback = () => {
-    if (v.paused) {
-      v.play().catch(() => {});
-    }
-    // desbloquea orientación si la bloqueaste
-    window.screen?.orientation?.unlock?.();
-  };
+        const resumePlayback = () => {
+            if (v.paused) {
+                v.play().catch(() => { });
+            }
+            window.screen?.orientation?.unlock?.();
+        };
 
-  // Estándar
-  document.addEventListener('fullscreenchange', () => {
-    if (!document.fullscreenElement) resumePlayback();
-  });
+        const handleFullscreenChange = () => {
+            if (!document.fullscreenElement) {
+                resumePlayback();
+            }
+        };
 
-  // Safari/iOS
-  v.addEventListener('webkitendfullscreen', resumePlayback);
+        document.addEventListener('fullscreenchange', handleFullscreenChange);
+        v.addEventListener('webkitendfullscreen', resumePlayback);
 
-  return () => {
-    document.removeEventListener('fullscreenchange', resumePlayback);
-    v.removeEventListener('webkitendfullscreen', resumePlayback);
-  };
-}, []);
+        return () => {
+            document.removeEventListener('fullscreenchange', handleFullscreenChange);
+            v.removeEventListener('webkitendfullscreen', resumePlayback);
+        };
+    }, []);
+
     // Inicio lineas en movimeinto
     useEffect(() => {
         const restartAnimation = (element, animationClass) => {
@@ -807,112 +873,89 @@ useEffect(() => {
 
     // fin lineas
 
-useEffect(() => {
-  if (showIntro) return; // ⛔ No hacemos nada si está el intro
+    useEffect(() => {
+        if (showIntro) return; // ⛔ No hacemos nada si está el intro
 
-  const observerSection = new IntersectionObserver((entries) => {
-    entries.forEach((entry) => {
-      if (entry.isIntersecting) {
-        const delay = 500;
-        setYearsCount(0);
-        setCountriesCount(0);
-        setCitiesCount(0);
+        const observerSection = new IntersectionObserver((entries) => {
+            entries.forEach((entry) => {
+                if (entry.isIntersecting) {
+                    const delay = 500;
+                    setYearsCount(0);
+                    setCountriesCount(0);
+                    setCitiesCount(0);
 
-        setTimeout(() => animateCounter(setYearsCount, 10, 500), 0);
-        setTimeout(() => animateCounter(setCountriesCount, 15, 500), delay);
-        setTimeout(() => animateCounter(setCitiesCount, 25, 500), delay * 2);
-      } else {
-        setYearsCount(0);
-        setCountriesCount(0);
-        setCitiesCount(0);
-      }
-    });
-  }, { threshold: 0.5 });
+                    setTimeout(() => animateCounter(setYearsCount, 10, 500), 0);
+                    setTimeout(() => animateCounter(setCountriesCount, 15, 500), delay);
+                    setTimeout(() => animateCounter(setCitiesCount, 25, 500), delay * 2);
+                } else {
+                    setYearsCount(0);
+                    setCountriesCount(0);
+                    setCitiesCount(0);
+                }
+            });
+        }, { threshold: 0.5 });
 
-  const sectionCounterRef = sectionCountersRef.current;
-  if (sectionCounterRef) observerSection.observe(sectionCounterRef);
+        const sectionCounterRef = sectionCountersRef.current;
+        if (sectionCounterRef) observerSection.observe(sectionCounterRef);
 
-  return () => {
-    if (sectionCounterRef) observerSection.unobserve(sectionCounterRef);
-  };
-}, [showIntro, animateCounter]);
+        return () => {
+            if (sectionCounterRef) observerSection.unobserve(sectionCounterRef);
+        };
+    }, [showIntro, animateCounter]);
 
 
-const [triggerAnimations, setTriggerAnimations] = useState(false);
 
-useEffect(() => {
-  if (!showIntro) {
-    // Esperamos a que todo esté montado
-    setTimeout(() => {
-      setTriggerAnimations(true);
-    }, 300); // le podés ajustar el delay
-  }
-}, [showIntro]);
 
-useEffect(() => {
-  if (triggerAnimations) {
-    startCountingProjects();
-    startCountingSection();
-    startCountingProjectsDesktop();
-    startCountingSectionDesktop();
-    setSlideBoxes(true);
-    setSlideBoxesDesktop(true);
-    setSlideStudioBox(true);
-    setSlideStudioBoxDesktop(true);
-    setRotateYellowBox(true);
-    setRotateYellowBoxDesktop(true);
-  }
-}, [triggerAnimations]);
 
-if (showIntro) {
-  return (
-    <IntroScreen
-      onFinish={() => {
-        sessionStorage.setItem('seenIntro', 'true'); // o localStorage si prefieres
-        setShowIntro(false);
-      }}
-    />
-  );
-}
+
+
+
 
 
 
     return (
-        
+
         <div className="home">
-           <div className="videoHome-home">
-    <header className="home-header-home">
-      <video
-        ref={videoRef}
-        className="background-video-home"
-        src={homeVideo}
-        autoPlay
-        muted
-        playsInline
-        onEnded={handleVideoEnd}
-        onClick={enterFullScreen}
-      />
+            <div className="videoHome-home">
+                <header className="home-header-home">
+                    <video
+                        ref={videoRef}
+                        className="background-video-home"
+                        src={homeVideo}
+                        autoPlay
+                        muted
+                        playsInline
+                        onEnded={handleVideoEnd}
+
+                    />
 
                     <button className="mute-button" onClick={toggleMute}>
                         {isMuted ? <FaVolumeMute /> : <FaVolumeUp />}
+                    </button>
+                    <button className="full-button" onClick={enterFullScreen}>
+                        <FaExpand />
                     </button>
                     <Navbar
                         isSliding={isSliding}
                         menuOpen={menuOpen}
                         setMenuOpen={setMenuOpen}
                         showInput={showInput}
-                        setShowInput={setShowInput} />
+                        setShowInput={setShowInput}
+                        page="Home"
+                        searchData={searchIndex}
+                        onSelect={handleSelectProject}
+                    />
 
                 </header>
 
             </div>
 
             <div className="phrase-section-home desktop-hide" onClick={goToStudio}>
-                <span className="phrase-line"> We are a </span> <br />
-                <span className="phrase-line"> design studio </span>
+                <span className="phrase-line">  {lang === 'ES' ? 'Somos un Estudio' : 'We are a'}</span> <br />
+                <span className="phrase-line"> {lang === 'ES' ? ' de Diseño' : 'design studio'} </span>
             </div>
             <div className="phrase-section-home mobile-hide" onClick={goToStudio}>
-                <span className="phrase-line-desktop"> We are a design studio </span>
+                <span className="phrase-line-desktop"> {lang === 'ES' ? 'Somos un Estudio de Diseño' : 'We are a design studio'} </span>
             </div>
             {/* Seccion mobile */}
             <div className="full-square desktop-hide">
@@ -923,11 +966,11 @@ if (showIntro) {
                         alt="Branding 1"
                         className="parallax-image"
                         ref={brandingImageRef}
-                        onClick={() => {goToProject("design", "CheMono") }}
+                        onClick={() => { goToProject("design", "CheMono") }}
                     />
                 </div>
                 <div className="image-label-home">
-                    {getFileName(branding1)}
+                    Che Mono
                 </div>
                 <div className="image-label-star">
                     <img src={starImage} alt="Star" className="star-image-foto" onClick={goToAwardsAndPress} />
@@ -936,8 +979,8 @@ if (showIntro) {
             <section className="image-and-quadrants desktop-hide">
                 <div className="quadrant-container">
                     <div className="quadrant white-box">
-                        <span className="project-box">Inspiring</span>
-                        <span className="project-box">people</span>
+                        <span className="project-box"> {lang === 'ES' ? 'Personas' : 'Inspiring'}</span>
+                        <span className="project-box"> {lang === 'ES' ? 'inspiradoras' : 'people'}</span>
                         <div className="moving-line" ref={line1Ref}></div>
                     </div>
                     <div
@@ -949,22 +992,22 @@ if (showIntro) {
                                 <img src={logoVertical} alt="Logo Vertical" className="logo-image" />
                             </div>
                             <div className="back" onClick={goToProjects}>
-                                <span className='back-item'>Design</span>
-                                <span className='back-item'>Architecture</span>
-                                <span className='back-item'>Branding</span>
+                                <span className='back-item'>{lang === 'ES' ? 'Diseño' : 'Design'}</span>
+                                <span className='back-item'>{lang === 'ES' ? 'Arquitectura' : 'Architecture'}</span>
+                                <span className='back-item'>{lang === 'ES' ? 'Marcas' : 'Branding'}</span>
 
                             </div>
                         </div>
                     </div>
                     <div className="quadrant blue-box" ref={counterRef} onClick={goToProjects}>
                         <span className="project-count">+{projectCount}</span>
-                        <span className="project-label">projects</span>
+                        <span className="project-label">{lang === 'ES' ? 'Proyectos' : 'projects'}</span>
                         <div className="moving-line2" ref={line2Ref}></div>
                     </div>
                     <div className="quadrant white-box" onClick={goToProjects}>
-                        <span className="project-box">To create</span>
-                        <span className="project-box">exciting</span>
-                        <span className="project-box">places</span>
+                        <span className="project-box">{lang === 'ES' ? 'Para crear' : 'To create'}</span>
+                        <span className="project-box">{lang === 'ES' ? 'espacios' : 'exciting'}</span>
+                        <span className="project-box">{lang === 'ES' ? 'emocionantes' : 'places'}</span>
                     </div>
                 </div>
 
@@ -975,17 +1018,17 @@ if (showIntro) {
                         <div className="horizontal-counter-item-new">
                             <span className="horizontal-project-count-new">+{yearsCount}</span>
                             <br />
-                            <span className="horizontal-project-label-new" style={{ paddingLeft: "30px" }}>years</span>
+                            <span className="horizontal-project-label-new" style={{ paddingLeft: "30px" }}>{lang === 'ES' ? 'años' : 'years'}</span>
                         </div>
                         <div className="horizontal-counter-item-new">
                             <span className="horizontal-project-count-new">+{countriesCount}</span>
                             <br />
-                            <span className="horizontal-project-label-new" style={{ paddingLeft: "70px" }}>countries</span>
+                            <span className="horizontal-project-label-new" style={{ paddingLeft: "70px" }}>{lang === 'ES' ? 'países' : 'countries'}</span>
                         </div>
                         <div className="horizontal-counter-item-new">
                             <span className="horizontal-project-count-new">+{citiesCount}</span>
                             <br />
-                            <span className="horizontal-project-label-new" style={{ paddingLeft: "27px" }}>cities</span>
+                            <span className="horizontal-project-label-new" style={{ paddingLeft: "27px" }}>{lang === 'ES' ? 'ciudades' : 'cities'}</span>
                         </div>
 
                     </div>
@@ -998,14 +1041,14 @@ if (showIntro) {
                             alt="Interiorismo 1"
                             className="parallax-image"
                             ref={interiorismoImageRef}
-                            onClick={() => { {goToProject("architecture", "Valpo") }}}
-                            style={{position:"relative", top: "-25vh", width: "150vw", overflow: "hidden" }}
+                            onClick={() => { { goToProject("architecture", "Valpo1") } }}
+                            style={{ position: "relative", top: "-13vh", width: "150vw", overflow: "hidden" }}
 
                         />
                         {/* Muestra el nombre del archivo */}
                     </div>
                     <div className="image-label-home">
-                        {getFileName(interiorismo1)}
+                        Valpo 1
                     </div>
                     <div className="image-label-star">
                         <img src={starImage} alt="Star" className="star-image-foto" onClick={goToAwardsAndPress} />
@@ -1019,7 +1062,7 @@ if (showIntro) {
                         <img src={starImage} alt="Star" className="star-image" onClick={goToAwardsAndPress} />
                     </div>
                     <div onClick={goToAwardsAndPress} className="quadrant white-box-estrella">
-                        <span className="text-Awards">Awards</span>
+                        <span className="text-Awards" style={lang === 'ES' ? { paddingLeft: '-15%' } : undefined}>{lang === 'ES' ? <>Prensa <br/> y <br/>Premios </> : 'Awards'}</span>
                     </div>
                 </div>
 
@@ -1027,16 +1070,16 @@ if (showIntro) {
                 <div className="full-square">
                     <div className="parallax-wrapper">
                         <img
-                            src={arquitectura4}
+                            src={arquitectura2}
                             alt="Architecture 1"
                             className="parallax-image"
                             ref={arquitecturaImageRef}
-                            onClick={() => { goToProject("design", "LobbyHotelAzur") }}
-
+                            onClick={() => { goToProject("design", "HotelAzurLobby") }}
+                            style={{ position: "relative", left: "-25vh", top: "-3vh", width: "190vw", overflow: "hidden" }}
                         />
                     </div>
                     <div className="image-label-home">
-                        {getFileName(arquitectura4)}
+                        Hotel Azur Lobby
                     </div>
                     <div className="image-label-star">
                         <img src={starImage} alt="Star" className="star-image-foto" />
@@ -1054,7 +1097,7 @@ if (showIntro) {
                     <div onClick={goToStudio}
                         className={` quadrant custom-white-box ${slideStudioBox ? 'custom-slide-team' : ''}`}
                     >
-                        {slideStudioBox && <span className="text-Awards">Our Studio</span>}
+                        {slideStudioBox && <span className="text-Awards">{lang === 'ES' ? <> Nuestro<br/> estudio</> : 'Our Studio'}</span>}
                     </div>
                 </div>
 
@@ -1079,20 +1122,21 @@ if (showIntro) {
                             alt="Branding 1"
                             className="parallax-image"
                             ref={brandingDesktopImageRef}
-                            onClick={() => { goToProject("design", "CienFuegos"); }}
+                            onClick={() => { goToProject("design", "COC"); }}
                             style={{ width: "70vw", position: 'relative', left: '-16%' }}
                         />
                         <div className="image-label-home-desktop">
-                            {getFileName(branding2)}
+                            Che Mono
                         </div>
                         <div className="image-label-star-desktop">
                             <img src={starImage} alt="Star" className="star-image-foto-desktop" onClick={goToAwardsAndPress} />
                         </div>
                     </div>
 
-                    <div className=" quadrant white-box-desktop box-two" style={{ position: 'relative', left: '75.3%', alignItems: "baseline" }}>
-                        <span className="project-box-desktop">Inspiring</span> <br />
-                        <span className="project-box-desktop">people</span>
+                    <div className=" quadrant white-box-desktop box-two" style={{ position: 'relative', left: '76.3%', alignItems: "baseline" }}>
+
+                        <span className="project-box-desktop"  style={lang === 'ES' ? { paddingLeft: '15%' } : undefined}> {lang === 'ES' ? 'Personas' : 'Inspiring'}</span><br />
+                        <span className="project-box-desktop"  style={lang === 'ES' ? { paddingLeft: '15%' } : undefined}> {lang === 'ES' ? 'inspiradoras' : 'people'}</span>
                         <div className="desktopmoving-line" ref={desktopline1Ref}></div>
                     </div>
                 </div>
@@ -1101,9 +1145,9 @@ if (showIntro) {
             {/*                 Van 3 cajas iguales en la misma fila ,   */}
             <div className="row-2-desktop mobile-hide">
                 <div className="quadrant-row-2 white-box-desktop mobile-hide" onClick={goToProjects} style={{ alignItems: "baseline" }}>
-                    <span className="project-box-desktop">To create</span>
-                    <span className="project-box-desktop">exciting</span>
-                    <span className="project-box-desktop">places</span>
+                    <span className="project-box-desktop"  style={lang === 'ES' ? { paddingLeft: '15%' } : undefined}>{lang === 'ES' ? 'Para crear' : 'To create'}</span>
+                    <span className="project-box-desktop"  style={lang === 'ES' ? { paddingLeft: '15%' } : undefined}>{lang === 'ES' ? 'espacios' : 'exciting'}</span>
+                    <span className="project-box-desktop" style={lang === 'ES' ? { paddingLeft: '15%' } : undefined} >{lang === 'ES' ? 'emocionantes' : 'places'}</span>
                     <div className="desktopmoving-line2" ref={desktopline2Ref}></div>
 
                 </div>
@@ -1115,9 +1159,9 @@ if (showIntro) {
                             <img src={logoVertical} alt="Logo Vertical" className="logo-image-desktop" />
                         </div>
                         <div className="back mobile-hide">
-                            <span className='back-item' style={{ marginLeft: "40px" }}>Design</span>
-                            <span className='back-item' style={{ marginLeft: "40px" }}>Architecture</span>
-                            <span className='back-item' style={{ marginLeft: "40px" }}>Branding</span>
+                            <span className='back-item' style={{ marginLeft: "40px" }}>{lang === 'ES' ? 'Diseño' : 'Design'}</span>
+                            <span className='back-item' style={{ marginLeft: "40px" }}>{lang === 'ES' ? 'Arquitectura' : 'Architecture'}</span>
+                            <span className='back-item' style={{ marginLeft: "40px" }}>{lang === 'ES' ? 'Marcas' : 'Branding'}</span>
                         </div>
                     </div>
                 </div>
@@ -1127,9 +1171,10 @@ if (showIntro) {
                     <img
                         src={arquitectura3}
                         alt="Architecture 1"
-                        onClick={() => { goToProject("design", "ElMercadillo") }}
+                        onClick={() => { goToProject("design", "Central Club") }}
                         style={{ width: "34vw", height: "39.55vw" }}
                     />
+
                 </div>
             </div>
             {/* tercera linea*/}
@@ -1141,48 +1186,61 @@ if (showIntro) {
                             alt="Interiorismo 1"
                             className="parallax-image"
                             ref={interiorismoDesktopImageRef}
-                            onClick={() => { goToProject("design", "CordiezMixo") }}
-                            style={{ width: "70vw", position: 'relative', left: '-16%', overflow: "hidden" }}
+                            onClick={() => { goToProject("design", "HotelAzurLobby") }}
+                            style={{ width: "73vw", position: 'relative', left: '-16%', overflow: "hidden" }}
                         />
                         <div className="image-label-home-desktop">
-                            {getFileName(arquitectura2)}
+                            Hotel Azur Lobby
                         </div>
                         <div className="image-label-star-desktop mobile-hide">
                             <img src={starImage} alt="Star" className="star-image-foto-desktop" onClick={goToAwardsAndPress} />
                         </div>
                     </div>
-                    <div className=" quadrant blue-box-desktop box-two mobile-hide" ref={counterDesktopRef} style={{ position: 'relative', left: '101%', width: "35vw" }}>
+                    <div className=" quadrant blue-box-desktop box-two mobile-hide" ref={counterDesktopRef} style={{ position: 'relative', left: '102%', width: "35vw" }}>
                         <span className="project-count-desktop">+{projectCountDesktop}</span>
-                        <span className="project-label-desktop">projects</span>
+                        <span className="project-label-desktop">{lang === 'ES' ? 'proyectos' : 'projects'}</span>
                     </div>
                 </div>
             </div>
             {/* cuarta linea*/}
             <div className="row-3-desktop mobile-hide">
                 <div style={{ width: "31vw", height: "60vw" }}>
-                    <img
-                        src={arquitectura1}
-                        alt="Architecture 1"
-                        onClick={() => { goToProject("design", "MTVDCafe") }}
-                        style={{ width: "150%", alignContent: "center", justifyContent: "center" }}
+                    <video
+                        src={interiorismoVideo1}
+                        className="parallax-video"                    /* dale el mismo estilo base que .parallax-image */
+                        ref={interiorismoVideoDesktopRef}             /* si tu lógica de parallax lo necesita */
+                        onClick={() => goToProject("design", "COC")}
+                        autoPlay
+                        loop
+                        muted
+                        playsInline                                  /* indispensable para autoplay en móvil */
+                        style={{
+                            width: "40vw",
+                            position: "relative",
+                            /* left: "4%",
+                            top: "1%", */
+                            objectFit: "cover",                         /* rellena como la imagen */
+                            overflow: "hidden"
+                        }}
                     />
+
                 </div>
                 <div className="quadrant mobile-hide" style={{ alignItems: "baseline", width: "30vw", height: "60vw" }}>
                     {/* Nueva sección horizontal para los contadores */}
                     <div className="horizontal-counter-section-new-desktop mobile-hide" ref={sectionCountersDesktopRef}>
                         <div className="horizontal-counter-item-new-desktop">
                             <span className="horizontal-project-count-new-desktop" style={{ marginBottom: "-27px", display: "grid", justifyContent: "end" }}>+{citiesCountDesktop}</span>
-                            <span className="horizontal-project-label-new-desktop" style={{ paddingLeft: "27px", marginTop: "-20px" }}>cities</span>
+                            <span className="horizontal-project-label-new-desktop" style={lang === 'ES' ? { paddingLeft: "7px", marginTop: "-20px" } : { paddingLeft: "27px", marginTop: "-20px" }}>{lang === 'ES' ? 'ciudades' : 'cities'}</span>
                         </div>
                         <div className="horizontal-counter-item-new-desktop">
                             <span className="horizontal-project-count-new-desktop">+{countriesCountDesktop}</span>
                             <br />
-                            <span className="horizontal-project-label-new-desktop" style={{ paddingLeft: "146px" }}>countries</span>
+                            <span className="horizontal-project-label-new-desktop" style={lang === 'ES' ? { paddingLeft: '27px' } : { paddingLeft: "146px" }}>{lang === 'ES' ? 'países' : 'countries'}</span>
                         </div>
                         <div className="horizontal-counter-item-new-desktop">
                             <span className="horizontal-project-count-new-desktop">+{yearsCountDesktop}</span>
                             <br />
-                            <span className="horizontal-project-label-new-desktop" style={{ paddingLeft: "49px" }}>years</span>
+                            <span className="horizontal-project-label-new-desktop" style={lang === 'ES' ? { paddingLeft: '22px' } : { paddingLeft: "49px" }}>{lang === 'ES' ? 'años' : 'years'}</span>
                         </div>
 
                     </div>
@@ -1193,9 +1251,9 @@ if (showIntro) {
                     <div className=" white-box-desktop mobile-hide" onClick={goToProjects}
                     >
                         <img
-                            src={interiorismo2}
+                            src={arquitectura4}
                             alt="Architecture 1"
-                            onClick={() => { goToProject("design", "COC") }}
+                            onClick={() => { goToProject("design", "Soberana") }}
                             style={{ width: "34vw", height: "30vw" }}
                         />
                     </div>
@@ -1205,107 +1263,47 @@ if (showIntro) {
                 </div>
             </div>
             <section className="image-and-quadrants mobile-hide">
-                {/* 
-Cuarta Fila */}
-                {/*   <div className="full-square">
-                    <div className="parallax-wrapper">
-                        <img
-                            src={interiorismo1}
-                            alt="Interiorismo 1"
-                            className="parallax-image"
-                            ref={interiorismoDesktopImageRef}
-                            onClick={() => { goToProject(2) }}
 
-                        />
-                    </div>
-                    <div className="image-label-home">
-                        {getFileName(interiorismo1)}
-                    </div>
-                    <div className="image-label-star">
-                        <img src={starImage} alt="Star" className="star-image-foto" onClick={goToAwardsAndPress} />
-                    </div>
-                </div> */}
-                {/* tercera linea*/}
                 <div className="full-square-desktop mobile-hide grid-container-uno mobile-hide" >
                     <div className="container-one" >
                         <div className="parallax-wrapper home-parallax-desktop box-uno" >
                             <img
-                                src={interiorismo1}
-                                alt="Interiorismo 1"
-                                className="parallax-image"
-                                ref={interiorismoDesktopImageRef}
-                                onClick={() => {goToProject("architecture", "Valpo") }}
-                                style={{ width: "70vw", position: 'relative', left: '-14.5%', top: '-50%', overflow: "hidden" }}
+                                src={interiorismo2}
+                                alt="Architecture 1"
+                                className="parallax-image-architecture"
+                                ref={arquitectura4DesktopImageRef}
+                                onClick={() => { goToProject("design", "BarilatteUrca") }}
+                                style={{ width: "120%", overflow: "hidden", marginLeft: "-10%" }}
                             />
-                            <div className="image-label-home-desktop">
-                                {getFileName(interiorismo1)}
+
+                            <div className="image-label-home-desktop mobile-hide" >
+                                {getFileName(interiorismo2)}
                             </div>
-                            <div className="image-label-star-desktop">
-                                <img src={starImage} alt="Star" className="star-image-foto-desktop" onClick={goToAwardsAndPress} />
+                            <div className="image-label-star-architecture mobile-hide">
+                                <img src={starImage} alt="Star" className="star-image-foto-architecture" />
                             </div>
+
+
                         </div>
                     </div>
 
 
-                    <div className="quadrant-star-desktop box-two-star-desktop" ref={slideBoxesDesktopRef}
-                        style={{ position: 'relative', left: "-26px", width: "33vw", height: "33vw", overflow: "visible" }}>
-
+                    <div
+                        className="quadrant-star-desktop box-two-star-desktop wrapper-star-custom"
+                        ref={slideBoxesDesktopRef}
+                    >
                         {/* Caja verde que se mueve */}
-                        <div className={`quadrant-row-2-star-desktop green-box-star-desktop ${slideBoxesDesktop ? 'slide-green-star-desktop' : ''}`} >
+                        <div className={`quadrant-row-2-star-desktop green-box-star-desktop ${slideBoxesDesktop ? 'slide-green-star-desktop' : ''}`}>
                             <img src={starImage} alt="Star" className="star-image-star-desktop" onClick={goToAwardsAndPress} />
                         </div>
 
                         {/* Awards detrás de la caja verde */}
                         <div className="quadrant-star-desktop white-box-estrella-star-desktop">
-                            <span className="text-Awards-desktop">Awards</span>
+                            <span className="text-Awards-desktop">{lang === 'ES' ? <>Prensa <br/> y <br/>Premios </> : 'Awards'}</span>
                         </div>
                     </div>
+
                 </div>
-
-                {/* <div className="new-quadrant-container-desktop" ref={slideBoxesDesktopRef} onClick={goToAwardsAndPress}>
-                        <img
-                            src={interiorismo1}
-                            alt="Interiorismo 1"
-                            className="parallax-image"
-                            ref={interiorismoDesktopImageRef}
-                            onClick={() => { goToProject(2) }}
-                            style={{ width: "77vw", position: 'relative', left: '-17%' }}
-                        />
-                        <div className="image-label-home-desktop">
-                            {getFileName(interiorismo1)}
-                        </div>
-                        <div className="image-label-star-desktop">
-                            <img src={starImage} alt="Star" className="star-image-foto-desktop" onClick={goToAwardsAndPress} />
-                        </div>
-                    <div
-                        className={`quadrant-row-2 green-box-desktop ${slideBoxesDesktop ? 'slide-green-desktop' : ''}`}
-                    >
-                        <img src={starImage} alt="Star" className="star-image" onClick={goToAwardsAndPress} />
-                    </div>
-                    <div onClick={goToAwardsAndPress} className="quadrant white-box-estrella">
-                        <span className="text-Awards">Awards</span>
-                    </div>
-                </div> */}
-
-
-                {/*     <div className="full-square">
-                    <div className="parallax-wrapper">
-                        <img
-                            src={arquitectura1}
-                            alt="Architecture 1"
-                            className="parallax-image"
-                            ref={arquitecturaDesktopImageRef}
-                            onClick={() => { goToProject(3) }}
-
-                        />
-                    </div>
-                    <div className="image-label-home">
-                    {getFileName(arquitectura1)}
-                    </div>
-                    <div className="image-label-star">
-                    <img src={starImage} alt="Star" className="star-image-foto" />
-                    </div>
-                    </div> */}
 
                 <div className='row-box-studio mobile-hide'>
 
@@ -1320,7 +1318,7 @@ Cuarta Fila */}
                         <div onClick={goToStudio}
                             className="quadrant-row-2 custom-white-box-desktop"
                         >
-                            {slideStudioBoxDesktop && <span className="text-Awards-desktop">Our studio</span>}
+                            {slideStudioBoxDesktop && <span className="text-Awards-desktop">{lang === 'ES' ? <>Nuestro<br />estudio</> : 'Our studio'}</span>}
                         </div>
                     </div>
 
@@ -1329,19 +1327,17 @@ Cuarta Fila */}
 
 
                         <div className="parallax-wrapper-architecture mobile-hide">
+
                             <img
-                                src={interiorismo2}
+                                src={arquitectura1}
                                 alt="Architecture 1"
-                                className="parallax-image-architecture"
-                                ref={arquitectura4DesktopImageRef}
-                                onClick={() => { goToProject("design", "COC") }}
+                                onClick={() => { goToProject("design", "Soberana") }}
+                                style={{ width: "151%", alignContent: "center", justifyContent: "center", marginLeft: "-22%" }}
                             />
                         </div>
-                        <div className="image-label-home-desktop mobile-hide">
-                            {getFileName(interiorismo2)}
-                        </div>
-                        <div className="image-label-star-architecture mobile-hide">
-                            <img src={starImage} alt="Star" className="star-image-foto-architecture" />
+
+                        <div className="image-label-home-desktop" style={{ marginTop: "-100px" }}>
+                            Soberana
                         </div>
                     </div>
                 </div>
@@ -1355,7 +1351,7 @@ Cuarta Fila */}
             <section className="content-section mobile-hide" style={{ width: "100%" }}>
                 <div className="button-container">
                     <a className="custom-button-end-desktop">
-                        <span onClick={goToProjects}> check our  <strong className="custom-button-project-desktop"> projects </strong></span>
+                        <span onClick={goToProjects}>  <strong className="custom-button-project-desktop">{lang === 'ES' ? 'Descubrí nuestros proyectos' : 'check our projects'} </strong></span>
                     </a>
                 </div>
 
@@ -1373,7 +1369,7 @@ Cuarta Fila */}
             <section className="content-section desktop-hide">
                 <div className="button-container">
                     <a className="custom-button-end">
-                        <span onClick={goToProjects}> check our  <strong> projects </strong></span>
+                        <span onClick={goToProjects}> <strong> {lang === 'ES' ? 'Descubrí nuestros proyectos' : 'check our projects'} </strong></span>
                     </a>
                 </div>
 
