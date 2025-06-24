@@ -150,9 +150,9 @@ const images = [
                     : "We are a passionate team dedicated to interior design with a distinct commercial focus. We provide personalized solutions with strong personalities that cater to the unique needs and preferences of each project. With over 10 years of experience, we've designed 350+ projects in 25+ cities around the world. Our pursuit of creating authentic and original spaces has earned us notable recognition and awards in architecture, interior design, and branding. We are here to inspire people to create exciting places."}
                     
                 </p>
-                <div class="column">
-                    <blockquote class="styled-quote">
-                        {lang === 'ES' ? "Inspirando a las personas a crear emocionantes lugares." : "Inspiring people to create exciting places"}
+                <div class="column"  >
+                    <blockquote class="styled-quote" style={lang === 'ES' ? { textAlign: "center", width: "77%" } : undefined}>
+                        {lang === 'ES' ? <>Inspirando <br/> personas <br/>a crear<br/> espacios<br/> emocionantes.</> : "Inspiring people to create exciting places"}
                         
                     </blockquote>
                 </div>

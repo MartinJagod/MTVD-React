@@ -132,16 +132,16 @@ const Navbar = ({ isSliding, menuOpen, setMenuOpen, showInput, setShowInput, pag
                         <FaSearch
                             className="search-icon-home-desktop"
                             onClick={handleSearchClick}
-                            style={{ color: iconColor, paddingLeft: '10px' }}
+                            style={{ color: iconColor }}
                         />
                         <button
                             onClick={toggleLang}
                             className="lang-toggle-btn"
                             style={{
-                                marginLeft: "12px",
+                                marginLeft: "10px",
                                 background: "transparent",
                                 border: "none",
-                                padding: "2px 8px",
+                                padding: "2px",
                                 fontSize: "0.75rem",
                                 cursor: "pointer",
                                 color: iconColor,
@@ -153,7 +153,7 @@ const Navbar = ({ isSliding, menuOpen, setMenuOpen, showInput, setShowInput, pag
                         <span
                             className="icon"
                             onClick={toggleMenu}
-                            style={{ color: iconColor, paddingLeft: '10px' }}
+                            style={{ color: iconColor }}
                         >
                             ☰
                         </span>

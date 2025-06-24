@@ -554,7 +554,7 @@ function Home() {
                     }
                 });
             },
-            { threshold: 0.7 } // Se activa cuando el 50% del elemento es visible
+            { threshold: 0.1 } // Se activa cuando el 50% del elemento es visible
         );
 
         const slideBoxesElement = slideBoxesDesktopRef.current;
@@ -581,7 +581,7 @@ function Home() {
                     }
                 });
             },
-            { threshold: 1 } // Ajusta el umbral para determinar cuándo se activa
+            { threshold: 0.1 } // Ajusta el umbral para determinar cuándo se activa
         );
 
         const slideBoxesElement = slideBoxesRef.current;
@@ -951,11 +951,11 @@ function Home() {
             </div>
 
             <div className="phrase-section-home desktop-hide" onClick={goToStudio}>
-                <span className="phrase-line">  {lang === 'ES' ? 'Somos un Estudio' : 'We are a'}</span> <br />
-                <span className="phrase-line"> {lang === 'ES' ? ' de Diseño' : 'design studio'} </span>
+                <span className="phrase-line">  {lang === 'ES' ? 'Hola! Somos' : 'We are a'}</span> <br />
+                <span className="phrase-line"> {lang === 'ES' ? ' Estudio Montevideo' : 'design studio'} </span>
             </div>
             <div className="phrase-section-home mobile-hide" onClick={goToStudio}>
-                <span className="phrase-line-desktop"> {lang === 'ES' ? 'Somos un Estudio de Diseño' : 'We are a design studio'} </span>
+                <span className="phrase-line-desktop"> {lang === 'ES' ? 'Hola! Somos Estudio Montevideo' : 'We are a design studio'} </span>
             </div>
             {/* Seccion mobile */}
             <div className="full-square desktop-hide">
@@ -979,8 +979,8 @@ function Home() {
             <section className="image-and-quadrants desktop-hide">
                 <div className="quadrant-container">
                     <div className="quadrant white-box">
-                        <span className="project-box"> {lang === 'ES' ? 'Personas' : 'Inspiring'}</span>
-                        <span className="project-box"> {lang === 'ES' ? 'inspiradoras' : 'people'}</span>
+                        <span className="project-box"> {lang === 'ES' ? 'Inspirando a' : 'Inspiring'}</span>
+                        <span className="project-box"> {lang === 'ES' ? 'la gente' : 'people'}</span>
                         <div className="moving-line" ref={line1Ref}></div>
                     </div>
                     <div
@@ -1005,7 +1005,7 @@ function Home() {
                         <div className="moving-line2" ref={line2Ref}></div>
                     </div>
                     <div className="quadrant white-box" onClick={goToProjects}>
-                        <span className="project-box">{lang === 'ES' ? 'Para crear' : 'To create'}</span>
+                        <span className="project-box">{lang === 'ES' ? 'a crear' : 'To create'}</span>
                         <span className="project-box">{lang === 'ES' ? 'espacios' : 'exciting'}</span>
                         <span className="project-box">{lang === 'ES' ? 'emocionantes' : 'places'}</span>
                     </div>
@@ -1062,7 +1062,7 @@ function Home() {
                         <img src={starImage} alt="Star" className="star-image" onClick={goToAwardsAndPress} />
                     </div>
                     <div onClick={goToAwardsAndPress} className="quadrant white-box-estrella">
-                        <span className="text-Awards" style={lang === 'ES' ? { paddingLeft: '-15%' } : undefined}>{lang === 'ES' ? <>Prensa <br/> y <br/>Premios </> : 'Awards'}</span>
+                        <span className="text-Awards" style={lang === 'ES' ? { paddingLeft: '-15%' } : undefined}>{lang === 'ES' ? <>Prensa y<br/>Premios </> : 'Awards'}</span>
                     </div>
                 </div>
 
@@ -1133,10 +1133,10 @@ function Home() {
                         </div>
                     </div>
 
-                    <div className=" quadrant white-box-desktop box-two" style={{ position: 'relative', left: '76.3%', alignItems: "baseline" }}>
+                    <div className=" quadrant white-box-desktop box-two" style={{ position: 'relative', left: '76%', alignItems: "baseline" }}>
 
-                        <span className="project-box-desktop"  style={lang === 'ES' ? { paddingLeft: '15%' } : undefined}> {lang === 'ES' ? 'Personas' : 'Inspiring'}</span><br />
-                        <span className="project-box-desktop"  style={lang === 'ES' ? { paddingLeft: '15%' } : undefined}> {lang === 'ES' ? 'inspiradoras' : 'people'}</span>
+                        <span className="project-box-desktop"  style={lang === 'ES' ? { paddingLeft: '15%' } : undefined}> {lang === 'ES' ? 'Inspirando' : 'Inspiring'}</span><br />
+                        <span className="project-box-desktop"  style={lang === 'ES' ? { paddingLeft: '15%' } : undefined}> {lang === 'ES' ? 'a la gente' : 'people'}</span>
                         <div className="desktopmoving-line" ref={desktopline1Ref}></div>
                     </div>
                 </div>
@@ -1145,7 +1145,7 @@ function Home() {
             {/*                 Van 3 cajas iguales en la misma fila ,   */}
             <div className="row-2-desktop mobile-hide">
                 <div className="quadrant-row-2 white-box-desktop mobile-hide" onClick={goToProjects} style={{ alignItems: "baseline" }}>
-                    <span className="project-box-desktop"  style={lang === 'ES' ? { paddingLeft: '15%' } : undefined}>{lang === 'ES' ? 'Para crear' : 'To create'}</span>
+                    <span className="project-box-desktop"  style={lang === 'ES' ? { paddingLeft: '15%' } : undefined}>{lang === 'ES' ? 'a crear' : 'To create'}</span>
                     <span className="project-box-desktop"  style={lang === 'ES' ? { paddingLeft: '15%' } : undefined}>{lang === 'ES' ? 'espacios' : 'exciting'}</span>
                     <span className="project-box-desktop" style={lang === 'ES' ? { paddingLeft: '15%' } : undefined} >{lang === 'ES' ? 'emocionantes' : 'places'}</span>
                     <div className="desktopmoving-line2" ref={desktopline2Ref}></div>
@@ -1196,7 +1196,7 @@ function Home() {
                             <img src={starImage} alt="Star" className="star-image-foto-desktop" onClick={goToAwardsAndPress} />
                         </div>
                     </div>
-                    <div className=" quadrant blue-box-desktop box-two mobile-hide" ref={counterDesktopRef} style={{ position: 'relative', left: '102%', width: "35vw" }}>
+                    <div className=" quadrant blue-box-desktop box-two mobile-hide" ref={counterDesktopRef} style={{ position: 'relative', left: '102%', width: "33vw" }}>
                         <span className="project-count-desktop">+{projectCountDesktop}</span>
                         <span className="project-label-desktop">{lang === 'ES' ? 'proyectos' : 'projects'}</span>
                     </div>
@@ -1204,7 +1204,7 @@ function Home() {
             </div>
             {/* cuarta linea*/}
             <div className="row-3-desktop mobile-hide">
-                <div style={{ width: "31vw", height: "60vw" }}>
+                <div style={{ width: "33vw", height: "66vw", overflow: "hidden" }} className="quadrant-row-2 white-box-desktop mobile-hide" onClick={goToProjects}>
                     <video
                         src={interiorismoVideo1}
                         className="parallax-video"                    /* dale el mismo estilo base que .parallax-image */
@@ -1225,7 +1225,8 @@ function Home() {
                     />
 
                 </div>
-                <div className="quadrant mobile-hide" style={{ alignItems: "baseline", width: "30vw", height: "60vw" }}>
+                <div className="quadrant mobile-hide" style={{ alignItems: "baseline", width: "32vw", height: "66vw" }} >
+
                     {/* Nueva sección horizontal para los contadores */}
                     <div className="horizontal-counter-section-new-desktop mobile-hide" ref={sectionCountersDesktopRef}>
                         <div className="horizontal-counter-item-new-desktop">
@@ -1253,27 +1254,27 @@ function Home() {
                         <img
                             src={arquitectura4}
                             alt="Architecture 1"
-                            onClick={() => { goToProject("design", "Soberana") }}
-                            style={{ width: "34vw", height: "30vw" }}
+                            onClick={() => { goToProject("design", "CentralClub") }}
+                            style={{ width: "33vw", height: "30vw"}}
                         />
                     </div>
-                    <div className="quadrant-row-2 white-box-desktop" onClick={goToProjects} style={{ alignItems: "baseline", width: "34.5vw", height: "27vw" }}>
+                    <div className="quadrant-row-2 white-box-desktop" onClick={goToProjects} style={{ alignItems: "baseline", width: "34.8vw", height: "27vw" }}>
 
                     </div>
                 </div>
             </div>
             <section className="image-and-quadrants mobile-hide">
 
-                <div className="full-square-desktop mobile-hide grid-container-uno mobile-hide" >
-                    <div className="container-one" >
+                <div className="full-square-desktop mobile-hide grid-container-uno awards-row" >
+                    <div className="container-one mask-overflow" >
                         <div className="parallax-wrapper home-parallax-desktop box-uno" >
                             <img
                                 src={interiorismo2}
                                 alt="Architecture 1"
-                                className="parallax-image-architecture"
+                                className="parallax-image-architecture foto-doble-3"
                                 ref={arquitectura4DesktopImageRef}
                                 onClick={() => { goToProject("design", "BarilatteUrca") }}
-                                style={{ width: "120%", overflow: "hidden", marginLeft: "-10%" }}
+                               
                             />
 
                             <div className="image-label-home-desktop mobile-hide" >
@@ -1299,7 +1300,7 @@ function Home() {
 
                         {/* Awards detrás de la caja verde */}
                         <div className="quadrant-star-desktop white-box-estrella-star-desktop">
-                            <span className="text-Awards-desktop">{lang === 'ES' ? <>Prensa <br/> y <br/>Premios </> : 'Awards'}</span>
+                            <span className="text-Awards-desktop">{lang === 'ES' ? <>Prensa y <br/>Premios </> : 'Awards'}</span>
                         </div>
                     </div>
 
@@ -1351,7 +1352,7 @@ function Home() {
             <section className="content-section mobile-hide" style={{ width: "100%" }}>
                 <div className="button-container">
                     <a className="custom-button-end-desktop">
-                        <span onClick={goToProjects}>  <strong className="custom-button-project-desktop">{lang === 'ES' ? 'Descubrí nuestros proyectos' : 'check our projects'} </strong></span>
+                        <span onClick={goToProjects}>  <strong className="custom-button-project-desktop">{lang === 'ES' ? 'Proyectos' : 'check our projects'} </strong></span>
                     </a>
                 </div>
 
@@ -1369,7 +1370,7 @@ function Home() {
             <section className="content-section desktop-hide">
                 <div className="button-container">
                     <a className="custom-button-end">
-                        <span onClick={goToProjects}> <strong> {lang === 'ES' ? 'Descubrí nuestros proyectos' : 'check our projects'} </strong></span>
+                        <span onClick={goToProjects}> <strong> {lang === 'ES' ? 'Proyectos' : 'check our projects'} </strong></span>
                     </a>
                 </div>
 

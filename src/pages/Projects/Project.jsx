@@ -39,7 +39,8 @@ function Project() {
     /* const PhraseLineSelected = imageName.replace(/\.jpg$/, ""); */
     const imageName = `${projectName}.jpg`;       // AlgoGrosso.jpg
     const PhraseLineSelected = projectName;                // AlgoGrosso
-    const images = importImagesProject(category, projectName);
+    const isDesktop = window.innerWidth >= 1024;
+const images = importImagesProject(category, projectName, isDesktop);
     const id = getIdByProjectName(PhraseLineSelected);
     const projectData =
   id

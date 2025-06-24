@@ -8,6 +8,9 @@ import projectsData from './projectsData';
 import ContactFooterDesktop from '../Parcial/ContactFooterDesktop'; // Ajusta la ruta según tu estructura de carpetas
 
 import { LanguageContext } from '../../context/LanguageContext';
+// fuera del componente, o con useCallback si prefieres
+const formatName = (str) =>
+  str.replace(/([A-Z])/g, ' $1').trim();
 
 function ProjectsSection() {
    const { lang } = useContext(LanguageContext);   // EN | ES
@@ -337,7 +340,7 @@ const normalize = (str) =>
                     className="project-image"
                     onClick={() => navigate(`/project/${section}/${name}`)}
                   />
-                  <div className="image-label-section">{name}</div>
+                  <div className="image-label-section">{formatName(name)}</div>
                 </div>
               ))}
             </div>
@@ -351,7 +354,7 @@ const normalize = (str) =>
                     className="project-image"
                     onClick={() => navigate(`/project/${section}/${name}`)}
                   />
-                  <div className="image-label-section">{name}</div>
+                  <div className="image-label-section">{formatName(name)}</div>
                 </div>
               ))}
             </div>
@@ -367,7 +370,7 @@ const normalize = (str) =>
                   className="project-image"
                   onClick={() => navigate(`/project/${section}/${name}`)}
                 />
-                <div className="image-label-section">{name}</div>
+                <div className="image-label-section">{formatName(name)}</div>
               </div>
             ))}
           </div>

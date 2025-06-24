@@ -31,13 +31,14 @@ const modalStyles = {
   },
   content: {
     position: 'relative',
+    inset: '0',
+    
     width: '90vw',
     height: '85vh',
     maxWidth: '95vw',
     maxHeight: '95vh',
    /*  minWidth: '320px',
     minHeight: '400px', */
-    background: 'rgba(255, 255, 255, 0.95)',
     backdropFilter: 'blur(20px)',
     WebkitBackdropFilter: 'blur(20px)',
     borderRadius: '12px',
@@ -46,7 +47,9 @@ const modalStyles = {
     padding: 0,
     margin: 0,
     overflow: 'hidden',
-    boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)'
+    boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
+  backgroundColor: 'transparent'
+
   }
 };
 
@@ -63,7 +66,6 @@ const closeBtnStyles = {
   position: 'absolute',
   top: '15px',
   right: '15px',
-  background: 'rgba(255, 255, 255, 0.9)',
   backdropFilter: 'blur(10px)',
   WebkitBackdropFilter: 'blur(10px)',
   color: '#333',
@@ -85,7 +87,9 @@ const swiperStyles = {
   width: '100%',
   height: '100%',
   display: 'flex',
-  alignItems: 'center'
+  alignItems: 'center',
+  margin : "auto 0"
+
 };
 
 const slideStyles = {
@@ -94,7 +98,7 @@ const slideStyles = {
   justifyContent: 'center',
   width: '100%',
   height: '100%',
-  backgroundColor: 'transparent'
+  backgroundColor: 'transparent',
 };
 
 const imageStyles = {
@@ -214,11 +218,11 @@ export default function ProjectPopup({
           style={closeBtnStyles}
           onClick={onClose}
           onMouseEnter={(e) => {
-            e.target.style.background = 'rgba(255, 255, 255, 1)';
+            e.target.style.background = 'rgba(255, 255, 255, 0.1)';
             e.target.style.transform = 'scale(1.1)';
           }}
           onMouseLeave={(e) => {
-            e.target.style.background = 'rgba(255, 255, 255, 0.9)';
+            e.target.style.background = 'rgba(255, 255, 255, 0.2)';
             e.target.style.transform = 'scale(1)';
           }}
         >
@@ -226,7 +230,7 @@ export default function ProjectPopup({
         </button>
 
         {images.length ? (
-          <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center' }}>
+          <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center'}}>
             <Swiper
               style={swiperStyles}
               modules={[Navigation, Pagination, Autoplay]}

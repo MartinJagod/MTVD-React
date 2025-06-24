@@ -8,6 +8,7 @@ const TITLE_MAP = {
   architecture: { EN: "Architecture", ES: "Arquitectura" },
   branding:     { EN: "Branding",     ES: "Marca" },
 };
+const formatName = (str) => str.replace(/([A-Z])/g, ' $1').trim();
 
 const Carousel = ({ title, images, goToProject, category }) => {
   const { lang } = useContext(LanguageContext);
@@ -96,6 +97,7 @@ const Carousel = ({ title, images, goToProject, category }) => {
       >
         {images.map((url, idx) => {
           const proj = url.match(/([^/]+)\.(jpe?g|png|webp)$/i)?.[1];
+            const label = proj ? formatName(proj) : '';
           return (
             <div
               key={idx}
@@ -103,7 +105,7 @@ const Carousel = ({ title, images, goToProject, category }) => {
               onClick={() => proj && goToProject(catKey, proj)}
             >
               <img src={url} alt={`Imagen ${idx + 1}`} className="carousel-image-projectsHome" />
-              <p>{proj}</p>
+              <p>{label}</p>
             </div>
           );
         })}

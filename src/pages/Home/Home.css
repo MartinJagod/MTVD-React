@@ -1563,7 +1563,7 @@ margin-top: -2%;
   font-size: 20px; /* Tamaño de fuente más pequeño para la palabra "projects" */
   align-items: center; 
   margin: 0 auto;
-  width: 32vw; /* Se ajusta al 33vw definido en grid */
+  width: 31.7vw; /* Se ajusta al 33vw definido en grid */
   height: 33vw;
   /* padding-left: 23px; */
 }
@@ -1616,7 +1616,7 @@ margin-top: -2%;
   display: grid;
   grid-template-columns: repeat(3, 1fr); /* 3 columnas iguales */
   width: 100vw; /* Ocupa todo el ancho disponible */
-  height: 60vw;
+  height: 63vw;
   align-items: start;
   justify-content:start;
 }
@@ -1696,11 +1696,11 @@ margin-top: -2%;
 /* Green box */
 .green-box-star-desktop {
   position: absolute;
-  width: 100%;
-  height: 100%;
+  width: 33vw;
+  height: 33vw;
   background-color: #44B87E;
   top: 0;
-  left: 0;
+  left: -1.9vw;
   z-index: 10; /* Sobre "Awards" */
   transition: transform 0.6s ease-in-out;
   text-align: center;
@@ -1798,20 +1798,33 @@ margin-top: -2%;
   height: 40px;
 }
 
-.custom-white-box-desktop {
+.custom-white-box-desktop {        
+  align-items: center;
+        display: flex;
+        flex: 1 1;
+        justify-content: center;
+        left: 0;
+        padding-left: 8px;
+        position: absolute;
+        width: 32.6vw;
   background-color: #ffffff;
  
   width: 33vw;
-  height: 33vw;
   z-index: 0;
 }
 .custom-orange-box-desktop {
   background-color: #FD7E40;
   position: absolute;
   left: 0;
-  width: 33.5vw;
+  width: 32.8vw;
   height: 33vw;
   z-index: 1;
+    flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-left: 10px;
+  transition: transform 0.5s ease-in-out; /* Transición suave */
 }
 .custom-quadrant-container-desktop{
   display: flex;
@@ -1822,19 +1835,12 @@ margin-top: -2%;
   right: 0;
    /* Alineado a la derecha */
 }
-.custom-orange-box-desktop {
-  flex: 1;
-  height: 32.1vw; /* Ocupan toda la altura del contenedor */
-  width: 33w;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding-left: 10px;
-  transition: transform 0.5s ease-in-out; /* Transición suave */
+/* .custom-orange-box-desktop {
+
   
-}
+} */
 .custom-slide-orange-desktop {
-  transform: translateY(-103%); /* Mueve hacia la derecha completamente */
+  transform: translateY(-100.1%); /* Mueve hacia la derecha completamente */
 }
 .row-box-studio{
   display: grid;
@@ -1955,7 +1961,14 @@ margin-top: -2%;
   margin-left: 100px;
 }
 /* Contenedor principal que ocupa 60vw de ancho a la derecha */
-
+.custom-orange-box-desktop {
+  background-color: #FD7E40;
+  position: absolute;
+  left: 0;
+  width: 33.15vw;
+  height: 33vw;
+  z-index: 1;
+}
 
 }
 
@@ -2036,7 +2049,8 @@ modificacion video */
 }
 .full-square-architecture {
   position: absolute;
-  right: -13%; /* Alineado a la derecha */
+  left: 33.6vw;
+  /* right: -12.5%; */ /* Alineado a la derecha */
   width: 78.85vw;
   height: 80vw; /* Mismo alto y ancho */
   background-color: #f8f8f8; /* Opcional */
@@ -2076,16 +2090,24 @@ modificacion video */
   background-color: rgba(0, 0, 0, 0.7);
 }
 }
+
+@media (max-width:1100px) {
+  .custom-orange-box-desktop {
+  background-color: #FD7E40;
+  position: absolute;
+  left: 0;
+  width: 33.15vw;
+  height: 33vw;
+  z-index: 1;
+}
 .wrapper-star-custom {
   position: relative;
-  left: -26px;
+  left: -1.3vw;
   width: 33vw;
   height: 33vw;
   overflow: visible;
 }
-
-@media (min-width:2000px) {
-  /* Contenedor principal que ocupa 60vw de ancho a la derecha */
+/* Contenedor principal que ocupa 60vw de ancho a la derecha */
 .full-square-architecture {
   position: absolute;
   right: -13%; /* Alineado a la derecha */
@@ -2093,7 +2115,42 @@ modificacion video */
   height: 80vw; /* Mismo alto y ancho */
   background-color: #f8f8f8; /* Opcional */
   overflow: hidden;
+}  
 
 }
-  
+@media (min-width:1024px){
+  .wrapper-star-custom {
+    position: relative;
+    left: -0.8vw;
+    width: 33vw;
+    height: 33vw;
+    overflow: visible;
+  }
+  .full-square-desktop.awards-row{
+    overflow: visible;   /* deja que la caja verde sobresalga */
+  }
+   .mask-overflow{
+    overflow:hidden;      /* ← clave */
+    position:relative;    /* mantiene contexto de stacking */
+  }
+  .foto-doble-3{
+     width: 74.7%;
+     overflow: hidden;
+     margin-Left: -33%;
+  }
+}
+@media (min-width:1024px){
+  .custom-quadrant-container-desktop{
+    width: 33vw;      /* ya existe, solo lo recuerdo */
+  }
+
+  /* las dos cajas toman el 100 % del padre */
+  .custom-orange-box-desktop,
+  .custom-white-box-desktop{
+    width: 100%;
+    margin-left: 1.5%;
+    /* alturas distintas PERMITIDAS:
+       - la naranja ya tiene 33vw
+       - la blanca puede quedar auto o la que quieras */
+  }
 }

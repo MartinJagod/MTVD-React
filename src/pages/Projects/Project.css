@@ -47,7 +47,7 @@ body {
   align-items: center;
   padding: 5px;
   color: #ffffff; /* Color del texto dentro del header */
-  margin-right: 60px;
+  margin-right: 11px;
   margin-top: 8px;
 }
 
@@ -1575,6 +1575,7 @@ display: grid;
     display: flex;
     justify-content: center;
     align-items: center;
+    margin-left: 10px;
   }
 
 }
@@ -1765,7 +1766,6 @@ body.no-scroll {
   align-items: center; /* Centra verticalmente */
   overflow: hidden; /* Oculta lo que sobresale */
   position: relative; /* Para controlar la posición del contenido interno */
-  background-color: #ffffff; /* Color de fondo opcional */
 }
 .primer-foto{
   
@@ -1785,6 +1785,22 @@ body.no-scroll {
     color: #ffffff;
     margin-right: 30px;
     margin-top: -30px;
+}
+.button-container {
+    display: flex
+;
+    justify-content: center;
+    margin-top: -30px;
+}
+.carousel-container {
+    width: 100vw;
+    height: 11vw;
+    overflow: hidden;
+    display: flex
+;
+    align-items: center;
+    position: relative;
+    background-color: #ffffff;
 }
 }
 .projects-general{
