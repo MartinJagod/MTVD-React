@@ -130,7 +130,13 @@ export default function ProjectPopup({
   console.log('🔍 ProjectPopup props:', { isOpen, projectName, category, initialImage });
 
   /* Utilidades */
-  const normalize = (str = '') => str.replace(/\s+/g, '').trim();
+  const normalize = (str = '') =>
+  str
+    .normalize('NFD')                    // descompone letras con acento (ej: ó → o + ◌́)
+    .replace(/[\u0300-\u036f]/g, '')     // elimina los signos diacríticos (acentos, diéresis, etc.)
+    .replace(/\s+/g, '')                 // elimina todos los espacios
+    .trim();                             // remueve espacios iniciales y finales (por si acaso)
+
   const formattedProject = normalize(projectName);
 
   /* Estados */

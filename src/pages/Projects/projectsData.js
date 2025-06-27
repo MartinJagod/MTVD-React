@@ -918,7 +918,7 @@ const projectsData = {
 
 ,
 5007: {
-  nombreproyecto: "La Luisita",
+  nombreproyecto: "La Luisita 2",
   frase1: "Geometry and light organize life with precision.",
   frase2: "Volumes open to light, time, and growth.",
   contador1: 2022,

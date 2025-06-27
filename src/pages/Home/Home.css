@@ -1845,7 +1845,7 @@ margin-top: -2%;
 .row-box-studio{
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  width: 100vw;
+  width: 100%;
   height: 66vw;
 }
  .phrase-line-desktop {
@@ -2051,7 +2051,7 @@ modificacion video */
   position: absolute;
   left: 33.6vw;
   /* right: -12.5%; */ /* Alineado a la derecha */
-  width: 78.85vw;
+  width: 78.9vw;
   height: 80vw; /* Mismo alto y ancho */
   background-color: #f8f8f8; /* Opcional */
   overflow: hidden;
@@ -2141,14 +2141,14 @@ modificacion video */
 }
 @media (min-width:1024px){
   .custom-quadrant-container-desktop{
-    width: 33vw;      /* ya existe, solo lo recuerdo */
+    width: 33.5vw;      /* ya existe, solo lo recuerdo */
   }
 
   /* las dos cajas toman el 100 % del padre */
   .custom-orange-box-desktop,
   .custom-white-box-desktop{
     width: 100%;
-    margin-left: 1.5%;
+    margin-left: 1.65%;
     /* alturas distintas PERMITIDAS:
        - la naranja ya tiene 33vw
        - la blanca puede quedar auto o la que quieras */

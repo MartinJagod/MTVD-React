@@ -18,7 +18,7 @@ export const importImagesProject = (category, projectName, isDesktop = false) =>
 
   // 3️⃣ si es desktop y arquitectura, añadimos el subdirectorio
   const basePath = `/assets/images/PaginaProyecto/${safeCategory}` +
-                   ((isDesktop && safeCategory === "architecture") ? "/Desktop" : "");
+                   ((isDesktop && (safeCategory === "architecture" || safeCategory === "design")) ? "/Desktop" : "");
 
   // 4️⃣ construimos el objeto con rutas
   return folders.reduce((acc, folder) => {

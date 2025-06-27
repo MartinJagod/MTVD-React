@@ -255,7 +255,9 @@ function Home() {
     const interiorismoVideoDesktopRef = useRef(null);
     const arquitecturaDesktopImageRef = useRef(null);
     const arquitectura4DesktopImageRef = useRef(null);
-
+    const teamImageRef = useRef(null);
+    const studioImageRef = useRef(null);
+const studioImageDesktopRef = useRef(null);
 
     //inicio parallax
 
@@ -269,6 +271,12 @@ function Home() {
             { ref: arquitecturaDesktopImageRef, speed: 0.15 },
             { ref: arquitectura4DesktopImageRef, speed: 0.1 },
             { ref: interiorismo2DesktopImageRef, speed: 0.1 },
+            { ref: teamImageRef, speed: 0.15 },
+            { ref: studioImageRef, speed: 0.07 },
+            { ref: studioImageDesktopRef, speed: 0.07 },
+
+
+
 
         ];
 
@@ -1062,7 +1070,7 @@ function Home() {
                         <img src={starImage} alt="Star" className="star-image" onClick={goToAwardsAndPress} />
                     </div>
                     <div onClick={goToAwardsAndPress} className="quadrant white-box-estrella">
-                        <span className="text-Awards" style={lang === 'ES' ? { paddingLeft: '-15%' } : undefined}>{lang === 'ES' ? <>Prensa y<br/>Premios </> : 'Awards'}</span>
+                        <span className="text-Awards" style={lang === 'ES' ? { paddingLeft: '-15%' } : undefined}>{lang === 'ES' ? <>Prensa y<br />Premios </> : 'Awards'}</span>
                     </div>
                 </div>
 
@@ -1097,12 +1105,21 @@ function Home() {
                     <div onClick={goToStudio}
                         className={` quadrant custom-white-box ${slideStudioBox ? 'custom-slide-team' : ''}`}
                     >
-                        {slideStudioBox && <span className="text-Awards">{lang === 'ES' ? <> Nuestro<br/> estudio</> : 'Our Studio'}</span>}
+                        {slideStudioBox && <span className="text-Awards">{lang === 'ES' ? <> Nuestro<br /> estudio</> : 'Our Studio'}</span>}
                     </div>
                 </div>
 
                 <div className="horizontal-double-team" >
-                    <img src={teamImage} alt="Team" className="horizontal-image-team" onClick={goToStudio} />
+
+                    <img 
+                    src={teamImage} 
+                    alt="Team" 
+                    className="horizontal-image-team" 
+                    onClick={goToStudio} 
+                     ref={studioImageDesktopRef}
+                                style={{ height: "125%", alignContent: "center", justifyContent: "center"}}
+
+                    />
 
                 </div>
             </section>
@@ -1122,7 +1139,7 @@ function Home() {
                             alt="Branding 1"
                             className="parallax-image"
                             ref={brandingDesktopImageRef}
-                            onClick={() => { goToProject("design", "COC"); }}
+                            onClick={() => { goToProject("design", "CheMono"); }}
                             style={{ width: "70vw", position: 'relative', left: '-16%' }}
                         />
                         <div className="image-label-home-desktop">
@@ -1135,8 +1152,8 @@ function Home() {
 
                     <div className=" quadrant white-box-desktop box-two" style={{ position: 'relative', left: '76%', alignItems: "baseline" }}>
 
-                        <span className="project-box-desktop"  style={lang === 'ES' ? { paddingLeft: '15%' } : undefined}> {lang === 'ES' ? 'Inspirando' : 'Inspiring'}</span><br />
-                        <span className="project-box-desktop"  style={lang === 'ES' ? { paddingLeft: '15%' } : undefined}> {lang === 'ES' ? 'a la gente' : 'people'}</span>
+                        <span className="project-box-desktop" style={lang === 'ES' ? { paddingLeft: '15%' } : undefined}> {lang === 'ES' ? 'Inspirando' : 'Inspiring'}</span><br />
+                        <span className="project-box-desktop" style={lang === 'ES' ? { paddingLeft: '15%' } : undefined}> {lang === 'ES' ? 'a la gente' : 'people'}</span>
                         <div className="desktopmoving-line" ref={desktopline1Ref}></div>
                     </div>
                 </div>
@@ -1145,8 +1162,8 @@ function Home() {
             {/*                 Van 3 cajas iguales en la misma fila ,   */}
             <div className="row-2-desktop mobile-hide">
                 <div className="quadrant-row-2 white-box-desktop mobile-hide" onClick={goToProjects} style={{ alignItems: "baseline" }}>
-                    <span className="project-box-desktop"  style={lang === 'ES' ? { paddingLeft: '15%' } : undefined}>{lang === 'ES' ? 'a crear' : 'To create'}</span>
-                    <span className="project-box-desktop"  style={lang === 'ES' ? { paddingLeft: '15%' } : undefined}>{lang === 'ES' ? 'espacios' : 'exciting'}</span>
+                    <span className="project-box-desktop" style={lang === 'ES' ? { paddingLeft: '15%' } : undefined}>{lang === 'ES' ? 'a crear' : 'To create'}</span>
+                    <span className="project-box-desktop" style={lang === 'ES' ? { paddingLeft: '15%' } : undefined}>{lang === 'ES' ? 'espacios' : 'exciting'}</span>
                     <span className="project-box-desktop" style={lang === 'ES' ? { paddingLeft: '15%' } : undefined} >{lang === 'ES' ? 'emocionantes' : 'places'}</span>
                     <div className="desktopmoving-line2" ref={desktopline2Ref}></div>
 
@@ -1166,12 +1183,12 @@ function Home() {
                     </div>
                 </div>
 
-                <div className="quadrant-row-2 white-box-desktop mobile-hide" onClick={goToProjects}
+                <div className="quadrant-row-2 white-box-desktop mobile-hide" 
                 >
                     <img
                         src={arquitectura3}
                         alt="Architecture 1"
-                        onClick={() => { goToProject("design", "Central Club") }}
+                        onClick={() => { goToProject("architecture", "Valpo1") }}
                         style={{ width: "34vw", height: "39.55vw" }}
                     />
 
@@ -1209,7 +1226,7 @@ function Home() {
                         src={interiorismoVideo1}
                         className="parallax-video"                    /* dale el mismo estilo base que .parallax-image */
                         ref={interiorismoVideoDesktopRef}             /* si tu lógica de parallax lo necesita */
-                        onClick={() => goToProject("design", "COC")}
+                        onClick={() => goToProject("design", "CheMono")}
                         autoPlay
                         loop
                         muted
@@ -1249,13 +1266,13 @@ function Home() {
                 </div>
                 <div>
 
-                    <div className=" white-box-desktop mobile-hide" onClick={goToProjects}
+                    <div className=" white-box-desktop mobile-hide"
                     >
                         <img
                             src={arquitectura4}
                             alt="Architecture 1"
                             onClick={() => { goToProject("design", "CentralClub") }}
-                            style={{ width: "33vw", height: "30vw"}}
+                            style={{ width: "33vw", height: "30vw" }}
                         />
                     </div>
                     <div className="quadrant-row-2 white-box-desktop" onClick={goToProjects} style={{ alignItems: "baseline", width: "34.8vw", height: "27vw" }}>
@@ -1274,7 +1291,7 @@ function Home() {
                                 className="parallax-image-architecture foto-doble-3"
                                 ref={arquitectura4DesktopImageRef}
                                 onClick={() => { goToProject("design", "BarilatteUrca") }}
-                               
+
                             />
 
                             <div className="image-label-home-desktop mobile-hide" >
@@ -1300,7 +1317,7 @@ function Home() {
 
                         {/* Awards detrás de la caja verde */}
                         <div className="quadrant-star-desktop white-box-estrella-star-desktop">
-                            <span className="text-Awards-desktop">{lang === 'ES' ? <>Prensa y <br/>Premios </> : 'Awards'}</span>
+                            <span className="text-Awards-desktop">{lang === 'ES' ? <>Prensa y <br />Premios </> : 'Awards'}</span>
                         </div>
                     </div>
 
@@ -1334,6 +1351,9 @@ function Home() {
                                 alt="Architecture 1"
                                 onClick={() => { goToProject("design", "Soberana") }}
                                 style={{ width: "151%", alignContent: "center", justifyContent: "center", marginLeft: "-22%" }}
+                                ref={teamImageRef}
+                                className='parallax-image-architecture foto-doble-3'
+
                             />
                         </div>
 
@@ -1342,8 +1362,18 @@ function Home() {
                         </div>
                     </div>
                 </div>
-                <div className="horizontal-double-team mobile-hide" >
-                    <img src={teamImage} alt="Team" className="horizontal-image-team" onClick={goToStudio} />
+                <div className=" horizontal-double-team mobile-hide" >
+
+                    <img
+                        src={teamImage}
+                        alt="Team"
+                        className=" horizontal-image-team"
+                        onClick={goToStudio}
+                                style={{ width: "150%", alignContent: "center", justifyContent: "center", marginBottom:"8%" }}
+
+                        ref={studioImageRef}
+
+                    />
 
                 </div>
 

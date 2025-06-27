@@ -37,7 +37,7 @@ const CATEGORY_DIR2 = {
 };
 
 /* Extensiones válidas */
-const VALID_EXT = new Set(['.jpg', '.jpeg', '.png', '.webp']);
+const VALID_EXT = new Set(['.jpg', '.jpeg', '.png', '.webp', '.mp4']);
 
 /* ------------------------------------------------------------------ */
 /* 2. Helper recursivo: devuelve URLs de todas las imágenes del dir    */
