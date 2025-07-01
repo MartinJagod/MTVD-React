@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect } from "react";
+import React, { useContext, useState, useRef, useEffect, useCallback } from "react";
 import { useParams } from "react-router-dom";
 import { LanguageContext } from "../../context/LanguageContext";
 import projectsData from "./projectsData";
@@ -22,18 +22,92 @@ function ProjectDesktop() {
     const { lang } = useContext(LanguageContext);
 
     /* ───── Dataset & Media ───── */
+    const SQFT_TO_SQM = 0.09290304;
     const dataset = lang === "ES" ? projectsDataES : projectsData;
     const images = importImagesProject(category, projectName, true);
     const imageKey = `${projectName}.jpg`;
     const id = getIdByProjectName(projectName);
-    const projectData = id ? dataset[id] ?? projectsData[id] : {};
-
+    let projectData = id ? dataset[id] ?? projectsData[id] : {};
+if (lang === "ES" && projectData?.contador2) {
+  projectData = {
+    ...projectData,
+    contador2: Math.round(projectData.contador2 * SQFT_TO_SQM),
+    nombre2: "m²",
+  };
+}
     /* ───── UI State (Navbar & Modal) ───── */
     const [isSliding, setIsSliding] = useState(false);
     const [menuOpen, setMenuOpen] = useState(false);
     const [showInput, setShowInput] = useState(false);
     const [modalOpen, setModalOpen] = useState(false);
     const [selectedMedia, setSelectedMedia] = useState(null);
+
+function useParallaxImages(imageRefs, speed = 0.1, scale = 1) {
+  const handleParallax = useCallback(() => {
+    imageRefs.current.forEach(({ el, factor }) => {
+      if (!el) return;
+
+      // ── Fallback: si no hay factor individual, usa speed ──
+      const f = (factor ?? speed);
+
+      const { top, bottom } = el.getBoundingClientRect();
+      const winH = window.innerHeight;
+
+      if (top < winH && bottom > 0) {
+        // OK dentro del viewport → parallax
+        const translateY = -((top - winH / 2) * f);
+        el.style.transform = `translateY(${translateY}px) scale(${scale})`;
+      } else {
+        // Fuera de vista → queda estática, pero agrandada
+        el.style.transform = `translateY(0px) scale(${scale})`;
+      }
+    });
+  }, [speed, scale]);
+
+  useEffect(() => {
+    handleParallax();                                            // ① primer disparo
+    window.addEventListener('scroll', handleParallax, { passive:true }); // ② scroll
+    return () => window.removeEventListener('scroll', handleParallax);   // ③ cleanup
+  }, [handleParallax]);
+}
+  
+
+
+
+/* ───── 2. Componente ───── */
+  // Creamos refs individuales
+  const project1Ref      = useRef(null);
+  const project2Ref  = useRef(null);
+  const project3Ref  = useRef(null);
+  const project4Ref  = useRef(null);
+  const project5Ref  = useRef(null);
+  const project6Ref  = useRef(null);
+
+
+
+  // Agrupamos en un ref contenedor para no disparar re-render
+  const imagesRef = useRef([
+    { el: null, factor: 0.1 },
+    { el: null, factor: 0.1 },
+    { el: null, factor: 0.1 },
+    { el: null, factor: 0.1 },
+    { el: null, factor: 0.1 },
+    { el: null, factor: 0.1 }  
+  ]);
+
+  // Vinculamos elementos DOM cuando se montan
+  useEffect(() => {
+    imagesRef.current[0].el = project1Ref.current;
+    imagesRef.current[1].el = project2Ref.current;
+    imagesRef.current[2].el = project3Ref.current;
+    imagesRef.current[3].el = project4Ref.current;
+    imagesRef.current[4].el = project5Ref.current;          
+    imagesRef.current[5].el = project6Ref.current;
+  }, []);
+
+  // Hook parallax
+  /* useParallaxImages(imagesRef); */
+
 
     /* ───── Navbar auto-hide logic ───── */
     useEffect(() => {
@@ -43,7 +117,7 @@ function ProjectDesktop() {
             clearTimeout(activityTimeout);
             activityTimeout = setTimeout(() => {
                 if (!menuOpen && !showInput) setIsSliding(true);
-            }, 2000);
+            }, 1000);
         };
 
         window.addEventListener("mousemove", handleActivity);
@@ -87,7 +161,7 @@ function ProjectDesktop() {
             {/* HERO + Navbar */}
             <header
                 className="ProjDes-hero cursor-pointer relative"
-                onClick={() => openPopup(heroMedia)}
+                /* onClick={() => openPopup(heroMedia)} */
             >
                 {heroMedia && isVideo(heroMedia) ? (
                     <video
@@ -102,9 +176,9 @@ function ProjectDesktop() {
                         Lo sentimos, tu navegador no soporta video HTML5.
                     </video>
                 ) : (
-                    <img src={heroMedia} alt={projectData.nombreproyecto || projectName} />
+                    <img src={heroMedia} alt={projectData.nombreproyecto || projectName} onClick={() => openPopup(images.proyecto2[imageKey])} />
                 )}
-                <img src={starImage} alt="Estrella" className="ProjDes-star absolute w-12 h-12" />
+                <img src={starImage} alt="Estrella" onClick={() => openPopup(images.proyecto2[imageKey])} className="ProjDes-star absolute w-12 h-12 parallax-img--clickable" />
                 <Navbar
                     isSliding={isSliding}
                     menuOpen={menuOpen}
@@ -122,13 +196,16 @@ function ProjectDesktop() {
 
                     {/* Fila 64/33 (imagen + texto) FUERA del grid principal */}
                     {images.proyecto2?.[imageKey] && (
-                        <section className="ProjDes-rowSplit" style={{ height: "33vw" }}>
+                        <section className="ProjDes-rowSplit " style={{ height: "33vw" }}>
+                          <div className="ProjDes-parallax-wrapper"  >
+
                             <img
                                 src={images.proyecto2[imageKey]}
                                 alt="Split img"
-                                className="ProjDes-rowSplit-img"
+                                className=" parallax-img parallax-img--clickable"
                                 onClick={() => openPopup(images.proyecto2[imageKey])}
-                            />
+                                />
+                                </div>
                             <div className="ProjDes-rowSplit-box">
                                 <h2 className="ProjDes-rowSplit-text">{projectData.frase1}</h2>
                                 <span className="ProjDes-rowSplit-dash" />
@@ -137,30 +214,40 @@ function ProjectDesktop() {
                     )}
                     {/* Fila 33/64 (cuadro verde + imagen) */}
                     {images.proyecto3?.[imageKey] && (
-                        <div className="ProjDes-rowSplitRev" style={{ height: "33vw" }}>
+                        <div className="ProjDes-rowSplitRev parallax-wrapper" style={{ height: "33vw" }}>
                             <div className="ProjDes-rowSplitRev-box">
                                 <span className="ProjDes-rowSplitRev-value">{projectData.contador1}</span>
-                                <span className="ProjDes-rowSplitRev-label">Year</span>
+                                <span className="ProjDes-rowSplitRev-label">{projectData.nombre1}</span>
                             </div>
+                          <div className="ProjDes-parallax-wrapper"  >
+
                             <img
+                                ref={project3Ref}
+
                                 src={images.proyecto3[imageKey]}
                                 alt="Imagen 3"
-                                className="ProjDes-rowSplitRev-img"
+                                className="ProjDes-rowSplitRev-img parallax-img parallax-img--clickable"
                                 onClick={() => openPopup(images.proyecto3[imageKey])}
                             />
+                            </div>
                         </div>
                     )}
 
                     {/* Triple row 33/34/33 (imagen · texto · stats) */}
                     {images.proyecto4?.[imageKey] && (
-                        <div className="ProjDes-rowTriple" style={{ height: "33vw" }}>
+                        <div className="ProjDes-rowTriple parallax-wrapper" style={{ height: "33vw" }}>
                             {/* 33vw imagen */}
+                          <div className="ProjDes-parallax-half-wrapper"  >
+
                             <img
-                                src={images.proyecto4[imageKey]}
+                                ref={project4Ref}
+
+                                src={images.miniatura2[imageKey]}
                                 alt="Imagen triple"
-                                className="ProjDes-rowTriple-img"
-                                onClick={() => openPopup(images.proyecto4[imageKey])}
+                                className="ProjDes-rowTriple-img parallax-img parallax-img--clickable"
+                                onClick={() => openPopup(images.miniatura2[imageKey])}
                             />
+                            </div>
 
                             {/* 34vw caja de texto */}
                             <div className="ProjDes-rowTriple-boxText">
@@ -173,7 +260,7 @@ function ProjectDesktop() {
                             {/* 33vw stats amarilla */}
                             <div className="ProjDes-rowTriple-boxStats">
                                 <span className="ProjDes-rowTriple-value">+{projectData.contador2}</span>
-                                <span className="ProjDes-rowTriple-unit">ft²</span>
+                                <span className="ProjDes-rowTriple-unit">{projectData.nombre2}</span>
                             </div>
                         </div>
                     )}
@@ -181,35 +268,38 @@ function ProjectDesktop() {
 
                     {/* Fila completa 100% ancho x 33vw alto */}
                     {images.proyecto4?.[imageKey] && (
-                        <div style={{ height: "33vw", width: "100vw", marginLeft: "calc(-50vw + 50%)" }}>
+                        <div className="parallax-wrapper" style={{ height: "33vw", width: "100vw", marginLeft: "calc(-50vw + 50%)" }}>
                             <img
+                                ref={project5Ref}
                                 src={images.proyecto4[imageKey]}
                                 alt="Imagen full"
                                 style={{ width: "100%", height: "100%", objectFit: "cover", cursor: "pointer" }}
-                                onClick={() => openPopup(images.proyecto5[imageKey])}
+                                onClick={() => openPopup(images.proyecto4[imageKey])}
+                                className="parallax-img parallax-img--clickable"
+
                             />
                         </div>
                     )}
 
                     {/* Doble columna izquierda (2×33) + imagen 64×66 */}
                     {images.proyecto2?.[imageKey] && (
-                        <div className="ProjDes-rowTall" style={{ height: "66vw", marginBottom: "60px" }}>
+                        <div className="ProjDes-rowTall parallax-wrapper" style={{ height: "66vw", marginBottom: "60px" }}>
                             {/* Columna izquierda con dos cajas */}
                             <div className="ProjDes-rowTall-col">
                                 <div className="ProjDes-rowTall-boxWhite">
 
                                     <div >
                                         <div>
-                                            <h4>Location</h4>
-                                            <p>{projectData.location}</p>
+                                            <h4 className="ProjDes-h4-location">{lang === 'ES' ? 'Ubicación' : 'Location'}</h4>
+                                            <p className="ProjDes-h4-value">{projectData.location}</p>
                                         </div>
                                         <div>
-                                            <h4>Year</h4>
-                                            <p>{projectData.contador1}</p>
+                                            <h4 className="ProjDes-h4-location">{projectData.nombre1}</h4>
+                                            <p className="ProjDes-h4-value">{projectData.contador1}</p>
                                         </div>
                                         <div>
-                                            <h4>Area</h4>
-                                            <p>
+                                            <h4 className="ProjDes-h4-location">Area</h4>
+                                            <p className="ProjDes-h4-value">
                                                 {projectData.contador2} {projectData.nombre2}
                                             </p>
                                         </div>
@@ -219,23 +309,31 @@ function ProjectDesktop() {
                                     <h2 className="ProjDes-rowTall-textWhite">{projectData.frase3}</h2>
                                 </div>
                             </div>
+                          <div className="ProjDes-parallax-box-wrapper"  >
 
                             {/* Imagen 64 × 66 vw */}
                             <img
-                                src={images.proyecto2[imageKey]}
+                                ref={project6Ref}
+                                src={images.miniatura3[imageKey]}
                                 alt="Imagen alta"
-                                className="ProjDes-rowTall-img"
-                                onClick={() => openPopup(images.proyecto2[imageKey])}
+                                className="ProjDes-rowTall-img parallax-img parallax-img--clickable"
+                                onClick={() => openPopup(images.miniatura3[imageKey])}
                             />
+                            </div>
                         </div>
                     )}
 
-
-
-                    <div className="ProjDes-text">
-                        <p>{projectData.parrafo1}</p>
-                        <p>{projectData.parrafo2}</p>
-                    </div>
+<div className="ProjDes-textCols">
+  <h2 className="ProjDes-textHeadline">{projectData.encabezado}</h2>
+  <div className="ProjDes-textColGrid">
+    <div className="ProjDes-colLeft">
+      <p>{projectData.parrafo1}</p>
+    </div>
+    <div className="ProjDes-colRight">
+      <p>{projectData.parrafo2}</p>
+    </div>
+  </div>
+</div>
 
 
                 </article>

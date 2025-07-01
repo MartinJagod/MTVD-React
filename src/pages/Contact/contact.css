@@ -3,7 +3,7 @@
     color: #333;
     margin: 0 auto;
     padding: 20px;
-    max-width: 1200px;
+    max-width: 98%;
 }
 
 .contact-header {
@@ -107,8 +107,9 @@ textarea {
         }
 
         .linea-separadora{
-            width: 100vw;
-            margin-left: -10%;
+            max-width: 200%;
+            width: 150%;
+            margin-left: -1%;
         }
   /* —— desktop (>900 px) —— */
   @media (min-width: 900px) {
@@ -120,10 +121,10 @@ textarea {
             }
     /* dos columnas lado a lado */
     .form-columns-contact {
-        margin-top: 20%;
+        margin-top: 6%;
       flex-direction: row;     /* dos columnas lado a lado */
       align-items: flex-start; /* alinear arriba */
-      gap: 10%;
+      gap: 5%;
       width: 100%;
     }
   
@@ -136,7 +137,7 @@ textarea {
     /* los campos ocupan todo el ancho disponible */
     .left-column-contact .form-group-contact input,
     .right-column-contact .form-group-contact textarea {
-      width: 100%;
+      width: 96%;
     }
   
     /* que el textarea crezca un poco más cómodo en desktop */

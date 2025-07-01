@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useRef, useContext } from 'react';
+
 import { useNavigate } from "react-router-dom";
 import './projectsHome.css';
 import Navbar from '../Parcial/Navbar';
@@ -6,6 +7,7 @@ import ContactFooter from '../Parcial/ContactFooter';
 import Carousel from './Carouseli';
 import projectsData from './projectsData';
 import ContactFooterDesktop from '../Parcial/ContactFooterDesktop'; // Ajusta la ruta según tu estructura de carpetas
+import { Link } from "react-router-dom";
 
 import { LanguageContext } from "../../context/LanguageContext";
 
@@ -200,14 +202,19 @@ const easeInOutCubic = t =>
     const goToProject = (category, projectName) => {
         navigate(`/project/${category}/${projectName}`);
     };
-
+/* dentro de ProjectsHome.jsx */
+const TITLE_MAP = {
+  Design:       { EN: 'Design',       ES: 'Diseño' },
+  Architecture: { EN: 'Architecture', ES: 'Arquitectura' },
+  Branding:     { EN: 'Branding',     ES: 'Branding' },
+};
 
     return (
-        <div className="projects-section">
-            {/* Encabezado con Navbar */}
-            <header className="projects-header">
+<div className="projects-section">
+        {/* Encabezado con Navbar */}
+            <header className="projects-header" >
                 <Navbar
-                    isSliding={isSliding}
+                    /* isSliding={isSliding} */
                     menuOpen={menuOpen}
                     setMenuOpen={setMenuOpen}
                     showInput={showInput}
@@ -215,9 +222,30 @@ const easeInOutCubic = t =>
                     page="ProjectsHome"
                     searchData={buildSearchIndexProjects()}
                     onSelect={handleSelectProject}
-                />
+                 style={{  backgroundColor:"#ffffff"} }>
+                 </Navbar>
             </header>
+    <div className="section-selector-projects mobile-hide">
+    {/* 2️⃣ Selector fijo SOLO desktop */}
+        
+      <nav className="menu-items-split-desktop-home">
+        <div className="menu-projects-home">
+          <Link to={`/projects?section=Design`}  className="menu-link-desktop-home">
+            {TITLE_MAP.Design[lang]}
+          
+            </Link>
+      
+                    <Link to={`/projects?section=Architecture`}  className="menu-link-desktop-home">
 
+            {TITLE_MAP.Architecture[lang]}
+           </Link>
+                    <Link to={`/projects?section=Branding`}  className="menu-link-desktop-home">
+
+            {TITLE_MAP.Branding[lang]}
+           </Link>
+        </div>
+      </nav>
+    </div>
             {/* Carruseles */}
             <main className="projects-content">
                 <div id="carousel-design" className="carousel-wrapper-projectsHome">

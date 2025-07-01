@@ -19,7 +19,7 @@ body {
   z-index: 1005;
   padding: 5px;
   background: linear-gradient(to bottom, rgb(78, 76, 76), rgba(226, 220, 220, 0)); /* Degradado de negro a transparente */
-  transition: background 0.3s ease;
+  transition: background 0.15s ease;
 }
 /* Degradado para el home */
 .navbar-home {
@@ -349,7 +349,7 @@ body {
   width: 30px; /* Ancho de la línea */
   height: 5px; /* Altura de la línea */
   background-color: #44B87E; /* Color de la línea */
-  animation: moveLine1-project 1s linear forwards; /* Animación de la línea */
+  animation: moveLine1-project 0.5s linear forwards; /* Animación de la línea */
   
 }
 
@@ -358,7 +358,7 @@ body {
     transform: translateX(-43vw); /* Comienza desde la derecha de la pantalla */
   }
   100% {
-    transform: translateX(18.5vw); /* Se mueve hasta el extremo derecho de la pantalla */
+    transform: translateX(0.1vw); /* Se mueve hasta el extremo derecho de la pantalla */
   }
 }
 
@@ -369,7 +369,7 @@ body {
   width: 30px; /* Ancho de la línea */
   height: 5px; /* Altura de la línea */
   background-color: #44B87E; /* Color de la línea */
-  animation: moveLine2 1s linear forwards; /* Animación de la línea */
+  animation: moveLine2 0.5s linear forwards; /* Animación de la línea */
   
 }
 
@@ -389,7 +389,7 @@ body {
   width: 30px; /* Ancho de la línea */
   height: 5px; /* Altura de la línea */
   background-color: #44B87E; /* Color de la línea */
-  animation: moveLine3 2s linear forwards; /* Animación de la línea */
+  animation: moveLine3 0.5s linear forwards; /* Animación de la línea */
   
 }
 
@@ -1322,7 +1322,7 @@ body {
 }
 .header-navbar {
 
-  transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
+  transition: transform 0.15s ease-in-out, opacity 0.15s ease-in-out;
 }
 
 .navbar-slide-up {
@@ -1785,6 +1785,7 @@ body.no-scroll {
     color: #ffffff;
     margin-right: 30px;
     margin-top: -30px;
+    background-color: rgba(0, 0, 0, 0.001); /* Fondo semitransparente */
 }
 .button-container {
     display: flex

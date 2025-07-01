@@ -87,15 +87,15 @@ const normalize = (str) =>
        navigate("/projectsHome"); // Cambia a la ruta /projects
    };
 */
-  /* ─── ③ mapa nombre→subCategoría, se crea 1 vez ─── */
-  /* ─── lookup con id incluido ─── */
-  const nameLookup = useMemo(() => {
-    const map = {};
-    subcategoriaProyectosData.forEach(p => {
-      map[normalize(p.nombre)] = { id: p.id, subCategoria: p.subCategoria };
-    });
-    return map;                                   // chemono → {id:30, subCategoria:'Restaurant'}
-  }, []);
+// 🔸 multi-map nombre → lista de posibles metas
+const nameLookup = useMemo(() => {
+  const map = {};
+  subcategoriaProyectosData.forEach(p => {
+    const key = normalize(p.nombre);
+    (map[key] ||= []).push({ id: p.id, subCategoria: p.subCategoria });
+  });
+  return map;                 // ej. chemono → [{id:123,sub:'Retail'}, {id:8123,sub:'Design'}]
+}, []);
 
   const sectionRanges = {
     Design: [1, 5000],
@@ -112,23 +112,23 @@ const normalize = (str) =>
 
         const [minId, maxId] = sectionRanges[section];    // rango vigente
 
-        const enriched = hits.flatMap(url => {
-          const raw = decodeURIComponent(url.split('/').pop())
-            .replace(/\.[^/.]+$/, '')
-            .replace(/\d+$/, '');             // CheMono
-          const key = normalize(raw);                    // chemono
-          const meta = nameLookup[key];
+       const enriched = hits.flatMap(url => {
+  const raw   = decodeURIComponent(url.split('/').pop())
+                 .replace(/\.[^/.]+$/, '')
+                 .replace(/\d+$/, '');
+  const key   = normalize(raw);
+  const metas = nameLookup[key] || [];          // ← ahora es array
+  const meta  = metas.find(m => m.id >= minId && m.id <= maxId);
 
-          // Si no está en el JSON o fuera del rango, lo descartamos
-          if (!meta || meta.id < minId || meta.id > maxId) return [];
+  if (!meta) return [];                         // no hay coincidencia válida
 
-          return {
-            url,
-            name: raw,                                   // label: CheMono
-            id: meta.id,
-            subCategoria: meta.subCategoria,
-          };
-        });
+  return {
+    url,
+    name: raw,
+    id: meta.id,
+    subCategoria: meta.subCategoria,
+  };
+});
 
         setImages(enriched.sort(() => Math.random() - 0.5));
       })
@@ -248,9 +248,9 @@ const normalize = (str) =>
       <div className="projects-fixed-top">
 
         {/* Header */}
-        <header className="projects-header">
+        <header className="projects-header" style={{ position: 'fixed', top: 0, width: '100%' }}>
           <Navbar
-            isSliding={isSliding}
+            /* isSliding={isSliding} */
             menuOpen={menuOpen}
             setMenuOpen={setMenuOpen}
             showInput={showInput}

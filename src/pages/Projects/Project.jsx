@@ -26,6 +26,14 @@ function Project() {
     const dataset = lang === 'ES' ? projectsDataES : projectsData;
 
     const imagesPrincipal = importImagesProject();
+// helper (fuera del JSX)
+const getCountry = loc =>
+  loc
+    ?.split(',')            // ["Banfield", " Buenos Aires", " Argentina"]
+    .pop()                  // " Argentina"
+    .trim()                 // "Argentina"
+    .split(/\s+/)           // ["Argentina"]
+    .pop();                 // "Argentina"
 
     /* const projectNames = {
         1:"CheMono.jpg",
@@ -315,14 +323,14 @@ const images = importImagesProject(category, projectName, isDesktop);
 
 
     const startCountingProjects = useCallback(() => {
-        animateCounter(setProjectCount, Number(projectData.contador1), 2000);
+        animateCounter(setProjectCount, Number(projectData.contador1), 700);
         setHasStartedCountingProjects(true);
     }, [animateCounter]);
 
     const startCountingSection = useCallback(() => {
-        animateCounter(setYearsCount, 4800, 2000);
-        animateCounter(setCountriesCount, 15, 4000);
-        animateCounter(setCitiesCount, 25, 4000);
+        animateCounter(setYearsCount, 4800, 1200);
+        animateCounter(setCountriesCount, 15, 1500);
+        animateCounter(setCitiesCount, 25, 1500);
         setHasStartedCountingSection(true);
     }, [animateCounter]);
 
@@ -467,8 +475,9 @@ const images = importImagesProject(category, projectName, isDesktop);
             (entries) => {
                 entries.forEach((entry) => {
                     if (entry.isIntersecting) {
-                        if (entry.target.classList.contains("moving-line")) {
-                            restartAnimation(entry.target, "moveLine");
+                        if (entry.target.classList.contains("moving-line1-project")) {
+                            restartAnimation(entry.target, "moveLine1-project");
+
                         } else if (entry.target.classList.contains("moving-line2")) {
                             restartAnimation(entry.target, "moveLine2");
                         }
@@ -651,7 +660,7 @@ const images = importImagesProject(category, projectName, isDesktop);
 
                     <div className="quadrant-project white-box-project">
                         <span className="project-box-project">{projectData.frase1}</span>
-                        <div className="moving-line1-project" ref={line1Ref} data-animation="moveLine1-project"></div>
+                        <div className="moving-line1-project" ref={line1Ref} ></div>
                     </div>
                     <div className="quadrant-project white-box-project"  >
                         <span className="project-box-project" >{projectData.frase2}</span>
@@ -729,7 +738,7 @@ const images = importImagesProject(category, projectName, isDesktop);
                         </div>
                     </div> */}
                     <div className="quadrant-project blue-box-project" ref={sectionCountersRef} style={{ width: '50vw' }}>
-                        <span className="project-box-frase"> {projectData.frase1}</span>
+                        <span className="project-box-frase">{getCountry(projectData.location)}</span>
                     </div>
                     <div className='container-image-small-projet' >
                         <img
@@ -747,14 +756,15 @@ const images = importImagesProject(category, projectName, isDesktop);
                             onClick={() => openPopup(images.miniatura2[imageName])}
                         />
                     </div>
-                    <div className="quadrant" >
-                        <span className="project-box-frase">{projectData.frase3}</span>
+                    <div className="quadrant"  >
+                                                <span className="project-box-frase"> {projectData.frase3}</span>
+
                         <div className="moving-line5" ref={line5Ref} data-animation="moveLine5"> </div>
 
                     </div>
                 </div>
                 {/* Texto después de las imágenes */}
-                <div className="project-text">
+                <div className="project-text" >
                     <p className="project-title">{projectData.encabezado}</p>
 
                     <br />

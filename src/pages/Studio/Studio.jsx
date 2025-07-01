@@ -238,6 +238,7 @@ const images = [
                         <li>Sofía Agnolon</li>
                         <li>Cristina Alemandi</li>
                         <li>Mariana Fedriani</li>
+                        <li>Sofía Jagodnik</li>
                         <li>Soledad Pereyra</li>
                         <li>Mateo Sanchez</li>
 

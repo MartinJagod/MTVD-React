@@ -13,7 +13,8 @@ const Navbar = ({ isSliding, menuOpen, setMenuOpen, showInput, setShowInput, pag
     const [filteredOptions, setFilteredOptions] = useState([]);
     const location = useLocation();
     const isHome = location.pathname === '/';
-
+const [hideOnScroll, setHideOnScroll] = useState(false);
+const lastScrollY = useRef(0);
     // Referencias para el menú y el buscador
     const menuRef = useRef(null);
     const searchRef = useRef(null);
@@ -46,14 +47,33 @@ const Navbar = ({ isSliding, menuOpen, setMenuOpen, showInput, setShowInput, pag
 
         setFilteredOptions(searchData.filter(hayQueCoincidir));
     };
+useEffect(() => {
+  const THRESHOLD_HIDE = 0;   // ← 0 px: basta con un solo tick
+  const THRESHOLD_SHOW = 3;   // ← sube 3 px y ya aparece
 
-    useEffect(() => {
-        const handleScroll = () => {
-            setIsBlurred(window.scrollY > 50);
-        };
-        window.addEventListener('scroll', handleScroll);
-        return () => window.removeEventListener('scroll', handleScroll);
-    }, []);
+  const handleScroll = () => {
+    const y = window.scrollY;
+    const prevY = lastScrollY.current;
+
+    // Blur si pasas 10 px (opcional)
+    setIsBlurred(y > 10);
+
+    /* ↙️ Bajas → ocultar */
+    if (y > prevY && y > THRESHOLD_HIDE) {
+      setHideOnScroll(true);
+    }
+    /* ↗️ Subes → mostrar */
+    else if (y < prevY - THRESHOLD_SHOW) {
+      setHideOnScroll(false);
+    }
+
+    lastScrollY.current = y;
+  };
+
+  window.addEventListener('scroll', handleScroll, { passive: true });
+  return () => window.removeEventListener('scroll', handleScroll);
+}, []);
+
 
     useEffect(() => {
         const handleClickOutside = (event) => {
@@ -104,7 +124,12 @@ const Navbar = ({ isSliding, menuOpen, setMenuOpen, showInput, setShowInput, pag
     const iconColor = isHome ? 'white' : 'black';
 
     return (
-        <div className={`header-navbar ${isBlurred ? '' : 'no-blur'} ${isSliding ? 'navbar-slide-up' : ''} ${isHome ? 'navbar-home' : 'navbar-other'}`}>
+        <div className={`header-navbar 
+        ${isBlurred ? '' : 'no-blur'} 
+         ${hideOnScroll ? 'navbar-slide-up' : ''}
+        ${isSliding ? 'navbar-slide-up' : ''} 
+        ${isHome ? 'navbar-home' : 'navbar-other'}`}
+        >
             <div className="header-content">
                 <Link to="/">
                     <img src={logo} alt="Logo Horizontal" className="logo-img" />

@@ -30,7 +30,7 @@ body {
   padding: 5px;
   backdrop-filter: blur(10px); /* Difumina el fondo detrás */
   -webkit-backdrop-filter: blur(10px); /* Compatibilidad con Safari */
-  transition: backdrop-filter 0.3s ease, -webkit-backdrop-filter 0.3s ease;
+  transition: backdrop-filter 0.15s ease, -webkit-backdrop-filter 0.15s ease;
 }
 
 /* Clase que elimina el blur */

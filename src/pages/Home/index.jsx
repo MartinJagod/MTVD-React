@@ -25,6 +25,8 @@ import Navbar from '../Parcial/Navbar'; // Ajusta la ruta según tu estructura d
 import CarouselLogos from "../Parcial/CarouselLogos";
 import ContactFooterDesktop from '../Parcial/ContactFooterDesktop'; // Ajusta la ruta según tu estructura de carpetas
 import projectsData from '../Projects/projectsData';
+import projectsDataES from '../Projects/projectsDataES';
+
 
 /* rango → categoría */
 const getCategoryById = id =>
@@ -89,9 +91,9 @@ function Home() {
     const navigate = useNavigate();
 
 
-    /* ── índice global de búsqueda, solo se calcula 1 vez ── */
-    const searchIndex = useMemo(() =>
-        Object.entries(projectsData).map(([idStr, p]) => {
+    /* helpers */
+    const buildIndex = (data) =>
+        Object.entries(data).map(([idStr, p]) => {
             const id = Number(idStr);
             const category = getCategoryById(id);
 
@@ -111,8 +113,16 @@ function Home() {
                 .toLowerCase();
 
             return { label: p.nombreproyecto, projectName: p.nombreproyecto, category, fullText };
-        })
-        , []);
+        });
+
+    /* ── índices globales, se calculan 1 vez ── */
+    const searchIndexes = useMemo(() => ({
+        EN: buildIndex(projectsData),
+        ES: buildIndex(projectsDataES),
+    }), []);
+
+    /* índice que realmente vas a usar */
+    const searchIndex = searchIndexes[lang === 'ES' ? 'ES' : 'EN'];
 
     const handleSelectProject = (item) => {
         const slug = encodeURIComponent(item.projectName.replace(/\s+/g, ''));
@@ -125,7 +135,7 @@ function Home() {
     const enterFullScreen = async () => {
         const v = videoRef.current;
         if (!v) return;
-
+toggleMute();
         // 1. fullscreen (estándar o prefijos)
         if (v.requestFullscreen) {
             await v.requestFullscreen();
@@ -146,6 +156,7 @@ function Home() {
             });
         }
     };
+
     useEffect(() => {
         const onFullscreenChange = () => {
             if (!document.fullscreenElement) {
@@ -257,7 +268,7 @@ function Home() {
     const arquitectura4DesktopImageRef = useRef(null);
     const teamImageRef = useRef(null);
     const studioImageRef = useRef(null);
-const studioImageDesktopRef = useRef(null);
+    const studioImageDesktopRef = useRef(null);
 
     //inicio parallax
 
@@ -384,7 +395,7 @@ const studioImageDesktopRef = useRef(null);
     }, []);
 
     const startCountingProjects = useCallback(() => {
-        animateCounter(setProjectCount, 350, 2000);
+        animateCounter(setProjectCount, 500, 2000);
         setHasStartedCountingProjects(true);
     }, [animateCounter]);
 
@@ -397,7 +408,7 @@ const studioImageDesktopRef = useRef(null);
 
 
     const startCountingProjectsDesktop = useCallback(() => {
-        animateCounter(setProjectCountDesktop, 350, 2000);
+        animateCounter(setProjectCountDesktop, 500, 2000);
         setHasStartedCountingProjectsDesktop(true);
     }, [animateCounter]);
 
@@ -789,32 +800,39 @@ const studioImageDesktopRef = useRef(null);
     };
     // Fin reinicio video
 
-    // 4️⃣ Reanudar playback al salir de fullscreen
+    /* Hook que fuerza la reanudación al salir de fullscreen */
+
     useEffect(() => {
         const v = videoRef.current;
         if (!v) return;
 
-        const resumePlayback = () => {
-            if (v.paused) {
-                v.play().catch(() => { });
-            }
-            window.screen?.orientation?.unlock?.();
+        /*— Reanuda con un tick de margen —*/
+        const resume = () => {
+            requestAnimationFrame(() => {
+                // En algunos Android el vídeo reporta paused=false pero no suena; fuerza play()
+                const p = v.play();
+                if (p && typeof p.catch === 'function') p.catch(() => { }); // silencia bloqueoAutoplay
+                window.screen?.orientation?.unlock?.();                    // vuelve a desbloquear
+            });
         };
 
-        const handleFullscreenChange = () => {
-            if (!document.fullscreenElement) {
-                resumePlayback();
-            }
-        };
+        /*— Lista completa de eventos de cambio de fullscreen —*/
+        const EVENTS = [
+            ['fullscreenchange', resume],          // estándar
+            ['webkitfullscreenchange', resume],    // Safari (Mac)
+            ['mozfullscreenchange', resume],       // Firefox
+            ['MSFullscreenChange', resume],        // Edge “antiguo”
+        ];
 
-        document.addEventListener('fullscreenchange', handleFullscreenChange);
-        v.addEventListener('webkitendfullscreen', resumePlayback);
+        EVENTS.forEach(([ev, fn]) => document.addEventListener(ev, fn));
+        v.addEventListener('webkitendfullscreen', resume);            // iOS
 
         return () => {
-            document.removeEventListener('fullscreenchange', handleFullscreenChange);
-            v.removeEventListener('webkitendfullscreen', resumePlayback);
+            EVENTS.forEach(([ev, fn]) => document.removeEventListener(ev, fn));
+            v.removeEventListener('webkitendfullscreen', resume);
         };
-    }, []);
+    }, [videoRef]);
+
 
     // Inicio lineas en movimeinto
     useEffect(() => {
@@ -928,13 +946,14 @@ const studioImageDesktopRef = useRef(null);
                 <header className="home-header-home">
                     <video
                         ref={videoRef}
-                        className="background-video-home"
+                        className="background-video-home Hero-video"
                         src={homeVideo}
                         autoPlay
                         muted
+                        loop
                         playsInline
                         onEnded={handleVideoEnd}
-
+                        onDoubleClick={ enterFullScreen}
                     />
 
                     <button className="mute-button" onClick={toggleMute}>
@@ -987,8 +1006,8 @@ const studioImageDesktopRef = useRef(null);
             <section className="image-and-quadrants desktop-hide">
                 <div className="quadrant-container">
                     <div className="quadrant white-box">
-                        <span className="project-box"> {lang === 'ES' ? 'Inspirando a' : 'Inspiring'}</span>
-                        <span className="project-box"> {lang === 'ES' ? 'la gente' : 'people'}</span>
+                        <span className="project-box"> {lang === 'ES' ? 'Inspirando ' : 'Inspiring'}</span>
+                        <span className="project-box"> {lang === 'ES' ? 'persona' : 'people'}</span>
                         <div className="moving-line" ref={line1Ref}></div>
                     </div>
                     <div
@@ -1014,8 +1033,8 @@ const studioImageDesktopRef = useRef(null);
                     </div>
                     <div className="quadrant white-box" onClick={goToProjects}>
                         <span className="project-box">{lang === 'ES' ? 'a crear' : 'To create'}</span>
-                        <span className="project-box">{lang === 'ES' ? 'espacios' : 'exciting'}</span>
-                        <span className="project-box">{lang === 'ES' ? 'emocionantes' : 'places'}</span>
+                        <span className="project-box">{lang === 'ES' ? 'Historias' : 'exciting'}</span>
+                        <span className="project-box">{lang === 'ES' ? '' : 'places'}</span>
                     </div>
                 </div>
 
@@ -1105,19 +1124,19 @@ const studioImageDesktopRef = useRef(null);
                     <div onClick={goToStudio}
                         className={` quadrant custom-white-box ${slideStudioBox ? 'custom-slide-team' : ''}`}
                     >
-                        {slideStudioBox && <span className="text-Awards">{lang === 'ES' ? <> Nuestro<br /> estudio</> : 'Our Studio'}</span>}
+                        {slideStudioBox && <span className="text-Awards">{lang === 'ES' ? <> Nuestro<br /> equipo</> : 'Our Studio'}</span>}
                     </div>
                 </div>
 
                 <div className="horizontal-double-team" >
 
-                    <img 
-                    src={teamImage} 
-                    alt="Team" 
-                    className="horizontal-image-team" 
-                    onClick={goToStudio} 
-                     ref={studioImageDesktopRef}
-                                style={{ height: "125%", alignContent: "center", justifyContent: "center"}}
+                    <img
+                        src={teamImage}
+                        alt="Team"
+                        className="horizontal-image-team"
+                        onClick={goToStudio}
+                        ref={studioImageDesktopRef}
+                        style={{ height: "125%", alignContent: "center", justifyContent: "center" }}
 
                     />
 
@@ -1153,7 +1172,7 @@ const studioImageDesktopRef = useRef(null);
                     <div className=" quadrant white-box-desktop box-two" style={{ position: 'relative', left: '76%', alignItems: "baseline" }}>
 
                         <span className="project-box-desktop" style={lang === 'ES' ? { paddingLeft: '15%' } : undefined}> {lang === 'ES' ? 'Inspirando' : 'Inspiring'}</span><br />
-                        <span className="project-box-desktop" style={lang === 'ES' ? { paddingLeft: '15%' } : undefined}> {lang === 'ES' ? 'a la gente' : 'people'}</span>
+                        <span className="project-box-desktop" style={lang === 'ES' ? { paddingLeft: '15%' } : undefined}> {lang === 'ES' ? 'persona' : 'people'}</span>
                         <div className="desktopmoving-line" ref={desktopline1Ref}></div>
                     </div>
                 </div>
@@ -1163,8 +1182,8 @@ const studioImageDesktopRef = useRef(null);
             <div className="row-2-desktop mobile-hide">
                 <div className="quadrant-row-2 white-box-desktop mobile-hide" onClick={goToProjects} style={{ alignItems: "baseline" }}>
                     <span className="project-box-desktop" style={lang === 'ES' ? { paddingLeft: '15%' } : undefined}>{lang === 'ES' ? 'a crear' : 'To create'}</span>
-                    <span className="project-box-desktop" style={lang === 'ES' ? { paddingLeft: '15%' } : undefined}>{lang === 'ES' ? 'espacios' : 'exciting'}</span>
-                    <span className="project-box-desktop" style={lang === 'ES' ? { paddingLeft: '15%' } : undefined} >{lang === 'ES' ? 'emocionantes' : 'places'}</span>
+                    <span className="project-box-desktop" style={lang === 'ES' ? { paddingLeft: '15%' } : undefined}>{lang === 'ES' ? 'Historias' : 'exciting'}</span>
+                    <span className="project-box-desktop" style={lang === 'ES' ? { paddingLeft: '15%' } : undefined} >{lang === 'ES' ? '' : 'places'}</span>
                     <div className="desktopmoving-line2" ref={desktopline2Ref}></div>
 
                 </div>
@@ -1183,7 +1202,7 @@ const studioImageDesktopRef = useRef(null);
                     </div>
                 </div>
 
-                <div className="quadrant-row-2 white-box-desktop mobile-hide" 
+                <div className="quadrant-row-2 white-box-desktop mobile-hide"
                 >
                     <img
                         src={arquitectura3}
@@ -1336,7 +1355,7 @@ const studioImageDesktopRef = useRef(null);
                         <div onClick={goToStudio}
                             className="quadrant-row-2 custom-white-box-desktop"
                         >
-                            {slideStudioBoxDesktop && <span className="text-Awards-desktop">{lang === 'ES' ? <>Nuestro<br />estudio</> : 'Our studio'}</span>}
+                            {slideStudioBoxDesktop && <span className="text-Awards-desktop">{lang === 'ES' ? <>Nuestro<br />equipo</> : 'Our studio'}</span>}
                         </div>
                     </div>
 
@@ -1369,7 +1388,7 @@ const studioImageDesktopRef = useRef(null);
                         alt="Team"
                         className=" horizontal-image-team"
                         onClick={goToStudio}
-                                style={{ width: "150%", alignContent: "center", justifyContent: "center", marginBottom:"8%" }}
+                        style={{ width: "150%", alignContent: "center", justifyContent: "center", marginBottom: "8%" }}
 
                         ref={studioImageRef}
 

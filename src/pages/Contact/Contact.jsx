@@ -147,10 +147,7 @@ const Contact = () => {
 </form>
 
             </main>
-<br />
-<br />
-<br />
-<br />
+
             {/* Footer */}
             <footer className="contact-footer">
                 <div className="mobile-hide-contact">

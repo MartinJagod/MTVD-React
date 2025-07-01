@@ -74,14 +74,20 @@ const Carousel = ({ title, images, goToProject, category }) => {
     velocity.current *= 0.95;
     animationRef.current = requestAnimationFrame(applyInertia);
   };
+  let sectionTitle = "";
+  if (isDesktop) {sectionTitle  =  ""}
+    else         { sectionTitle  =  catKey;
+
+  };
 
   /* ---------- render ---------- */
   return (
     <div className="carousel-wrapper-projectsHome">
       {/* slug en inglés para el filtro */}
       <Link to={`/projects?section=${catKey}`} className="section-link-projectsHome">
-        <div className="section-input">{displayTitle}</div>
+        <div className="section-input">{sectionTitle}</div>
       </Link>
+      
 
       <div
         ref={carouselRef}
