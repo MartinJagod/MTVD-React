@@ -1,5 +1,7 @@
-import React, { useEffect, useState, useRef, useCallback, useContext } from 'react';
+import React, { useEffect, useState, useRef, useCallback, useContext, useMemo } from 'react';
 import { useNavigate } from "react-router-dom";
+import projectsData from '../Projects/projectsData';
+import projectsDataES from '../Projects/projectsDataES';
 import { LanguageContext } from '../../context/LanguageContext';
 import Navbar from '../Parcial/Navbar';
 import ContactFooter from '../Parcial/ContactFooter';
@@ -13,6 +15,13 @@ import pms from '../../assets/images/pms.jpg';
 import CarouselLogos from "../Parcial/CarouselLogos";
 import ContactFooterDesktop from '../Parcial/ContactFooterDesktop'; // Ajusta la ruta según tu estructura de carpetas
 
+/* rango → categoría */
+const getCategoryById = id =>
+    id <= 5000 ? 'design'
+        : id <= 8000 ? 'architecture'
+            : 'branding';
+
+
 const Studio = () => {
 
     // Inicio animación de menú 
@@ -23,6 +32,13 @@ const Studio = () => {
     const navigate = useNavigate();
     const [isSliding, setIsSliding] = useState(false); // Controla el deslizamiento del Navbar
     const options = [];
+
+
+
+
+
+    // 🔹 Dataset por idioma
+    const dataset = lang === 'ES' ? projectsDataES : projectsData;
 
     useEffect(() => {
         if (menuOpen) {
@@ -61,37 +77,77 @@ const Studio = () => {
         setSearchTerm(e.target.value);
     };
 
+    /* helpers */
+    const buildIndex = (data) =>
+        Object.entries(data).map(([idStr, p]) => {
+            const id = Number(idStr);
+            const category = getCategoryById(id);
+
+            const fullText = [
+                p.nombreproyecto,
+                p.frase1, p.frase2, p.frase3,
+                p.location,
+                p.encabezado,
+                p.parrafo1, p.parrafo2,
+                p.nombre1, p.nombre2,
+                p.contador1?.toString(),
+                p.contador2?.toString()
+            ]
+                .filter(Boolean)
+                .join(' | ')
+                .normalize('NFD').replace(/\p{Diacritic}/gu, '')
+                .toLowerCase();
+
+            return { label: p.nombreproyecto, projectName: p.nombreproyecto, category, fullText };
+        });
+
+    const handleSelectProject = (item) => {
+        const slug = encodeURIComponent(item.projectName.replace(/\s+/g, ''));
+        navigate(`/project/${item.category}/${slug}`);
+        setShowInput(false);
+    };
+
     const filteredOptions = options.filter(option =>
         option.toLowerCase().includes(searchTerm.toLowerCase())
     );
-    // Fin animación de búsqueda
-  const I18N_ALT = {
-  ES: {
-    equipo:        'Equipo',
-    socios:        'Socios',
-    pms:           'PMs',
-    interiorismo:  'Interiorismo',
-    arquitectura:  'Arquitectura',
-    support:       'Soporte',
-  },
-  EN: {
-    equipo:        'Team',
-    socios:        'Founders',
-    pms:           'PMs',
-    interiorismo:  'Design',
-    arquitectura:  'Architecture',
-    support:       'Support',
-  },
-};
 
-const images = [
-  { id: 'equipo',        src: equipo,        alt: I18N_ALT[lang].equipo },
-  { id: 'socios',        src: socios,        alt: I18N_ALT[lang].socios },
-  { id: 'pms',           src: pms,           alt: I18N_ALT[lang].pms },
-  { id: 'interiorismo',  src: interiorismo,  alt: I18N_ALT[lang].interiorismo },
-  { id: 'arquitectura',  src: arquitectura,  alt: I18N_ALT[lang].arquitectura },
-  { id: 'support',       src: support,       alt: I18N_ALT[lang].support },
-];
+
+    /* ── índices globales, se calculan 1 vez ── */
+    const searchIndexes = useMemo(() => ({
+        EN: buildIndex(projectsData),
+        ES: buildIndex(projectsDataES),
+    }), []);
+
+    /* índice que realmente vas a usar */
+    const searchIndex = searchIndexes[lang === 'ES' ? 'ES' : 'EN'];
+    // Fin animación de búsqueda
+    const I18N_ALT = {
+        ES: {
+            equipo: 'Equipo',
+            socios: 'Socios',
+            pms: 'PMs',
+            interiorismo: 'Interiorismo',
+            arquitectura: 'Arquitectura',
+            support: 'Soporte',
+        },
+        EN: {
+            equipo: 'Team',
+            socios: 'Founders',
+            pms: 'PMs',
+            interiorismo: 'Design',
+            arquitectura: 'Architecture',
+            support: 'Support',
+        },
+    };
+
+    const images = [
+        { id: 'equipo', src: equipo, alt: I18N_ALT[lang].equipo },
+        { id: 'socios', src: socios, alt: I18N_ALT[lang].socios },
+        { id: 'pms', src: pms, alt: I18N_ALT[lang].pms },
+        { id: 'interiorismo', src: interiorismo, alt: I18N_ALT[lang].interiorismo },
+        { id: 'arquitectura', src: arquitectura, alt: I18N_ALT[lang].arquitectura },
+        { id: 'support', src: support, alt: I18N_ALT[lang].support },
+    ];
 
 
     const [selectedImage, setSelectedImage] = useState('equipo');
@@ -123,6 +179,8 @@ const images = [
                     menuOpen={menuOpen}
                     setMenuOpen={setMenuOpen}
                     showInput={showInput}
+                    searchData={searchIndex}
+                    onSelect={handleSelectProject}
                     setShowInput={setShowInput} />
             </header>
 
@@ -142,35 +200,37 @@ const images = [
             </div>
             {/* Texto después de las imágenes */}
             <div className="studio-text">
-                <span className="studio-title desktop-hide" > {lang === 'ES' ? <> Somos un Estudio<br /> de Diseño </> : <> We are a<br /> design studio </>}</span>
-                <span className="studio-title mobile-hide">{lang === 'ES' ? 'Somos un Estudio de Diseño' : 'We are a design studio'}</span>
+                <span className="studio-title desktop-hide" >{lang === 'ES' ? 'Somos una plataforma de diseño y arquitectura inspiradora en el mundo.' : 'We are a design studio'}</span>
+                <span className="studio-title mobile-hide">{lang === 'ES' ? 'Somos una plataforma de diseño y arquitectura inspiradora en el mundo.' : 'We are a design studio'}</span>
+                <br />
+
                 <p className="studio-paragraph">
-                    {lang === 'ES' ? 
-                    "Somos un equipo apasionado dedicado al diseño de interiores con un enfoque comercial distintivo. Brindamos soluciones personalizadas con personalidades fuertes que se adaptan a las necesidades y preferencias únicas de cada proyecto. Con más de 10 años de experiencia, hemos diseñado más de 350 proyectos en más de 25 ciudades alrededor del mundo. Nuestra búsqueda de crear espacios auténticos y originales nos ha valido un reconocimiento notable y premios en arquitectura, diseño de interiores y branding. Estamos aquí para inspirar a las personas a crear lugares emocionantes." 
-                    : "We are a passionate team dedicated to interior design with a distinct commercial focus. We provide personalized solutions with strong personalities that cater to the unique needs and preferences of each project. With over 10 years of experience, we've designed 350+ projects in 25+ cities around the world. Our pursuit of creating authentic and original spaces has earned us notable recognition and awards in architecture, interior design, and branding. We are here to inspire people to create exciting places."}
-                    
+                    {lang === 'ES' ?
+                        "Somos un equipo inquieto y curioso que diseñamos espacios únicos y memorables. Entendemos el diseño como un servicio comprendiendo las necesidades de nuestros clientes y usuarios, para crear proyectos disruptivos y cargados de significado e identidad, trascendiendo lo funcional."
+                        : "We are a passionate team dedicated to interior design with a distinct commercial focus. We provide personalized solutions with strong personalities that cater to the unique needs and preferences of each project. With over 10 years of experience, we've designed 350+ projects in 25+ cities around the world. Our pursuit of creating authentic and original spaces has earned us notable recognition and awards in architecture, interior design, and branding. We are here to inspire people to create exciting places."}
+
                 </p>
-                <div class="column"  >
-                    <blockquote class="styled-quote" style={lang === 'ES' ? { textAlign: "center", width: "77%" } : undefined}>
-                        {lang === 'ES' ? <>Inspirando <br/> personas <br/>a crear<br/> espacios<br/> emocionantes.</> : "Inspiring people to create exciting places"}
-                        
+                <div className="column"  >
+                    <blockquote className={`styled-quote ${lang !== 'ES' ? 'styled-quote--alt' : ''}`}>
+                        {lang === 'ES' ? "Diseñamos espacios que cuentan historias y potencian marcas." : <>Inspiring people <br/> to create exciting places</>}
+
                     </blockquote>
                 </div>
                 <p className="studio-paragraph">
                     {lang === 'ES' ?
-                "Creemos en forjar conexiones emocionales tanto con nuestros clientes como entre los espacios que diseñamos y sus futuros usuarios. Alineamos nuestro enfoque con los objetivos comerciales de cada marca, fomentando la colaboración estratégica, las alianzas y el crowdsourcing para brindar soluciones integrales basadas en la sabiduría colectiva."
-                :"We believe in forging emotional connections with both our clients and among the spaces we design and their future users. We align our approach with the business objectives of each brand, fostering strategic collaboration, partnerships, and crowdsourcing to deliver comprehensive solutions based on collective wisdom."
+                        "Nuestro enfoque cercano y amigable se basa en el compromiso y experiencia, nos permiten materializar sueños y propósitos, potenciar al cliente y transformar ideas en historias que inspiran y conectan."
+                        : "We believe in forging emotional connections with both our clients and among the spaces we design and their future users. We align our approach with the business objectives of each brand, fostering strategic collaboration, partnerships, and crowdsourcing to deliver comprehensive solutions based on collective wisdom."
                     }
                 </p>
             </div>
 
             {/* Datos del equipo */}
             <div className="studio-team">
-                <h2>{lang === 'ES' ? "Equipo":"Team"}</h2>
+                <h2>{lang === 'ES' ? "Equipo" : "Team"}</h2>
 
                 {/* Founders Section */}
                 <div className="team-section">
-                    <h4>{lang === 'ES' ?"Fundadores":"Founders"}</h4>
+                    <h4>{lang === 'ES' ? "Fundadores" : "Founders"}</h4>
                     <ul>
                         <li>Marco Ferrari / Arch. Co-founder</li>
                         <li>Gabriela Jagodnik / Arch. Co-founder</li>
@@ -194,7 +254,7 @@ const images = [
                 <div className="team-columns">
                     {/* Design Team */}
                     <div className="team-column">
-                        <h4>{lang === 'ES' ?<>Equipo de<br/>Diseño</>: <> Design <br /> Team</>}</h4>
+                        <h4>{lang === 'ES' ? <>Equipo de<br />Diseño</> : <> Design <br /> Team</>}</h4>
                         <ul>
                             <li>Arch. Francisco Brandan</li>
                             <li>Arch. Valentina Cabrera</li>
@@ -212,7 +272,7 @@ const images = [
 
                     {/* Architecture Team */}
                     <div className="team-column">
-                        <h4>{lang === 'ES' ?<>Equipo de<br/>Arquitectura</>:<>Architecture <br /> Team</>}</h4>
+                        <h4>{lang === 'ES' ? <>Equipo de<br />Arquitectura</> : <>Architecture <br /> Team</>}</h4>
                         <ul>
                             <li>Arch. Abril Accotto</li>
                             <li>Arch. Franco Alvite</li>
@@ -233,7 +293,7 @@ const images = [
                 </div>
                 {/* PMs Section */}
                 <div className="team-section">
-                    <h4>{lang === 'ES' ?"Soporte":"Support"}</h4>
+                    <h4>{lang === 'ES' ? "Soporte" : "Support"}</h4>
                     <ul>
                         <li>Sofía Agnolon</li>
                         <li>Cristina Alemandi</li>

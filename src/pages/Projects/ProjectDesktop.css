@@ -81,7 +81,11 @@ body.no-scroll { overflow: hidden; }
 .ProjDes-rowSplit-img {  object-fit:cover; cursor:pointer; box-shadow:0 4px 14px rgba(0,0,0,.12); }
 .ProjDes-rowSplit-box { width:33vw; height:33vw; display:flex; flex-direction:column; justify-content:center; padding:0 60px; background:#fff; }
 .ProjDes-rowSplit-text { font-size:clamp(35px,2vw,42px); font-weight:700; line-height:1; margin: 0 9% 0 9%; }
-.ProjDes-rowSplit-dash { width:60px; height:4px; background:var(--clr-dash); display:inline-block; }
+.ProjDes-rowSplit-dash { 
+  width:45px; 
+  height:9px; 
+  background:var(--clr-dash); 
+  display:inline-block; }
 
 /* ---------- Wide image ---------- */
 .ProjDes-wide {
@@ -126,12 +130,15 @@ body.no-scroll { overflow: hidden; }
 .ProjDes-rowSplitRev-label { font-size:31px; font-weight:700; text-transform:uppercase; margin-left:-16%; }
 .ProjDes-rowSplitRev-img {  height:33vw; object-fit:cover; cursor:pointer;
   box-shadow:0 4px 14px rgba(0,0,0,.12); }
+
+  
 /* ---------- Triple 33/34/33 ---------- */
-.ProjDes-rowTriple          { display:flex; }
+.ProjDes-rowTriple          { display:flex;  }
 .ProjDes-rowTriple-img      {  height:33vw; object-fit:cover; cursor:pointer; }
 .ProjDes-rowTriple-boxText  { width:34vw; height:33vw; display:flex; flex-direction:column; justify-content:center; background:#fff; padding:0 60px; }
 .ProjDes-rowTriple-text     { font-size:clamp(35px,2vw,42px); font-weight:700; line-height:1; margin: 0 9% 0 9%; }
-.ProjDes-rowTriple-dash     { width:60px; height:4px; background:var(--clr-dash); }
+.ProjDes-rowTriple-dash     { width:45px; 
+  height:9px;  background:var(--clr-dash); }
 .ProjDes-rowTriple-boxStats { width:33vw; height:33vw; background:#F3C63B; display:flex; flex-direction:column; justify-content:center; align-items:center; color:#fff; }
 .ProjDes-rowTriple-value    { font-size:80px; font-weight:700; }
 .ProjDes-rowTriple-unit     { font-size:27px; font-weight:700; text-transform:uppercase; margin-left: -16%; }
@@ -238,3 +245,55 @@ body.no-scroll { overflow: hidden; }
   position: relative;   /* si ya lo tenés, dejalo así */
   overflow: hidden;     /* 🔑 recorta lo que se salga */
 }
+
+
+.moving-line1-PD {
+  position: relative;
+  z-index: 2000;
+  bottom: -10%; /* Ajusta la posición vertical dentro del cuadrante */
+  right: 0; /* Comienza desde la izquierda */
+ width: 8%; /* Ancho de la línea */
+  height: 0.9%; /* Altura de la línea */
+  background-color: #FD7E40; /* Color de la línea */
+  animation: movePD-Line1 2s linear forwards; /* Animación de la línea */
+}
+
+@keyframes movePD-Line1 {
+  0% {
+    transform: translateX(-53vw); /* Comienza desde la derecha de la pantalla */
+  }
+  100% {
+    transform: translateX(2vw); /* Se mueve hasta el extremo derecho de la pantalla */
+  }
+}
+.moving-line2-PD {
+  z-index: 2000;
+  position: absolute;
+  top: 80%; /* Ajusta la posición vertical dentro del cuadrante */
+  /* Comienza desde la izquierda */
+  width: 3%; /* Ancho de la línea */
+  height: 0.8%; /* Altura de la línea */
+  background-color: #3B76F3; /* Color de la línea */
+  animation: movePD-Line2 1s linear forwards; /* Animación de la línea */
+}
+
+@keyframes movePD-Line2 {
+  0% {
+    transform: translateX(50vw); /* Comienza desde la derecha de la pantalla */
+  }
+  100% {
+    transform: translateX(2.3vw); /* Se mueve hasta el extremo derecho de la pantalla */
+  }
+}
+/* .moving-line3 {
+  height: 2px;
+  background-color: black;
+  width: 0;
+  animation: none;
+  margin-top: 10px;
+}
+
+@keyframes moveLine3 {
+  from { width: 0; }
+  to { width: 100%; }
+} */

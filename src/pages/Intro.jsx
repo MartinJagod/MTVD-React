@@ -7,7 +7,7 @@ export default function Intro() {
 
   useEffect(() => {
     // Duración total de la animación (ms)
-    const T = 3500;
+    const T = 4000;
 
     const timer = setTimeout(() => {
       sessionStorage.setItem('seenIntro', '1');   // marca como vista

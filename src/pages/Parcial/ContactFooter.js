@@ -1,14 +1,38 @@
-import React, { useState } from 'react';
+import React, { useState, useContext} from 'react';
 import { FaLinkedin, FaPinterest, FaYoutube, FaInstagram, FaEnvelope, FaCopy } from 'react-icons/fa';
 import logoSlogan from '../../assets/images/logo-slogan.png'; // Ajusta la ruta según tu proyecto
+import { LanguageContext } from "../../context/LanguageContext";
+
 
 const ContactFooter = () => {
+  const { lang, toggleLang } = useContext(LanguageContext);
+  
+   const emails = (lang => {
+    const defaultEmails = {
+      SPAIN:     { email: "arquitectos@estudiomontevideo.com", cellphone: "+34622641468" },
+      USA:       { email: "arquitectos@estudiomontevideo.com", cellphone: "+5493516251960" },
+      ARGENTINA: { email: "arquitectos@estudiomontevideo.com", cellphone: "+5493516251960" }
+    };
+  
+    if (lang === "EN") {
+      for (const key in defaultEmails) {
+        defaultEmails[key].email = "contact@mtvd-design.com";
+      }
+    }
+  
+    // Convertimos el objeto a un array con el campo `country` incluido
+    return Object.entries(defaultEmails).map(([country, data]) => ({
+      country,
+      ...data
+    }));
+  })(lang); // o tu variable `currentLang`
+  /* 
   const emails = [
-    { country: "SPAIN", email: "contact@mtvd-design.com" },
-    { country: "USA", email: "contact@mtvd-design.com" },
-    { country: "ARGENTINA", email: "contact@mtvd-design.com" }
+    { country: "SPAIN", email: "arquitectos@estudiomontevideo.com", cellphone:" +34622641468" },
+    { country: "USA", email: "arquitectos@estudiomontevideo.com" , cellphone:"+5493516251960" },
+    { country: "ARGENTINA", email: "arquitectos@estudiomontevideo.com", cellphone:" +5493516251960"}
   ];
-
+ */
   const [copiedEmail, setCopiedEmail] = useState(null);
 
   // Función para copiar email al portapapeles y mostrar mensaje temporal
@@ -26,10 +50,10 @@ const ContactFooter = () => {
       <img src={logoSlogan} alt="Logo Slogan" className="logo-slogan" />
 
       <div className="contact-details">
-        {emails.map(({ country, email }, index) => (
+        {emails.map(({ country, email, cellphone }, index) => (
           <div key={index} className="email-container">
             <p>
-              <strong>{country}</strong> <br /> {email} 
+              <strong>{country}</strong> <br /> {email} {/*<br />  {cellphone} <br /> */}
               <FaCopy 
                 className="copy-icon"
                 onClick={() => copyToClipboard(email)}

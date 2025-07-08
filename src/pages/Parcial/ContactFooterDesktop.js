@@ -1,13 +1,38 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { FaLinkedin, FaPinterest, FaYoutube, FaInstagram, FaEnvelope, FaCopy } from 'react-icons/fa';
 import logoSlogan from '../../assets/images/logo-slogan.png'; // Ajusta la ruta según tu proyecto
+import { LanguageContext } from "../../context/LanguageContext";
 
 const ContactFooterDesktop = () => {
+const { lang, toggleLang } = useContext(LanguageContext);
+
+ const emails = (lang => {
+  const defaultEmails = {
+    SPAIN:     { email: "arquitectos@estudiomontevideo.com", cellphone: "+34622641468" },
+    USA:       { email: "arquitectos@estudiomontevideo.com", cellphone: "+5493516251960" },
+    ARGENTINA: { email: "arquitectos@estudiomontevideo.com", cellphone: "+5493516251960" }
+  };
+
+  if (lang === "EN") {
+    for (const key in defaultEmails) {
+      defaultEmails[key].email = "contact@mtvd-design.com";
+    }
+  }
+
+  // Convertimos el objeto a un array con el campo `country` incluido
+  return Object.entries(defaultEmails).map(([country, data]) => ({
+    country,
+    ...data
+  }));
+})(lang); // o tu variable `currentLang`
+
+/* 
   const emails = [
-    { country: "SPAIN", email: "contact@mtvd-design.com" },
-    { country: "USA", email: "contact@mtvd-design.com" },
-    { country: "ARGENTINA", email: "contact@mtvd-design.com" }
+    { country: "SPAIN", email: "arquitectos@estudiomontevideo.com", cellphone:" +34622641468" },
+    { country: "USA", email: "arquitectos@estudiomontevideo.com" , cellphone:"+5493516251960" },
+    { country: "ARGENTINA", email: "arquitectos@estudiomontevideo.com", cellphone:" +5493516251960"}
   ];
+ */
 
   const [copiedEmail, setCopiedEmail] = useState(null);
 
@@ -25,7 +50,7 @@ const ContactFooterDesktop = () => {
     
     <div >
 
-    <div class="linea-separadora" style={{width:"150%" ,height:"1px", backgroundColor:"#000000", marginTop:"1%", marginBottom:"1%"}}></div>
+    <div className="linea-separadora" style={{width:"150%" ,height:"1px", backgroundColor:"#000000", marginTop:"1%", marginBottom:"1%"}}></div>
     <div
   className="contact-section-footer"
   style={{

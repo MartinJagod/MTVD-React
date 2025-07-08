@@ -18,6 +18,21 @@ export const yearHighlights = {
     '2024': 'Celebrating 10 years of design',
     '2025': 'Time for a branding refresh'
   };
+  /* ---------- Encabezados de año ---------- */
+export const yearHighlightsES = {
+    '2014': 'Nace MTVD',
+    '2015': 'Nuestro trabajo comienza a expandirse',
+    '2016': 'Diseñamos más allá de nuestras fronteras',
+    '2017': 'Creadores de marcas',
+    '2018': 'Estudio más grande, proyectos más grandes.',
+    '2019': 'Abrimos nuestra sede en Madrid',
+    '2020': 'Diseñando en tiempos de Covid',
+    '2021': 'Nuevo estudio en Buenos Aires',
+    '2022': '2 in 1: especialistas en diseño de interiores y arquitectur',
+    '2023': 'Abrimos nuestra sede en Miami',
+    '2024': ' Celebramos 10 años de Diseño',
+    '2025': 'Hora de una renovación de marca.'
+  };
   
   /* ---------- Hitos con {label,url} ---------- */
   export const milestones = [

@@ -1,16 +1,17 @@
 import React, { useEffect, useState, useRef } from 'react';
 import Modal from 'react-modal';
-import { Swiper, SwiperSlide } from 'swiper/react';
+import { Swiper, SwiperSlide} from 'swiper/react';
 import { Navigation, Pagination, Autoplay } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import 'swiper/css/autoplay';
+import API_BASE from '../../apiBase';
 
 const root = document.getElementById('root');
 if (root) Modal.setAppElement(root);
 
-const API_BASE = 'http://193.203.182.77:5000/api/images/popup/';
+/* const API_BASE = 'http://193.203.182.77:5000/api/images/popup/'; */
 
 // Estilos para el modal responsive
 const modalStyles = {
@@ -27,28 +28,28 @@ const modalStyles = {
     alignItems: 'center',
     justifyContent: 'center',
     zIndex: 1000,
-   
+
   },
   content: {
     position: 'relative',
     inset: '0',
-    
-    width: '90vw',
-    height: '85vh',
-    maxWidth: '95vw',
-    maxHeight: '95vh',
-   /*  minWidth: '320px',
-    minHeight: '400px', */
-    backdropFilter: 'blur(20px)',
-    WebkitBackdropFilter: 'blur(20px)',
+
+    width: '100vw',
+    height: '100vh',
+    maxWidth: '100vw',
+    maxHeight: '100vh',
+    /*  minWidth: '320px',
+     minHeight: '400px', */
+    /* backdropFilter: 'blur(10px)', */
+    WebkitBackdropFilter: 'blur(10px)',
     borderRadius: '12px',
     outline: 'none',
-    border: '1px solid rgba(255, 255, 255, 0.2)',
+    border: 'none',
     padding: 0,
     margin: 0,
     overflow: 'hidden',
-    boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
-  backgroundColor: 'transparent'
+    /*   boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)', */
+    backgroundColor: 'transparent'
 
   }
 };
@@ -64,12 +65,12 @@ const popupContentStyles = {
 
 const closeBtnStyles = {
   position: 'absolute',
-  top: '15px',
-  right: '15px',
+  top: '15%',
+  right: '10%',
   backdropFilter: 'blur(10px)',
   WebkitBackdropFilter: 'blur(10px)',
   color: '#333',
-  border: '1px solid rgba(255, 255, 255, 0.3)',
+  border: '1px solid rgba(255, 255, 255, 0.2)',
   borderRadius: '50%',
   width: '40px',
   height: '40px',
@@ -88,7 +89,7 @@ const swiperStyles = {
   height: '100%',
   display: 'flex',
   alignItems: 'center',
-  margin : "auto 0"
+  margin: "auto 0"
 
 };
 
@@ -131,11 +132,11 @@ export default function ProjectPopup({
 
   /* Utilidades */
   const normalize = (str = '') =>
-  str
-    .normalize('NFD')                    // descompone letras con acento (ej: ó → o + ◌́)
-    .replace(/[\u0300-\u036f]/g, '')     // elimina los signos diacríticos (acentos, diéresis, etc.)
-    .replace(/\s+/g, '')                 // elimina todos los espacios
-    .trim();                             // remueve espacios iniciales y finales (por si acaso)
+    str
+      .normalize('NFD')                    // descompone letras con acento (ej: ó → o + ◌́)
+      .replace(/[\u0300-\u036f]/g, '')     // elimina los signos diacríticos (acentos, diéresis, etc.)
+      .replace(/\s+/g, '')                 // elimina todos los espacios
+      .trim();                             // remueve espacios iniciales y finales (por si acaso)
 
   const formattedProject = normalize(projectName);
 
@@ -155,7 +156,7 @@ export default function ProjectPopup({
     }
 
     async function load() {
-      const url = `${API_BASE}${category}/${projectName}`;
+      const url = `${API_BASE}/images/popup/${category}/${projectName}`;
       console.log('🌐 Intentando fetch a:', url);
 
       try {
@@ -168,7 +169,7 @@ export default function ProjectPopup({
         console.log('📦 Datos recibidos:', data);
 
         if (Array.isArray(data.images) && data.images.length) {
-          setImages(data.images.map(src => encodeURI(src)));
+          setImages(data.images); 
         } else {
           console.warn('⚠️ No se recibieron imágenes válidas:', data);
           setImages([]);
@@ -180,7 +181,7 @@ export default function ProjectPopup({
     }
 
     load();
-  }, [formattedProject, category, isOpen]);
+  }, [projectName, formattedProject, category, isOpen]);
 
   /* Slide inicial */
   useEffect(() => {
@@ -220,7 +221,7 @@ export default function ProjectPopup({
       shouldCloseOnEsc
     >
       <div style={popupContentStyles} ref={modalRef}>
-        <button 
+        <button
           style={closeBtnStyles}
           onClick={onClose}
           onMouseEnter={(e) => {
@@ -236,17 +237,20 @@ export default function ProjectPopup({
         </button>
 
         {images.length ? (
-          <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center'}}>
+          <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center' }}>
             <Swiper
               style={swiperStyles}
               modules={[Navigation, Pagination, Autoplay]}
               navigation
-              pagination={{ 
+              pagination={{
                 clickable: true,
-                dynamicBullets: true 
+                dynamicBullets: true
               }}
               slidesPerView={1}
               initialSlide={initialIndex}
+                          // requiere import { Lazy }
+              preloadImages={false}
+              watchSlidesProgress
               loop={images.length > 1}
               zoom={{ maxRatio: 3 }}
               spaceBetween={0}
@@ -254,10 +258,11 @@ export default function ProjectPopup({
             >
               {images.map((src, i) => (
                 <SwiperSlide key={i} style={slideStyles}>
-                  <img 
-                    src={src} 
-                    alt={`Imagen ${i + 1}`} 
+                  <img
+                    src={src}
+                    alt={`Imagen ${i + 1}`}
                     style={imageStyles}
+                  
                   />
                 </SwiperSlide>
               ))}

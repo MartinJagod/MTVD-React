@@ -1006,8 +1006,8 @@ toggleMute();
             <section className="image-and-quadrants desktop-hide">
                 <div className="quadrant-container">
                     <div className="quadrant white-box">
-                        <span className="project-box"> {lang === 'ES' ? 'Inspirando ' : 'Inspiring'}</span>
-                        <span className="project-box"> {lang === 'ES' ? 'persona' : 'people'}</span>
+                        <span className="project-box"> {lang === 'ES' ? 'Diseñamos ' : 'Inspiring'}</span>
+                        <span className="project-box"> {lang === 'ES' ? 'espacios' : 'people'}</span>
                         <div className="moving-line" ref={line1Ref}></div>
                     </div>
                     <div
@@ -1019,9 +1019,9 @@ toggleMute();
                                 <img src={logoVertical} alt="Logo Vertical" className="logo-image" />
                             </div>
                             <div className="back" onClick={goToProjects}>
-                                <span className='back-item'>{lang === 'ES' ? 'Diseño' : 'Design'}</span>
+                                <span className='back-item'>{lang === 'ES' ? 'Diseño Comercial' : 'Design'}</span>
                                 <span className='back-item'>{lang === 'ES' ? 'Arquitectura' : 'Architecture'}</span>
-                                <span className='back-item'>{lang === 'ES' ? 'Marcas' : 'Branding'}</span>
+                                <span className='back-item'>{lang === 'ES' ? 'Marcas' : 'Brands'}</span>
 
                             </div>
                         </div>
@@ -1032,9 +1032,11 @@ toggleMute();
                         <div className="moving-line2" ref={line2Ref}></div>
                     </div>
                     <div className="quadrant white-box" onClick={goToProjects}>
-                        <span className="project-box">{lang === 'ES' ? 'a crear' : 'To create'}</span>
-                        <span className="project-box">{lang === 'ES' ? 'Historias' : 'exciting'}</span>
-                        <span className="project-box">{lang === 'ES' ? '' : 'places'}</span>
+                        <span className="project-box">{lang === 'ES' ? 'que cuentan' : 'To create'}</span>
+                        <span className="project-box">{lang === 'ES' ? 'historias' : 'exciting'}</span>
+                        <span className="project-box">{lang === 'ES' ? 'y potencian' : 'places'}</span>
+                        <span className="project-box">{lang === 'ES' ? 'marcas.' : ''}</span>
+
                     </div>
                 </div>
 
@@ -1045,17 +1047,17 @@ toggleMute();
                         <div className="horizontal-counter-item-new">
                             <span className="horizontal-project-count-new">+{yearsCount}</span>
                             <br />
-                            <span className="horizontal-project-label-new" style={{ paddingLeft: "30px" }}>{lang === 'ES' ? 'años' : 'years'}</span>
+                            <span className="horizontal-project-label-new" style={lang === 'ES' ? { paddingLeft: '1px' } :{ paddingLeft: "30px" }}>{lang === 'ES' ? 'años' : 'years'}</span>
                         </div>
                         <div className="horizontal-counter-item-new">
                             <span className="horizontal-project-count-new">+{countriesCount}</span>
                             <br />
-                            <span className="horizontal-project-label-new" style={{ paddingLeft: "70px" }}>{lang === 'ES' ? 'países' : 'countries'}</span>
+                            <span className="horizontal-project-label-new" style={lang === 'ES' ? { paddingLeft: '3px' } :{ paddingLeft: "70px" }}>{lang === 'ES' ? 'países' : 'countries'}</span>
                         </div>
                         <div className="horizontal-counter-item-new">
                             <span className="horizontal-project-count-new">+{citiesCount}</span>
                             <br />
-                            <span className="horizontal-project-label-new" style={{ paddingLeft: "27px" }}>{lang === 'ES' ? 'ciudades' : 'cities'}</span>
+                            <span className="horizontal-project-label-new" style={lang === 'ES' ? { paddingLeft: '1px' } :{ paddingLeft: "27px" }}>{lang === 'ES' ? 'ciudades' : 'cities'}</span>
                         </div>
 
                     </div>
@@ -1069,7 +1071,7 @@ toggleMute();
                             className="parallax-image"
                             ref={interiorismoImageRef}
                             onClick={() => { { goToProject("architecture", "Valpo1") } }}
-                            style={{ position: "relative", top: "-13vh", width: "150vw", overflow: "hidden" }}
+                            style={{ position: "relative", top: "-13vh", width: "165vw", overflow: "hidden" }}
 
                         />
                         {/* Muestra el nombre del archivo */}
@@ -1089,7 +1091,7 @@ toggleMute();
                         <img src={starImage} alt="Star" className="star-image" onClick={goToAwardsAndPress} />
                     </div>
                     <div onClick={goToAwardsAndPress} className="quadrant white-box-estrella">
-                        <span className="text-Awards" style={lang === 'ES' ? { paddingLeft: '-15%' } : undefined}>{lang === 'ES' ? <>Prensa y<br />Premios </> : 'Awards'}</span>
+                        <span className="text-Awards" style={lang === 'ES' ? { paddingLeft: '-15%' } : undefined}>{lang === 'ES' ? <>Prensa &<br />Premios </> : 'Awards'}</span>
                     </div>
                 </div>
 
@@ -1102,7 +1104,7 @@ toggleMute();
                             className="parallax-image"
                             ref={arquitecturaImageRef}
                             onClick={() => { goToProject("design", "HotelAzurLobby") }}
-                            style={{ position: "relative", left: "-25vh", top: "-3vh", width: "190vw", overflow: "hidden" }}
+                            style={{ position: "relative", left: "-25vh", top: "-2vh", width: "195vw", overflow: "hidden" }}
                         />
                     </div>
                     <div className="image-label-home">
@@ -1118,13 +1120,16 @@ toggleMute();
                         className={`custom-orange-box ${slideStudioBox ? 'custom-slide-orange' : ''}`}
                         ref={slideStudioBoxRef} onClick={goToStudio}
                     >
-                        <img src={groupImage} alt="Group Icon" className="icon-image" onClick={goToStudio} />
+                    {/*     <img src={groupImage} alt="Group Icon" className="icon-image" onClick={goToStudio} /> */}
+                    {slideStudioBox && <span className="text-Awards" style={{color:"#ffffff"}}>{lang === 'ES' ? <> Nuestro<br /> equipo</> : 'Our team'}</span>}
 
                     </div>
                     <div onClick={goToStudio}
                         className={` quadrant custom-white-box ${slideStudioBox ? 'custom-slide-team' : ''}`}
                     >
-                        {slideStudioBox && <span className="text-Awards">{lang === 'ES' ? <> Nuestro<br /> equipo</> : 'Our Studio'}</span>}
+                         {slideStudioBox && <span className="text-Awards" style={{textAlign:"left", lineHeight:"1.5"}}>{lang === 'ES' ? <>Argentina<br/>España<br/>USA</> : <>Argentina<br/>Spain<br/>USA</>}</span>}
+
+                        
                     </div>
                 </div>
 
@@ -1136,7 +1141,7 @@ toggleMute();
                         className="horizontal-image-team"
                         onClick={goToStudio}
                         ref={studioImageDesktopRef}
-                        style={{ height: "125%", alignContent: "center", justifyContent: "center" }}
+                        style={{ height: "130%", alignContent: "center", justifyContent: "center" }}
 
                     />
 
@@ -1171,8 +1176,8 @@ toggleMute();
 
                     <div className=" quadrant white-box-desktop box-two" style={{ position: 'relative', left: '76%', alignItems: "baseline" }}>
 
-                        <span className="project-box-desktop" style={lang === 'ES' ? { paddingLeft: '15%' } : undefined}> {lang === 'ES' ? 'Inspirando' : 'Inspiring'}</span><br />
-                        <span className="project-box-desktop" style={lang === 'ES' ? { paddingLeft: '15%' } : undefined}> {lang === 'ES' ? 'persona' : 'people'}</span>
+                        <span className="project-box-desktop" style={lang === 'ES' ? { paddingLeft: '15%' } : undefined}> {lang === 'ES' ? 'Diseñamos' : 'Inspiring'}</span><br />
+                        <span className="project-box-desktop" style={lang === 'ES' ? { paddingLeft: '15%' } : undefined}> {lang === 'ES' ? 'espacios' : 'people'}</span>
                         <div className="desktopmoving-line" ref={desktopline1Ref}></div>
                     </div>
                 </div>
@@ -1181,9 +1186,11 @@ toggleMute();
             {/*                 Van 3 cajas iguales en la misma fila ,   */}
             <div className="row-2-desktop mobile-hide">
                 <div className="quadrant-row-2 white-box-desktop mobile-hide" onClick={goToProjects} style={{ alignItems: "baseline" }}>
-                    <span className="project-box-desktop" style={lang === 'ES' ? { paddingLeft: '15%' } : undefined}>{lang === 'ES' ? 'a crear' : 'To create'}</span>
-                    <span className="project-box-desktop" style={lang === 'ES' ? { paddingLeft: '15%' } : undefined}>{lang === 'ES' ? 'Historias' : 'exciting'}</span>
-                    <span className="project-box-desktop" style={lang === 'ES' ? { paddingLeft: '15%' } : undefined} >{lang === 'ES' ? '' : 'places'}</span>
+                    <span className="project-box-desktop" style={lang === 'ES' ? { paddingLeft: '15%' } : undefined}>{lang === 'ES' ? 'que cuentan' : 'To create'}</span>
+                    <span className="project-box-desktop" style={lang === 'ES' ? { paddingLeft: '15%' } : undefined}>{lang === 'ES' ? 'historias' : 'exciting'}</span>
+                    <span className="project-box-desktop" style={lang === 'ES' ? { paddingLeft: '15%' } : undefined} >{lang === 'ES' ? 'y potencian' : 'places'}</span>
+                    <span className="project-box-desktop" style={lang === 'ES' ? { paddingLeft: '15%' } : undefined} >{lang === 'ES' ? 'marcas.' : 'places'}</span>
+
                     <div className="desktopmoving-line2" ref={desktopline2Ref}></div>
 
                 </div>
@@ -1195,9 +1202,9 @@ toggleMute();
                             <img src={logoVertical} alt="Logo Vertical" className="logo-image-desktop" />
                         </div>
                         <div className="back mobile-hide">
-                            <span className='back-item' style={{ marginLeft: "40px" }}>{lang === 'ES' ? 'Diseño' : 'Design'}</span>
-                            <span className='back-item' style={{ marginLeft: "40px" }}>{lang === 'ES' ? 'Arquitectura' : 'Architecture'}</span>
-                            <span className='back-item' style={{ marginLeft: "40px" }}>{lang === 'ES' ? 'Marcas' : 'Branding'}</span>
+                            <span className='back-item' style={{ marginLeft: "3%" }}>{lang === 'ES' ? 'Diseño Comercial' : 'Design'}</span>
+                            <span className='back-item' style={{ marginLeft: "3%" }}>{lang === 'ES' ? 'Arquitectura' : 'Architecture'}</span>
+                            <span className='back-item' style={{ marginLeft: "3%" }}>{lang === 'ES' ? 'Marcas' : 'Brands'}</span>
                         </div>
                     </div>
                 </div>
@@ -1336,7 +1343,7 @@ toggleMute();
 
                         {/* Awards detrás de la caja verde */}
                         <div className="quadrant-star-desktop white-box-estrella-star-desktop">
-                            <span className="text-Awards-desktop">{lang === 'ES' ? <>Prensa y <br />Premios </> : 'Awards'}</span>
+                            <span className="text-Awards-desktop">{lang === 'ES' ? <>Prensa & <br />Premios </> : 'Awards'}</span>
                         </div>
                     </div>
 
@@ -1349,13 +1356,14 @@ toggleMute();
                             className={`custom-orange-box-desktop ${slideStudioBoxDesktop ? 'custom-slide-orange-desktop' : ''}`}
                             onClick={goToStudio}
                         >
-                            <img src={groupImage} alt="Group Icon" className="star-image-star-desktop" onClick={goToStudio} />
-
+                            {slideStudioBoxDesktop && <span className="text-Awards-desktop" style={{textAlign:"left", color:"#ffffff"}}>{lang === 'ES' ? <>Nuestro<br />equipo</> : 'Our team'}</span>}
+                            {/* <img src={groupImage} alt="Group Icon" className="star-image-star-desktop" onClick={goToStudio} />
+ */}
                         </div>
                         <div onClick={goToStudio}
                             className="quadrant-row-2 custom-white-box-desktop"
                         >
-                            {slideStudioBoxDesktop && <span className="text-Awards-desktop">{lang === 'ES' ? <>Nuestro<br />equipo</> : 'Our studio'}</span>}
+                            {slideStudioBoxDesktop && <span className="project-box" style={{textAlign:"left", lineHeight:"1.5"}}>{lang === 'ES' ? <>Argentina<br/>España<br/>USA</> : <>Argentina<br/>Spain<br/>USA</>}</span>}
                         </div>
                     </div>
 

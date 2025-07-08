@@ -1,11 +1,12 @@
 import React, { useEffect, useState, useRef, useMemo, useContext } from 'react';
 import { useNavigate, useSearchParams, Link } from 'react-router-dom';
-import subcategoriaProyectosData from './subcategoriasProyectosData';   // ①
+import {subcategoriaProyectosData, subcategoriaProyectosDataES} from './subcategoriasProyectosData';   // ①
 import './ProjectsSection.css';
 import Navbar from '../Parcial/Navbar';
 import ContactFooter from '../Parcial/ContactFooter';
 import projectsData from './projectsData';  
 import ContactFooterDesktop from '../Parcial/ContactFooterDesktop'; // Ajusta la ruta según tu estructura de carpetas
+import API_BASE from '../../apiBase';
 
 import { LanguageContext } from '../../context/LanguageContext';
 // fuera del componente, o con useCallback si prefieres
@@ -17,7 +18,7 @@ function ProjectsSection() {
    const TITLE_MAP = {
   Design:       { EN: 'Design',       ES: 'Diseño' },
   Architecture: { EN: 'Architecture', ES: 'Arquitectura' },
-  Branding:     { EN: 'Branding',     ES: 'Branding' },   // o 'Branding' si prefieres
+  Branding:     { EN: 'Brands',     ES: 'Marcas' },   // o 'Branding' si prefieres
 };
   const [searchParams] = useSearchParams();
   const [category, setCategory] = useState('All');
@@ -87,25 +88,31 @@ const normalize = (str) =>
        navigate("/projectsHome"); // Cambia a la ruta /projects
    };
 */
-// 🔸 multi-map nombre → lista de posibles metas
+const proyectosData = lang === "ES"
+  ? subcategoriaProyectosDataES
+  : subcategoriaProyectosData;
+
+
+// 2️⃣  Usala en el useMemo
 const nameLookup = useMemo(() => {
   const map = {};
-  subcategoriaProyectosData.forEach(p => {
+  proyectosData.forEach(p => {
     const key = normalize(p.nombre);
     (map[key] ||= []).push({ id: p.id, subCategoria: p.subCategoria });
   });
-  return map;                 // ej. chemono → [{id:123,sub:'Retail'}, {id:8123,sub:'Design'}]
-}, []);
+  return map;
+}, [proyectosData]);   // 👈 importante: se recalcula si cambia el idioma
 
-  const sectionRanges = {
-    Design: [1, 5000],
-    Architecture: [5001, 8000],
-    Branding: [8001, 10000],
-  };
+// 3️⃣  Rango de secciones (si querés traducir las claves, hacelo aquí)
+const sectionRanges = {
+  Design:        [1,    5000],
+  Architecture:  [5001, 8000],
+  Branding:      [8001, 10000],
+};
 
   /* ─── fetch + enriquecimiento ─── */
   useEffect(() => {
-    fetch('http://193.203.182.77:5000/api/projects-home')
+     fetch(`${API_BASE}/projects-home`)
       .then(r => r.json())
       .then(data => {
         const hits = data?.[section.toLowerCase()]?.hits ?? [];
@@ -193,7 +200,7 @@ const nameLookup = useMemo(() => {
   useEffect(() => {
     console.log("📡 Solicitando imágenes de la API para:", section);
 
-    fetch("http://193.203.182.77:5000/api/projects-home")
+     fetch(`${API_BASE}/projects-home`)
       .then(response => response.json())
       .then(data => {
         console.log("✅ Datos recibidos:", data);

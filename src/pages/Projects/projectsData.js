@@ -1473,20 +1473,7 @@ const projectsData = {
   parrafo1: "Casa Firenze is located in Molvento, where Los Molinos Lake sets the tone for the entire experience. A dock begins at the shoreline and leads into the architecture, threading between two solid volumes that separate public and private functions. The project frames the landscape through movement and structure, encouraging visual and spatial dialogue with the water.",
   parrafo2: "Robust and rustic materials define the house’s exterior, creating a quiet and introverted presence from the street. Toward the lake, however, the design opens up to light, air and interaction. Every space is meant to support relaxation, contemplation and connection with nature. This is a home conceived for both introspection and celebration."
 }
-,5048: {
-  nombreproyecto: "Barrio Trina",
-  frase1: "Designing community with ecological intention and care",
-  frase2: "Urban planning rooted in regional sustainability",
-  contador1: 2022,
-  nombre1: "year",
-  contador2: "",
-  nombre2: "ft²",
-  location: "Merlo, San Luis, Argentina",
-  frase3: "Infrastructure that grows with the land it shapes",
-  encabezado: "A sustainable blueprint for conscious living",
-  parrafo1: "Triná is a sustainable community masterplan located on the outskirts of Merlo, San Luis. Conceived from the ground up to promote ecological and regional economic sustainability, the project includes the design of all major structural and civic elements. Streets, green corridors, schools, urban gardens, commercial zones and public infrastructure were all developed under a unified ecological and cultural lens. Every part contributes to a meaningful whole rooted in place.",
-  parrafo2: "Beyond the physical layout, Triná proposes a living framework. It introduces a set of ten sustainable design principles for future architects involved in the project. These include passive bioclimatic strategies, energy-efficient systems, local materials, reforestation, and circular design. The result is not just a neighborhood but a philosophy of living in relationship with nature, where urban form becomes an extension of shared values and collective care."
-}
+
 ,5049: {
   nombreproyecto: "Barrio Calandria Norte",
   frase1: "Urban layout shaped by access and calm",

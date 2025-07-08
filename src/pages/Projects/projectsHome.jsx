@@ -8,8 +8,10 @@ import Carousel from './Carouseli';
 import projectsData from './projectsData';
 import ContactFooterDesktop from '../Parcial/ContactFooterDesktop'; // Ajusta la ruta según tu estructura de carpetas
 import { Link } from "react-router-dom";
-
+import API_BASE from '../../apiBase';
 import { LanguageContext } from "../../context/LanguageContext";
+
+
 
 /* ---------- helpers fuera del componente ---------- */
 const easeInOutCubic = t =>
@@ -150,7 +152,7 @@ function ProjectsHome() {
     useEffect(() => {
         setLoading(true);
 
-        fetch("http://193.203.182.77:5000/api/projects-home")
+        fetch(`${API_BASE}/projects-home`)
             .then(response => response.json())
             .then(({ design, architecture, branding }) => {
                 console.log("✅ Imágenes cargadas desde API local:", { design, architecture, branding });
@@ -206,7 +208,7 @@ const easeInOutCubic = t =>
 const TITLE_MAP = {
   Design:       { EN: 'Design',       ES: 'Diseño' },
   Architecture: { EN: 'Architecture', ES: 'Arquitectura' },
-  Branding:     { EN: 'Branding',     ES: 'Branding' },
+  Brands:     { EN: 'Brands',     ES: 'Marcas' },
 };
 
     return (
@@ -241,7 +243,7 @@ const TITLE_MAP = {
            </Link>
                     <Link to={`/projects?section=Branding`}  className="menu-link-desktop-home">
 
-            {TITLE_MAP.Branding[lang]}
+            {TITLE_MAP.Brands[lang]}
            </Link>
         </div>
       </nav>
@@ -268,7 +270,7 @@ const TITLE_MAP = {
 
                 <div id="carousel-branding" className="carousel-wrapper-projectsHome">
                     <Carousel
-                        title="Branding"
+                        title={lang === 'ES' ? 'Marcas' : "Brands"}
                         images={imagenesColumna3}
                         goToProject={goToProject}
                         category="Branding"

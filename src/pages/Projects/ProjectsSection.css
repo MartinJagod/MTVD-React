@@ -51,7 +51,7 @@ div.search-bar{
     justify-content: space-between;
     padding: 10px 20px;
     align-items: center;
-    margin-top: 4%;
+    margin-top: 10%;
 }
 
 .section-input-section {
@@ -206,12 +206,11 @@ div.search-bar{
     color: white; /* Texto blanco */
     padding: 5px 10px; /* Espaciado interno */
     border-radius: 4px; /* Bordes redondeados */
-    font-size: 1rem; /* Tamaño del texto */
+    font-size: 0.6rem; /* Tamaño del texto */
     font-weight: 600;
     z-index: 2; /* Asegura que esté sobre la imagen */
     font-family: 'Montserrat', sans-serif;
     text-shadow: 3px 3px 5px rgba(0, 0, 0, 0.9);
-    font-size: 16px;
   }
   .image-wrapper{
     position: relative; /* Posición relativa para el contenedor */
@@ -460,7 +459,7 @@ div.search-bar{
   flex: 1 0 auto;                 /* crece y empuja el footer */
   margin-top: 260px;              /* = alto real de .projects-fixed-top */
   overflow-y: auto;               /* scroll solo aquí */
-  padding: 0 2rem;                /* márgenes laterales opcionales */
+                /* márgenes laterales opcionales */
 }
 
 /* 4️⃣  Footer se queda al fondo; no necesita estilos extra,

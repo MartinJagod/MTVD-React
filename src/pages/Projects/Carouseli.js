@@ -6,7 +6,7 @@ import { LanguageContext } from "../../context/LanguageContext";
 const TITLE_MAP = {
   design:       { EN: "Design",       ES: "Interiorismo" },
   architecture: { EN: "Architecture", ES: "Arquitectura" },
-  branding:     { EN: "Branding",     ES: "Marca" },
+  branding:     { EN: "Brands",     ES: "Marcas" },
 };
 const formatName = (str) => str.replace(/([A-Z])/g, ' $1').trim();
 
@@ -14,7 +14,7 @@ const Carousel = ({ title, images, goToProject, category }) => {
   const { lang } = useContext(LanguageContext);
 
   const catKey       = category;          // slug fijo en inglés
-  const displayTitle = TITLE_MAP[catKey]?.[lang] ?? title;
+  const displayTitle = title ?? TITLE_MAP[catKey]?.[lang] ;
 
   const carouselRef  = useRef(null);
   const isDragging   = useRef(false);
@@ -76,7 +76,7 @@ const Carousel = ({ title, images, goToProject, category }) => {
   };
   let sectionTitle = "";
   if (isDesktop) {sectionTitle  =  ""}
-    else         { sectionTitle  =  catKey;
+    else         { sectionTitle  =  displayTitle;
 
   };
 

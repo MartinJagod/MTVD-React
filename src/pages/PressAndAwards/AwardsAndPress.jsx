@@ -1,16 +1,17 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef, useContext, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Navbar from '../Parcial/Navbar';
 import './AwardsAndPress.css';
+import { LanguageContext } from '../../context/LanguageContext';
 
 import fondo from '../../assets/images/fondopressAwards.jpg'; // fondo parallax
 
 // 📦  Datos
-import { milestones, yearHighlights } from '../../data/awardsData';
+import { milestones, yearHighlights, yearHighlightsES } from '../../data/awardsData';
 
 
 /* ─────────────── ➊ Generador de índice ─────────────── */
-function buildSearchIndex() {
+function buildSearchIndex(highlights) {
   const index = [];
 
   milestones.forEach(m => {
@@ -32,9 +33,9 @@ function buildSearchIndex() {
   });
 
   /*  Año + highlight (“2023 – We open our Miami base”)  */
-  Object.entries(yearHighlights).forEach(([year, text]) =>
-    index.push({ id: `year-${year}`, label: `${year} – ${text}` })
-  );
+  Object.entries(highlights).forEach(([year, text]) =>
+  index.push({ id: `year-${year}`, label: `${year} – ${text}` })
+);
 
   // quitamos duplicados por label
   const seen = new Set();
@@ -45,44 +46,46 @@ const AwardsAndPress = () => {
   const backgroundRef = useRef(null);
   const timelineRef = useRef(null);
   const itemRefs = useRef({});
-  useEffect(() => {
-    const handleScroll = () => {
-      if (!timelineRef.current || !backgroundRef.current) return;
-      const scrollX = timelineRef.current.scrollLeft;
-      const maxScroll = timelineRef.current.scrollWidth - timelineRef.current.clientWidth;
-      const move = ((scrollX / maxScroll) * 5) * (-1);               // 0–5 %
-      backgroundRef.current.style.transform = `translateX(${move}%)`;
-    };
+   const { lang } = useContext(LanguageContext);          // ✅ ahora dentro del componente
+   const highlights = useMemo(
+     () => (lang === "ES" ? yearHighlightsES : yearHighlights),
+     [lang]
+   );
+useEffect(() => {
+  const isMobile = window.innerWidth <= 768; // Ajustá si querés otro breakpoint
+  const multiplier = isMobile ? 80 : 10;     // Más velocidad en mobile
 
-    const tl = timelineRef.current;
-    tl?.addEventListener('scroll', handleScroll);
-    return () => tl?.removeEventListener('scroll', handleScroll);
-  }, []);
-
-const getStepPct = () =>
-  window.matchMedia("(max-width: 1540px)").matches ? 0.90 : 0.15;
-  /* porcentaje que queremos avanzar / retroceder */
-  const STEP_PCT = getStepPct();
-
-  /* flechas ---------------------------------------------------------------- */
-  const goPrevChunk = () => {
-    const el = timelineRef.current;
-    if (!el) return;
-
-    const delta = el.clientWidth * STEP_PCT;           // 80 % de pantalla
-    const target = Math.max(0, el.scrollLeft - delta);  // no pasar del inicio
-    el.scrollTo({ left: target, behavior: "smooth" });
+  const handleScroll = () => {
+    if (!timelineRef.current || !backgroundRef.current) return;
+    const scrollX = timelineRef.current.scrollLeft;
+    const maxScroll = timelineRef.current.scrollWidth - timelineRef.current.clientWidth;
+    const move = ((scrollX / maxScroll) * multiplier) * (-1); 
+    backgroundRef.current.style.transform = `translateX(${move}%)`;
   };
 
-  const goNextChunk = () => {
-    const el = timelineRef.current;
-    if (!el) return;
+  const tl = timelineRef.current;
+  tl?.addEventListener('scroll', handleScroll);
+  return () => tl?.removeEventListener('scroll', handleScroll);
+}, []);
 
-    const delta = el.clientWidth * STEP_PCT;
-    const maxLeft = el.scrollWidth - el.clientWidth;
-    const target = Math.min(maxLeft, el.scrollLeft + delta); // no pasar del final
-    el.scrollTo({ left: target, behavior: "smooth" });
-  };
+  const PCT   = 0.8;       // 80 % del ancho visible
+const MAX   = 1400;      // …pero nunca más de 1400 px (ajusta a tu gusto)
+
+const getStep = el => Math.min(el.clientWidth * PCT, MAX);
+
+const scrollBySafe = dir => {
+  const el = timelineRef.current;
+  if (!el) return;
+
+  const delta   = getStep(el) * dir;                // dir = +1 / –1
+  const maxLeft = el.scrollWidth - el.clientWidth;
+  const target  = Math.max(0, Math.min(maxLeft, el.scrollLeft + delta));
+
+  el.scrollTo({ left: target, behavior: 'smooth' });
+};
+
+const goPrevChunk = () => scrollBySafe(-1);
+const goNextChunk = () => scrollBySafe(+1);
 
   /* ---------- Year counter ---------- */
   const YearCounter = ({ targetYear }) => {
@@ -264,7 +267,7 @@ const getStepPct = () =>
       </>
     )
   );
-
+const searchIndex = useMemo(() => buildSearchIndex(highlights), [highlights]);
   /* ---------- JSX ---------- */
   return (
     <div className="awards-and-press">
@@ -276,7 +279,7 @@ const getStepPct = () =>
           showInput={showInput}
           setShowInput={setShowInput}
           page="AwardsAndPress"
-          searchData={buildSearchIndex()}
+          searchData={searchIndex}
           onSelect={scrollToMilestone}
         />
       </header>
@@ -294,7 +297,7 @@ const getStepPct = () =>
 
           {/* Hitos */}
           {milestones.map((m, idx) => {
-            const highlight = yearHighlights[m.year];
+            const highlight = highlights[m.year];
             const isFirstOfYear = idx === milestones.findIndex(mm => mm.year === m.year);
             const above = idx % 2 === 0;
 

@@ -3,6 +3,7 @@ import { useNavigate, useSearchParams, Link } from 'react-router-dom';
 import './ProjectsSection.css';
 import Navbar from '../Parcial/Navbar';
 import ContactFooter from '../Parcial/ContactFooter';
+import API_BASE from '../../apiBase';   // ajusta la ruta
 
 function ProjectsSection() {
     const [searchParams] = useSearchParams();
@@ -66,7 +67,7 @@ function ProjectsSection() {
     useEffect(() => {
         console.log("📡 Solicitando imágenes de la API para:", section);
 
-        fetch("http://193.203.182.77:5000/api/projects-home")
+        fetch(`${API_BASE}/projects-home`)
             .then(response => response.json())
             .then(data => {
                 console.log("✅ Datos recibidos:", data);

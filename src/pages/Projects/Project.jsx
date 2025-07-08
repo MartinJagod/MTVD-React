@@ -1,8 +1,9 @@
-import React, { useEffect, useState, useRef, useCallback, useContext } from 'react';
+import React, { useEffect, useState, useRef, useCallback, useContext, useMemo } from 'react';
 import { LanguageContext } from '../../context/LanguageContext';
 import { useParams } from "react-router-dom";
 import projectsData from './projectsData';
 import projectsDataES from './projectsDataES';
+import { useNavigate } from "react-router-dom";
 
 import ProjectPopup from "./ProjectPopup";
 import { getIdByProjectName } from './projectUtils';
@@ -15,25 +16,54 @@ import ContactFooter from '../Parcial/ContactFooter'; // Ajusta la ruta según t
 import Navbar from '../Parcial/Navbar'; // Ajusta la ruta según tu estructura de carpetas
 import ContactFooterDesktop from '../Parcial/ContactFooterDesktop'; // Ajusta la ruta según tu estructura de carpetas
 
+/* rango → categoría */
+const getCategoryById = id =>
+    id <= 5000 ? 'design'
+        : id <= 8000 ? 'architecture'
+            : 'branding';
 
 function Project() {
     const interiorismo1 = '/assets/images/PaginaProyecto/proyecto3/CheMono.jpg';
     /* const { id } = useParams(); */ // 🔹 Obtiene el ID desde la URL
     const { category, projectName } = useParams();
     const { lang } = useContext(LanguageContext);  // EN | ES
+    const navigate = useNavigate();
 
     // 🔹 Dataset por idioma
     const dataset = lang === 'ES' ? projectsDataES : projectsData;
 
     const imagesPrincipal = importImagesProject();
-// helper (fuera del JSX)
-const getCountry = loc =>
-  loc
-    ?.split(',')            // ["Banfield", " Buenos Aires", " Argentina"]
-    .pop()                  // " Argentina"
-    .trim()                 // "Argentina"
-    .split(/\s+/)           // ["Argentina"]
-    .pop();                 // "Argentina"
+    /* helpers */
+    const buildIndex = (data) =>
+        Object.entries(data).map(([idStr, p]) => {
+            const id = Number(idStr);
+            const category = getCategoryById(id);
+
+            const fullText = [
+                p.nombreproyecto,
+                p.frase1, p.frase2, p.frase3,
+                p.location,
+                p.encabezado,
+                p.parrafo1, p.parrafo2,
+                p.nombre1, p.nombre2,
+                p.contador1?.toString(),
+                p.contador2?.toString()
+            ]
+                .filter(Boolean)
+                .join(' | ')
+                .normalize('NFD').replace(/\p{Diacritic}/gu, '')
+                .toLowerCase();
+
+            return { label: p.nombreproyecto, projectName: p.nombreproyecto, category, fullText };
+        });
+    // helper (fuera del JSX)
+    const getCountry = loc =>
+        loc
+            ?.split(',')            // ["Banfield", " Buenos Aires", " Argentina"]
+            .pop()                  // " Argentina"
+            .trim()                 // "Argentina"
+            .split(/\s+/)           // ["Argentina"]
+            .pop();                 // "Argentina"
 
     /* const projectNames = {
         1:"CheMono.jpg",
@@ -48,12 +78,12 @@ const getCountry = loc =>
     const imageName = `${projectName}.jpg`;       // AlgoGrosso.jpg
     const PhraseLineSelected = projectName;                // AlgoGrosso
     const isDesktop = window.innerWidth >= 1024;
-const images = importImagesProject(category, projectName, isDesktop);
+    const images = importImagesProject(category, projectName, isDesktop);
     const id = getIdByProjectName(PhraseLineSelected);
     const projectData =
-  id
-    ? (dataset[id] ?? projectsData[id])   // ← intenta ES, si no existe cae a EN
-    : {};
+        id
+            ? (dataset[id] ?? projectsData[id])   // ← intenta ES, si no existe cae a EN
+            : {};
 
 
 
@@ -92,6 +122,20 @@ const images = importImagesProject(category, projectName, isDesktop);
     const [modalOpen, setModalOpen] = useState(false);
     const [selectedImage, setSelectedImage] = useState(null);
 
+    /* ── índices globales, se calculan 1 vez ── */
+    const searchIndexes = useMemo(() => ({
+        EN: buildIndex(projectsData),
+        ES: buildIndex(projectsDataES),
+    }), []);
+
+    /* índice que realmente vas a usar */
+    const searchIndex = searchIndexes[lang === 'ES' ? 'ES' : 'EN'];
+
+    const handleSelectProject = (item) => {
+        const slug = encodeURIComponent(item.projectName);
+        navigate(`/project/${item.category}/${slug}`);
+        setShowInput(false);
+    };
     //inicio headermover
     const [isSliding, setIsSliding] = useState(false); // Controla el deslizamiento del Navbar
 
@@ -217,9 +261,9 @@ const images = importImagesProject(category, projectName, isDesktop);
 
     useEffect(() => {
         const imageRefs = [
-            { ref: brandingImageRef, speed: 0.15 },
-            { ref: interiorismoImageRef, speed: 0.15 },
-            { ref: arquitecturaImageRef, speed: 0.15 },
+            { ref: brandingImageRef, speed: 0.1 },
+            { ref: interiorismoImageRef, speed: 0.1 },
+            { ref: arquitecturaImageRef, speed: 0.1 },
         ];
 
         const handleParallaxEffect = () => {
@@ -577,7 +621,12 @@ const images = importImagesProject(category, projectName, isDesktop);
     };
 
     const principalMedia = images.principal[imageName];
-
+    const markHorizontal = (img, useParent = false) => {
+        if (!img) return;
+        const horizontal = img.naturalWidth > img.naturalHeight;
+        const target = useParent ? img.parentElement : img;   // div .primer-foto ≠ img
+        target.classList.toggle('horizontal', horizontal);
+    };
     return (
         <div className="projects-general">
             <div id="overlay-blur" className={modalOpen ? 'active' : ''}></div>
@@ -606,7 +655,7 @@ const images = importImagesProject(category, projectName, isDesktop);
                         {isVideo(principalMedia) ? (
                             <video
                                 src={principalMedia}
-                                className="parallax-image-project"
+                                className="parallax-image-project "
                                 autoPlay
                                 muted
                                 loop
@@ -617,8 +666,9 @@ const images = importImagesProject(category, projectName, isDesktop);
                             <img
                                 src={principalMedia}
                                 alt="Principal"
-                                className='primer-foto'
-                                ref={brandingImageRef}
+                                className='primer-foto parallax-image-project-primera  '
+                                /* ref={brandingImageRef}  */
+                                onLoad={e => markHorizontal(e.target)}
                                 onClick={() => openPopup(principalMedia)}
                             />
                         )}
@@ -633,6 +683,8 @@ const images = importImagesProject(category, projectName, isDesktop);
                     menuOpen={menuOpen}
                     setMenuOpen={setMenuOpen}
                     showInput={showInput}
+                    searchData={searchIndex}
+                    onSelect={handleSelectProject}
                     setShowInput={setShowInput} />
 
             </header>
@@ -652,7 +704,7 @@ const images = importImagesProject(category, projectName, isDesktop);
                         <img
                             src={images.miniatura1[imageName]}
                             alt="Miniatura 1"
-                            ref={brandingImageRef}
+                            /*  ref={interiorismoImageRef} */
                             className='image-small-projet'
                             onClick={() => openPopup(images.miniatura1[imageName])}
                         />
@@ -678,7 +730,8 @@ const images = importImagesProject(category, projectName, isDesktop);
                             src={images.proyecto2[imageName]}
                             alt="proyecto f2"
                             className="parallax-image-project"
-                            ref={arquitecturaImageRef}
+                            /* ref={arquitecturaImageRef} */
+                            onLoad={e => markHorizontal(e.target)}
                             onClick={() => openPopup(images.proyecto2[imageName])}
                         />
                     </div>
@@ -712,7 +765,8 @@ const images = importImagesProject(category, projectName, isDesktop);
                             src={images.proyecto3[imageName]}
                             alt="Proyecto f3"
                             className="parallax-image-project"
-                            ref={brandingImageRef}
+                            /* ref={brandingImageRef} */
+                            onLoad={e => markHorizontal(e.target)}
                             onClick={() => openPopup(images.proyecto3[imageName])}
                         />
                     </div>
@@ -757,7 +811,7 @@ const images = importImagesProject(category, projectName, isDesktop);
                         />
                     </div>
                     <div className="quadrant"  >
-                                                <span className="project-box-frase"> {projectData.frase3}</span>
+                        <span className="project-box-frase"> {projectData.frase3}</span>
 
                         <div className="moving-line5" ref={line5Ref} data-animation="moveLine5"> </div>
 

@@ -1,6 +1,5 @@
 import React from 'react';
-import {
-  BrowserRouter as Router,
+import { HashRouter as Router,
   Routes,
   Route,
   useLocation,

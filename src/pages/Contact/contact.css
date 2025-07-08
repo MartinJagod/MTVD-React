@@ -146,4 +146,42 @@ textarea {
       width: 50%;
     }
   }
-  
+
+  /* desde acá */
+/*  Colores que ya usas en el menú  */
+:root{
+  --c1:#44B87E;   /* verde   */
+  --c2:#FD7E40;   /* naranja */
+  --c3:#FEC93A;   /* amarillo*/
+  --c4:#3B76F3;   /* azul    */
+}
+
+/*  Keyframes: gris → color → gris  */
+@keyframes flashBorder{
+  0%   { border-color:#ccc; }
+  20%  { border-color:var(--flash); }
+  80%  { border-color:var(--flash); }
+  100% { border-color:#ccc; }
+}
+
+/*  Clase que dispara el efecto  */
+.flash-border{
+  animation:flashBorder 1.1s ease-out forwards;
+}
+/* ----------  IMAGEN CON RATIO DINÁMICO  ---------- */
+.ratio-img{
+  object-fit: cover;            /* mantiene la proporción, recorta lo que sobre */
+  object-position: 50% 50%;
+}
+
+/* HORIZONTAL → quita width y usa height 100 vw */
+.ratio-img.landscape{
+  width:  auto !important;
+  height: 100vw !important;
+}
+
+/* VERTICAL   → quita height y usa width 100 vw */
+.ratio-img.portrait{
+  width: 100vw !important;
+  height: auto !important;
+}

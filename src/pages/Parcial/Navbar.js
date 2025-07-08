@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef, useContext } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { FaSearch } from 'react-icons/fa';
+import './Navbar.css';
 import logoHorizontal from '../../assets/images/logo-horizontal.png';
 import logoHorizontalBlack from '../../assets/images/Logo-horizontal-negro.png';
 import { LanguageContext } from "../../context/LanguageContext";
@@ -154,27 +155,28 @@ useEffect(() => {
                         </nav>
                     </div>
                     <div className="icons" style={{ display: 'flex', alignItems: 'center', justifyItems: 'center' }}>
+                        <button
+                            onClick={toggleLang}
+                            className="lang-toggle-btn idiomaNavbar"
+                            style={{
+                                  /*       marginTop: "50px",
+                                        marginRight: "10px",
+                                background: "transparent",
+                                border: "none",
+                                padding: "2px",
+                                fontSize: "0.75rem",
+                                cursor: "pointer", */
+                                color: iconColor,
+                            }} 
+                            aria-label="Cambiar idioma"
+                            >
+                            {lang}
+                            </button>
                         <FaSearch
                             className="search-icon-home-desktop"
                             onClick={handleSearchClick}
                             style={{ color: iconColor }}
                         />
-                        <button
-                            onClick={toggleLang}
-                            className="lang-toggle-btn"
-                            style={{
-                                marginLeft: "10px",
-                                background: "transparent",
-                                border: "none",
-                                padding: "2px",
-                                fontSize: "0.75rem",
-                                cursor: "pointer",
-                                color: iconColor,
-                            }}
-                            aria-label="Cambiar idioma"
-                        >
-                            {lang}
-                        </button>
                         <span
                             className="icon"
                             onClick={toggleMenu}

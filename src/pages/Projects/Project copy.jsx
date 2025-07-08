@@ -1,7 +1,11 @@
-import React, { useEffect, useState, useRef, useCallback } from 'react';
+import React, { useEffect, useState, useRef, useCallback, useContext } from 'react';
+import { LanguageContext } from '../../context/LanguageContext';
 import { useParams } from "react-router-dom";
-import projectsData from "./projectsData";
+import projectsData from './projectsData';
+import projectsDataES from './projectsDataES';
+
 import ProjectPopup from "./ProjectPopup";
+import { getIdByProjectName } from './projectUtils';
 import './Project.css';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import { importImages } from "./importImages"; // 🔹 Importamos la función
@@ -9,33 +13,76 @@ import { importImagesProject } from "./importImagesProject";
 import starImage from '../../assets/images/estrella.png';
 import ContactFooter from '../Parcial/ContactFooter'; // Ajusta la ruta según tu estructura de carpetas
 import Navbar from '../Parcial/Navbar'; // Ajusta la ruta según tu estructura de carpetas
+import ContactFooterDesktop from '../Parcial/ContactFooterDesktop'; // Ajusta la ruta según tu estructura de carpetas
 
 
 function Project() {
-    const interiorismo1='/assets/images/PaginaProyecto/proyecto3/CheMono.jpg';
-    const { id } = useParams(); // 🔹 Obtiene el ID desde la URL
-    
-    const imagesPrincipal = importImagesProject(); // 🔹 Carga todas las imágenes del proyecto
+    const interiorismo1 = '/assets/images/PaginaProyecto/proyecto3/CheMono.jpg';
+    /* const { id } = useParams(); */ // 🔹 Obtiene el ID desde la URL
+    const { category, projectName } = useParams();
+    const { lang } = useContext(LanguageContext);  // EN | ES
 
-    console.log("📂 Imágenes importadas:", imagesPrincipal);
+    // 🔹 Dataset por idioma
+    const dataset = lang === 'ES' ? projectsDataES : projectsData;
 
-    const projectNames = {
+    const imagesPrincipal = importImagesProject();
+
+    // Utilidad para clasificar la foto al cargar
+    const setBestFit = (img) => {
+  if (!img) return;
+
+  const cont = img.parentElement.getBoundingClientRect();
+  const contRatio = cont.width / cont.height;
+  const imgRatio  = img.naturalWidth / img.naturalHeight;
+
+  if (imgRatio > contRatio) {
+    // La imagen es más apaisada que el contenedor → sobra a los costados
+    img.classList.add('fit-height');
+    img.classList.remove('fit-width');
+  } else {
+    // Es más alta que ancha → sobran arriba/abajo
+    img.classList.add('fit-width');
+    img.classList.remove('fit-height');
+  }
+};
+
+    // helper (fuera del JSX)
+    const getCountry = loc =>
+        loc
+            ?.split(',')            // ["Banfield", " Buenos Aires", " Argentina"]
+            .pop()                  // " Argentina"
+            .trim()                 // "Argentina"
+            .split(/\s+/)           // ["Argentina"]
+            .pop();                 // "Argentina"
+
+    /* const projectNames = {
         1:"CheMono.jpg",
         2:"Barilatte.jpg",
         3:"Soberana.jpg"
+        
+        }; */
 
-    };
+    /* const imageName = projectNames[id] || "CheMono.jpg"; */ // 🔹 Imagen por defecto
 
-    const imageName = projectNames[id] || "CheMono.jpg"; // 🔹 Imagen por defecto
+    /* const PhraseLineSelected = imageName.replace(/\.jpg$/, ""); */
+    const imageName = `${projectName}.jpg`;       // AlgoGrosso.jpg
+    const PhraseLineSelected = projectName;                // AlgoGrosso
+    const isDesktop = window.innerWidth >= 1024;
+    const images = importImagesProject(category, projectName, isDesktop);
+    const id = getIdByProjectName(PhraseLineSelected);
+    const projectData =
+        id
+            ? (dataset[id] ?? projectsData[id])   // ← intenta ES, si no existe cae a EN
+            : {};
 
-    const PhraseLineSelected = imageName.replace(/\.jpg$/, "");
 
-    const projectData = projectsData[PhraseLineSelected] || {};
+
+    console.log("📂 Imágenes importadas:", images);
 
 
     console.log("🖼️ Imagen seleccionada:", PhraseLineSelected);
 
-    if (!imagesPrincipal.principal || !imagesPrincipal.principal[imageName]) {
+    if (!images.principal || !images.principal[imageName]) {
         console.error(`❌ No se encontró la imagen: ${imageName} en "principal"`);
     }
     /* const imageName = "Che Mono.jpg"; */
@@ -47,7 +94,7 @@ function Project() {
       const miniatura2 = require(`../../assets/images/PaginaProyecto/miniatura2/${imageName}`);
    */
     const [projectCount, setProjectCount] = useState(0);
-    const [yearsCount, setYearsCount] = useState(0);
+    const [yearsCount, setYearsCount] = useState(2000);
     const [countriesCount, setCountriesCount] = useState(0);
     const [citiesCount, setCitiesCount] = useState(0);
     const [showInput, setShowInput] = useState(false);
@@ -71,12 +118,17 @@ function Project() {
     let activityTimeout = null;
 
     // inicio carousel
-   /*  const images = importImages("CheMono"); */ // 🔹 Se puede cambiar a otra carpeta en el futuro
-
+    /*  const images = importImages("CheMono"); */ // 🔹 Se puede cambiar a otra carpeta en el futuro
 
     const openPopup = (image) => {
-        setSelectedImage(image);
-        setModalOpen(true);
+        if (modalOpen) {
+            // El modal ya está abierto → sólo actualizo la imagen
+            setSelectedImage(image);
+        } else {
+            // El modal está cerrado → abro y seteo imagen
+            setSelectedImage(image);
+            setModalOpen(true);
+        }
     };
     // fin carousel
 
@@ -189,18 +241,18 @@ function Project() {
             { ref: interiorismoImageRef, speed: 0.15 },
             { ref: arquitecturaImageRef, speed: 0.15 },
         ];
-    
+
         const handleParallaxEffect = () => {
             imageRefs.forEach(({ ref, speed }) => {
                 if (!ref.current) {
                     console.warn(`⚠️ El ref aún no está disponible:`, ref);
                     return; // ⛔ Evita ejecutar código sobre un `null`
                 }
-    
+
                 const image = ref.current;
                 const rect = image.getBoundingClientRect();
                 const windowHeight = window.innerHeight;
-    
+
                 if (rect.top < windowHeight && rect.bottom > 0) {
                     const translateY = -(rect.top - windowHeight / 2) * speed;
                     image.style.transform = `translateY(${translateY}px)`;
@@ -209,9 +261,9 @@ function Project() {
                 }
             });
         };
-    
+
         window.addEventListener('scroll', handleParallaxEffect);
-    
+
         return () => {
             window.removeEventListener('scroll', handleParallaxEffect);
         };
@@ -251,6 +303,7 @@ function Project() {
 
     const counterRef = useRef(null);
     const sectionCountersRef = useRef(null);
+    const sectionCounters2Ref = useRef(null);
     const slideBoxesRef = useRef(null);
     const slideStudioBoxRef = useRef(null);
 
@@ -271,8 +324,10 @@ function Project() {
 
     //Inicio contador animado
     const animateCounter = useCallback((setter, target, duration) => {
-        let count = 0;
-        const increment = target / (duration / 16);
+        let count = 0; // ⬅️ Empieza en 0
+        const frameTime = 16; // ~60 FPS
+        const steps = duration / frameTime;
+        const increment = target / steps;
 
         const interval = setInterval(() => {
             count += increment;
@@ -283,18 +338,19 @@ function Project() {
             } else {
                 setter(Math.ceil(count));
             }
-        }, 16);
+        }, frameTime);
     }, []);
 
+
     const startCountingProjects = useCallback(() => {
-        animateCounter(setProjectCount, projectData.contador1, 2000);
+        animateCounter(setProjectCount, Number(projectData.contador1), 700);
         setHasStartedCountingProjects(true);
     }, [animateCounter]);
 
     const startCountingSection = useCallback(() => {
-        animateCounter(setYearsCount, 4842, 2000);
-        animateCounter(setCountriesCount, 15, 4000);
-        animateCounter(setCitiesCount, 25, 4000);
+        animateCounter(setYearsCount, 4800, 1200);
+        animateCounter(setCountriesCount, 15, 1500);
+        animateCounter(setCitiesCount, 25, 1500);
         setHasStartedCountingSection(true);
     }, [animateCounter]);
 
@@ -308,7 +364,7 @@ function Project() {
                     setProjectCount(0); // Reinicia el contador al salir de pantalla
                 }
             });
-        }, { threshold: 0.1 });
+        }, { threshold: 0.5 });
 
         const projectCounterRef = counterRef.current;
         if (projectCounterRef) {
@@ -329,32 +385,20 @@ function Project() {
                     // Inicia el conteo en secuencia
                     const delay = 50; // 1 segundo entre contadores
 
-                    setYearsCount(0);
-                  /*   setCountriesCount(0);
-                    setCitiesCount(0); */
-/* 
-                    setTimeout(() => {
-                    }, 0); */
-                        animateCounter(setYearsCount, 4842, 500); // Primer contador
+                    setYearsCount(2000);
 
-/*                     setTimeout(() => {
-                        animateCounter(setCountriesCount, 15, 500); // Segundo contador
-                    }, delay);
+                    animateCounter(setYearsCount, Number(projectData.contador2), 4000); // Primer contador
 
 
-                    setTimeout(() => {
-                        animateCounter(setCitiesCount, 25, 500); // Tercer contador
-                    }, delay * 2); */
                 } else {
                     // Reinicia los contadores al salir de pantalla
-                    setYearsCount(0);
-                   /*  setCountriesCount(0);
-                    setCitiesCount(0); */
+                    setYearsCount(2000);
+
                 }
             });
-        }, { threshold: 0.2 });
+        }, { threshold: 0.5 });
 
-        const sectionCounterRef = sectionCountersRef.current;
+        const sectionCounterRef = sectionCounters2Ref.current;
         if (sectionCounterRef) {
             observerSection.observe(sectionCounterRef);
         }
@@ -451,8 +495,9 @@ function Project() {
             (entries) => {
                 entries.forEach((entry) => {
                     if (entry.isIntersecting) {
-                        if (entry.target.classList.contains("moving-line")) {
-                            restartAnimation(entry.target, "moveLine");
+                        if (entry.target.classList.contains("moving-line1-project")) {
+                            restartAnimation(entry.target, "moveLine1-project");
+
                         } else if (entry.target.classList.contains("moving-line2")) {
                             restartAnimation(entry.target, "moveLine2");
                         }
@@ -513,50 +558,61 @@ function Project() {
         };
     }, []);
 
-const [open, setOpen] = useState(false);
+    const [open, setOpen] = useState(false);
 
-useEffect(() => {
-  const overlay = document.getElementById('overlay-blur');
-  if (overlay) {
-    overlay.classList.toggle('active', modalOpen);
-  }
-}, [modalOpen]);
-useEffect(() => {
-  const body = document.body;
+    useEffect(() => {
+        const overlay = document.getElementById('overlay-blur');
+        if (overlay) {
+            overlay.classList.toggle('active', modalOpen);
+        }
+    }, [modalOpen]);
+    useEffect(() => {
+        const body = document.body;
 
-  if (modalOpen) {
-    // Método A: directo en línea
-    // body.style.overflow = 'hidden';
+        if (modalOpen) {
+            // Método A: directo en línea
+            // body.style.overflow = 'hidden';
 
-    // Método B: con clase (recomendado si usas Tailwind/otros)
-    body.classList.add('no-scroll');
-  } else {
-    // body.style.overflow = '';          // ← revierte al valor original
-    body.classList.remove('no-scroll');   // ← quita la clase
-  }
+            // Método B: con clase (recomendado si usas Tailwind/otros)
+            body.classList.add('no-scroll');
+        } else {
+            // body.style.overflow = '';          // ← revierte al valor original
+            body.classList.remove('no-scroll');   // ← quita la clase
+        }
 
-  // Limpieza de seguridad por si el componente se desmonta
-  return () => {
-    // body.style.overflow = '';
-    body.classList.remove('no-scroll');
-  };
-}, [modalOpen]);
+        // Limpieza de seguridad por si el componente se desmonta
+        return () => {
+            // body.style.overflow = '';
+            body.classList.remove('no-scroll');
+        };
+    }, [modalOpen]);
+    // Al cerrar el modal liberamos el scroll
+    const closePopup = () => {
+        setModalOpen(false);
+        setSelectedImage(null);          // (opcional) evita “imagen parpadeo”
+    };
+
+    const isVideo = (filename) => {
+        return /\.(mp4|webm|ogg)$/i.test(filename);
+    };
+
+    const principalMedia = images.principal[imageName];
 
     return (
-        <div className="home">
-<div id="overlay-blur" className={modalOpen ? 'active' : ''}></div>
+        <div className="projects-general">
+            <div id="overlay-blur" className={modalOpen ? 'active' : ''}></div>
 
 
             {/* Imagen  de fondo */}
             <header className="projet-header">
-                <div className="full-square">
+                {/*    <div className="full-square">
                     <div className="parallax-wrapper">
                         <img
-                            src={imagesPrincipal.principal[imageName]}
-                            alt="Branding 1"
-                            className="parallax-image"
+                            src={images.principal[imageName]}
+                            alt="Principal"
+                            className="parallax-image-project"
                             ref={brandingImageRef}
-                            onClick={() => openPopup(imagesPrincipal.principal[imageName])}
+                            onClick={() => openPopup(images.principal[imageName])}
 
                         />
                     </div>
@@ -564,8 +620,39 @@ useEffect(() => {
                     <div className="image-label-star">
                         <img src={starImage} alt="Star" className="star-image-foto" />
                     </div>
-                </div>
+                </div> */}
+                <div className="full-square-primero-foto">
+                    <div className='primer-foto'>
+                        {isVideo(principalMedia) ? (
+                            <video
+                                src={principalMedia}
+                                className="parallax-image-project"
+                                autoPlay
+                                muted
+                                loop
+                                playsInline
+                                onClick={() => openPopup(principalMedia)}
+                            />
+                        ) : (
+                            <img
+                                src={principalMedia}
+                                alt="Principal"
+                                className='primer-foto'
+                                ref={brandingImageRef}
+                                 onLoad={(e) => setBestFit(e.target)} 
+                                onClick={() => openPopup(principalMedia)}
+                            />
+                        )}
+                    </div>
 
+                    <div className="image-label-star">
+                        <img src={starImage} 
+                        alt="Star" 
+                        className="star-image-foto" 
+                        
+                        />
+                    </div>
+                </div>
                 <Navbar
                     isSliding={isSliding}
                     menuOpen={menuOpen}
@@ -577,7 +664,7 @@ useEffect(() => {
 
             {/* Inicio frase  */}
             <div className="phrase-section">
-                <span className="phrase-line">{PhraseLineSelected}</span>
+                <span className="phrase-line">{projectData.nombreproyecto}</span>
             </div>
 
             {/* fin frase  */}
@@ -588,24 +675,25 @@ useEffect(() => {
                 <div className="quadrant-container">
                     <div className='container-image-small-projet' >
                         <img
-                            src={imagesPrincipal.miniatura1[imageName]}
-                            alt="Branding 1"
+                            src={images.miniatura1[imageName]}
+                            alt="Miniatura 1"
                             ref={brandingImageRef}
                             className='image-small-projet'
-                            onClick={() => openPopup(imagesPrincipal.miniatura1[imageName])}
+                              onLoad={(e) => setBestFit(e.target)} 
+                            onClick={() => openPopup(images.miniatura1[imageName])}
                         />
                     </div>
 
                     <div className="quadrant-project white-box-project">
                         <span className="project-box-project">{projectData.frase1}</span>
+                        <div className="moving-line1-project" ref={line1Ref} ></div>
                     </div>
                     <div className="quadrant-project white-box-project"  >
                         <span className="project-box-project" >{projectData.frase2}</span>
-                        <div className="moving-line-project" ref={line1Ref}></div>
                     </div>
                     <div className="quadrant-project green-box-project" ref={counterRef}>
                         <span className="project-count-project">{projectCount}</span>
-                        <span className="project-label-project">{projectData.nombre}</span>
+                        <span className="project-label-project">{projectData.nombre1}</span>
                         <div className="moving-line2-project" ref={line2Ref}></div>
                     </div>
                 </div>
@@ -613,11 +701,12 @@ useEffect(() => {
                 <div className="full-square">
                     <div className="parallax-wrapper">
                         <img
-                            src={imagesPrincipal.proyecto2[imageName]}
-                            alt="Branding 1"
-                            className="parallax-image"
+                            src={images.proyecto2[imageName]}
+                            alt="proyecto f2"
+                            className="parallax-image-project"
                             ref={arquitecturaImageRef}
-                            onClick={() => openPopup(imagesPrincipal.proyecto2[imageName])}
+                             onLoad={(e) => setBestFit(e.target)} 
+                            onClick={() => openPopup(images.proyecto2[imageName])}
                         />
                     </div>
 
@@ -626,20 +715,20 @@ useEffect(() => {
                     </div>
                 </div>
                 <div className="horizontal-double-team">
-                    <div className="quadrant-project yellow-box-project" ref={sectionCountersRef} style={{ width: '50vw' }}>
+                    <div className="quadrant-project yellow-box-project" ref={sectionCounters2Ref} style={{ width: '50vw' }}>
                         <span className="project-count-project">{yearsCount}</span>
-                        <span className="project-label-project2">ft2</span>
+                        <span className="project-label-project2">{projectData.nombre2}</span>
                     </div>
                     <div className="quadrant-project white-box-project" style={{ width: '50vw', backgroundOpacity: "0.1" }}>
                         <span className="project-label-small">Location</span>
                         <span className="project-label-normal" style={{ marginBottom: "10px" }}>{projectData.location}</span>
 
                         <span className="project-label-small">Year</span>
-                        <span className="project-label-normal" style={{ marginBottom: "10px" }}>{projectData.year}</span>
-                        <div className="moving-line3" ref={line3Ref} data-animation="moveLine3"></div>
+                        <span className="project-label-normal" style={{ marginBottom: "10px" }}>{projectData.contador1}</span>
 
                         <span className="project-label-small">Area</span>
-                        <span className="project-label-normal">{projectData.area}</span>
+                        <span className="project-label-normal">{projectData.contador2 + " " + projectData.nombre2}</span>
+                        <div className="moving-line3" ref={line3Ref} data-animation="moveLine3"></div>
                     </div>
                 </div>
 
@@ -647,11 +736,12 @@ useEffect(() => {
                 <div className="full-square">
                     <div className="parallax-wrapper">
                         <img
-                            src={imagesPrincipal.proyecto3[imageName]}
-                            alt="Branding 1"
-                            className="parallax-image"
+                            src={images.proyecto3[imageName]}
+                            alt="Proyecto f3"
+                            className="parallax-image-project"
                             ref={brandingImageRef}
-                            onClick={() => openPopup(imagesPrincipal.proyecto3[imageName])}
+                               onLoad={(e) => setBestFit(e.target)} 
+                            onClick={() => openPopup(images.proyecto3[imageName])}
                         />
                     </div>
 
@@ -660,7 +750,7 @@ useEffect(() => {
                     </div>
                 </div>
                 <div className="quadrant-container">
-                   {/*  <div className="vertical-half-square">
+                    {/*  <div className="vertical-half-square">
                         <div className="half-parallax-wrapper">
                             <img
                                 src={imagesPrincipal.proyecto4[imageName]}
@@ -676,61 +766,69 @@ useEffect(() => {
                         </div>
                     </div> */}
                     <div className="quadrant-project blue-box-project" ref={sectionCountersRef} style={{ width: '50vw' }}>
-                        <span className="project-box-frase"> Balance of energy, style and comfort.</span>
+                        <span className="project-box-frase">{getCountry(projectData.location)}</span>
                     </div>
-                        <div className='container-image-small-projet' >
-                            <img
-                                src={imagesPrincipal.miniatura2[imageName]}
-                                alt="Branding 1"
-                                className='image-small-projet'
-                                onClick={() => openPopup(imagesPrincipal.miniatura2[imageName])}
-                            />
-                        </div>
-                        <div className='container-image-small-projet' >
-                            <img
-                                src={imagesPrincipal.proyecto4[imageName]}
-                                alt="Branding 1"
-                                className='image-small-projet'
-                                onClick={() => openPopup(imagesPrincipal.miniatura2[imageName])}
-                            />
-                        </div>
-                        <div className="quadrant" >
-                            <span className="project-box-frase">{projectData.frase3}</span>
-                            <div className="moving-line5" ref={line5Ref} data-animation="moveLine5"> </div>
+                    <div className='container-image-small-projet' >
+                        <img
+                            src={images.miniatura2[imageName]}
+                            alt="Miniatura 2"
+                            className='image-small-projet'
+                              onLoad={(e) => setBestFit(e.target)} 
+                            onClick={() => openPopup(images.miniatura2[imageName])}
+                        />
+                    </div>
+                    <div className='container-image-small-projet' >
+                        <img
+                            src={images.proyecto4[imageName]}
+                            alt="Proyecto f4"
+                            className='image-small-projet'
+                            onLoad={(e) => setBestFit(e.target)} 
+                            onClick={() => openPopup(images.miniatura2[imageName])}
+                        />
+                    </div>
+                    <div className="quadrant"  >
+                        <span className="project-box-frase"> {projectData.frase3}</span>
 
-                        </div>
+                        <div className="moving-line5" ref={line5Ref} data-animation="moveLine5"> </div>
+
+                    </div>
                 </div>
                 {/* Texto después de las imágenes */}
-                <div className="project-text">
-                    <span className="project-title">{projectData.encabezado}</span>
+                <div className="project-text" >
+                    <p className="project-title">{projectData.encabezado}</p>
 
                     <br />
                     <br />
                     <br />
 
-                    <p className="studio-paragraph">
-                    {projectData.parrafo1}
+                    <p className=" project-paragraph">
+                        {projectData.parrafo1}
                     </p>
 
-                    <p className="studio-paragraph">
-                    {projectData.parrafo2}
+                    <p className=" project-paragraph">
+                        {projectData.parrafo2}
                     </p>
                 </div>
+                <ProjectPopup
+                    isOpen={modalOpen}
+                    onClose={closePopup}
+                    initialImage={selectedImage}
+                    projectName={PhraseLineSelected}
+                    category={category}
+                />
             </section>
-
-            <section className="content-section">
-
+            <div className="button-container-clients mobile-hide">
+                <ContactFooterDesktop />
+            </div>
+            <section className="content-section desktop-hide">
                 <ContactFooter />
             </section>
-            <ProjectPopup 
-            isOpen={modalOpen} 
-            onClose={() => setModalOpen(false)} 
-            initialImage={selectedImage} 
-            projectName={PhraseLineSelected}
-            />
+
 
         </div>
     );
 }
+
+
 
 export default Project;

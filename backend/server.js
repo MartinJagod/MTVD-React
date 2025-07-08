@@ -42,6 +42,10 @@ const VALID_EXT = new Set(['.jpg', '.jpeg', '.png', '.webp', '.mp4']);
 /* ------------------------------------------------------------------ */
 /* 2. Helper recursivo: devuelve URLs de todas las imágenes del dir    */
 /* ------------------------------------------------------------------ */
+function makeUrl(relPath) {
+  // Versión A – ruta relativa
+  return `/assets/images/${relPath}`;
+}
 function readImagesRec(dir) {
   if (!fs.existsSync(dir)) return [];
 
@@ -65,7 +69,7 @@ function readImagesRec(dir) {
       .map(encodeURIComponent)
       .join('/');
 
-    result.push(`http://${SERVER_IP}:${PORT}/assets/images/${rel}`);
+    result.push(makeUrl(rel));
   });
 
   return result;
@@ -135,9 +139,7 @@ app.get('/api/images/:folder', (req, res) => {
       .filter((f) => VALID_EXT.has(path.extname(f).toLowerCase()))
       .map(
         (f) =>
-          `http://${SERVER_IP}:${PORT}/assets/images/${folder}/${encodeURIComponent(
-            f
-          )}`
+          makeUrl(`${folder}/${encodeURIComponent(f)}`)
       );
 
     res.json({ images });
@@ -166,10 +168,7 @@ app.get('/api/projects-home', (req, res) => {
         .readdirSync(dir)
         .filter((f) => VALID_EXT.has(path.extname(f).toLowerCase()))
         .map(
-          (f) =>
-            `http://${SERVER_IP}:${PORT}/assets/images/${folder}/${encodeURIComponent(
-              f
-            )}`
+          (f) => makeUrl(`${folder}/${encodeURIComponent(f)}`)
         );
 
       result[folder] = { hits: images };

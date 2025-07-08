@@ -48,7 +48,6 @@ body {
   padding: 5px;
   color: #ffffff; /* Color del texto dentro del header */
   margin-right: 11px;
-  margin-top: 8px;
 }
 
 
@@ -1812,3 +1811,33 @@ body.no-scroll {
     min-height: 100vh;
     overflow-x: hidden;
 }
+/* ---------- REGLAS SOLO PARA FOTOS HORIZONTALES ---------- */
+
+/* 1️⃣  primera imagen de cabecera */
+.primer-foto.horizontal{
+  width: auto !important;          /* anula el 130 vw original :contentReference[oaicite:0]{index=0}  */
+  height: 110vw !important;
+  background-position: center center;
+  position: relative;
+  top:-7%;
+}
+
+/* 2️⃣  cualquier .parallax-image-project que resulte horizontal */
+.parallax-image-project.horizontal{
+  width: auto !important;          /* quita el ancho forzado (150 vw o 160 vw)            */
+  height: 110vw !important;        /* hace que mande la altura                            */
+  position: relative;
+  left:-30%;
+  top:-10%;
+  background-position:center center;
+  transform: translateY(0);
+  transition: transform .1s ease-out;
+  will-change: transform;
+}
+
+ .parallax-image-project-primera{
+      position: relative;
+    left: 0;
+    top: 0;
+  
+ } 

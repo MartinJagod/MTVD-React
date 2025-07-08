@@ -5,7 +5,7 @@ import Navbar from '../Parcial/Navbar';
 import ContactFooter from '../Parcial/ContactFooter';
 import Carousel from './Carouseli';
 import projectsData from './projectsData';
-
+import API_BASE from '../../apiBase';
 /* ---------- helpers fuera del componente ---------- */
 const easeInOutCubic = t =>
   t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
@@ -144,7 +144,7 @@ function ProjectsHome() {
     useEffect(() => {
         setLoading(true);
 
-        fetch("http://193.203.182.77:5000/api/projects-home")
+        fetch(`${API_BASE}/projects-home`)
             .then(response => response.json())
             .then(({ design, architecture, branding }) => {
                 console.log("✅ Imágenes cargadas desde API local:", { design, architecture, branding });

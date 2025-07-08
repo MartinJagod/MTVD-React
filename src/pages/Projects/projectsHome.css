@@ -564,12 +564,12 @@ body {
 
 .menu-projects-home {
   position: absolute;
-  top: -4vw;
+  top: -3vw;
   border: none;
   width: 100%;
   color: #444;
-  font-size: 1.4rem;
-  font-weight: 800;
+  font-size: 1.3rem;
+  font-weight: 600;
   text-align: center;
   text-decoration: none;
   justify-content: center;

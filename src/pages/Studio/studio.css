@@ -75,8 +75,8 @@
 
 
 .studio-text {
-    margin-top: 60px;
-    padding: 30px;
+    margin-top: 1%;
+    padding: 2% 7%;
     text-align: left;
 }
 
@@ -185,8 +185,8 @@ ul {
     font-size: 7em;
     color: #44b87e;
     position: absolute;
-    top: -66px; /* Ajusta la posición vertical */
-    left: -17px; /* Ajusta la posición horizontal */
+    top: -37%; /* Ajusta la posición vertical */
+    left: -8%; /* Ajusta la posición horizontal */
     z-index: -1;
 }
 
@@ -195,8 +195,8 @@ ul {
     font-size: 3em;
     color: #44b87e;
     position: absolute;
-    bottom: -52px; /* Ajusta la posición vertical */
-    right: 1%; /* Ajusta la posición horizontal */
+    bottom: -30%; /* Ajusta la posición vertical */
+    right: 15%; /* Ajusta la posición horizontal */
     z-index: -1;
 }
 li {
@@ -223,16 +223,16 @@ li {
         font-size: 1.1em;
         line-height: 1.2;
         margin-bottom: 1rem;
-        padding: 10px;
+        padding: 10px 0;
         text-align: justify;
         max-width: 50%;
-        margin-left: 7%;
+        /* margin-left: 7%; */
     }
     .studio-title {
         font-size: 3rem;
         font-weight: 850;
         margin-bottom: 1rem;
-        margin-left: 7%;
+        /* margin-left: 7%; */
         padding-bottom: 3%;
     
     }
@@ -316,8 +316,8 @@ li {
         align-items: center;
         height: 0px;
         position: relative;
-        width: 29%;
-        margin-left: 60%;
+        width: 45%;
+        margin-left: 57%;
     }
     .styled-quote {
         position: relative;
@@ -328,6 +328,97 @@ li {
         color: #000;
         width: 41%;
         text-align: left;
-        padding: 12% 18%;
+        padding: 8% 8%;
     }
+    .styled-quote::before {
+    content: "“"; /* Comilla de apertura */
+    font-size: 7em;
+    color: #44b87e;
+    position: absolute;
+    top: -25%; /* Ajusta la posición vertical */
+    left: -20%; /* Ajusta la posición horizontal */
+    z-index: -1;
+}
+
+.styled-quote::after {
+    content: "”"; /* Comilla de cierre */
+    font-size: 3em;
+    color: #44b87e;
+    position: absolute;
+    bottom: -63px; /* Ajusta la posición vertical */
+    right: 5%; /* Ajusta la posición horizontal */
+    z-index: -1;
+}
+  }
+    /* ---------- DESKTOP overrides ---------- */
+  @media (min-width: 1500px) {
+    .studio-image          { width: 7.5vw;  height: 72vh; margin-top: 2%;}
+    .studio-image.selected { width: 50vw; height: 72vh; }
+    .image-label {
+        display: none;
+      }
+    .studio-image.selected .image-label {
+        display: inline;
+        text-shadow: 1px 2px 2px rgba(0, 0, 0, 0.4); /* Sombra negra semi-transparente */
+        font-size: 25px; /* Ajusta el tamaño según sea necesario */
+        margin-bottom: 3%;
+      }
+      .column {
+        /* display: flex
+    ; */
+        justify-content: center;
+        align-items: center;
+        height: 0px;
+        position: relative;
+        width: 45%;
+        margin-left: 57%;
+    }
+    .styled-quote {
+        position: relative;
+        font-family: "Montserrat", sans-serif;
+        font-size: 2.5em;
+        line-height: 1;
+        font-weight: bold;
+        color: #000;
+        width: 41%;
+        text-align: left;
+        padding: 8% 8%;
+    }
+    .styled-quote::before {
+    content: "“"; /* Comilla de apertura */
+    font-size: 7em;
+    color: #44b87e;
+    position: absolute;
+    top: -20%; /* Ajusta la posición vertical */
+    left: -4%; /* Ajusta la posición horizontal */
+    z-index: -1;
+}
+
+.styled-quote::after {
+    content: "”"; /* Comilla de cierre */
+    font-size: 3em;
+    color: #44b87e;
+    position: absolute;
+    bottom: -33px; /* Ajusta la posición vertical */
+    right: 15%; /* Ajusta la posición horizontal */
+    z-index: -1;
+}
+.styled-quote {
+  position: relative;
+  text-align: center;
+  width: 77%;
+}
+
+.styled-quote--alt::before {
+  position: absolute;
+  top: -25%;
+  left: 6%;
+  /* resto de estilos */
+}
+.styled-quote--alt::after {
+  position: absolute;
+  bottom: -18%;
+  right: 10%;
+  /* resto de estilos */
+}
   }
