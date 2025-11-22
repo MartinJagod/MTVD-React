@@ -1,0 +1,51 @@
+2025-08-10 09:05:51,403:DEBUG:certbot._internal.main:certbot version: 1.21.0
+2025-08-10 09:05:51,403:DEBUG:certbot._internal.main:Location of certbot entry point: /usr/bin/certbot
+2025-08-10 09:05:51,403:DEBUG:certbot._internal.main:Arguments: ['-q']
+2025-08-10 09:05:51,404:DEBUG:certbot._internal.main:Discovered plugins: PluginsRegistry(PluginEntryPoint#manual,PluginEntryPoint#null,PluginEntryPoint#standalone,PluginEntryPoint#webroot)
+2025-08-10 09:05:51,413:DEBUG:certbot._internal.log:Root logging level set at 40
+2025-08-10 09:05:51,415:DEBUG:certbot._internal.display.obj:Notifying user: Processing /etc/letsencrypt/renewal/mtvd-design.com.conf
+2025-08-10 09:05:51,421:DEBUG:certbot._internal.plugins.selection:Requested authenticator <certbot._internal.cli.cli_utils._Default object at 0x7fba59e9be80> and installer <certbot._internal.cli.cli_utils._Default object at 0x7fba59e9be80>
+2025-08-10 09:05:51,435:INFO:certbot.ocsp:Cannot extract OCSP URI from /etc/letsencrypt/archive/mtvd-design.com/cert1.pem
+2025-08-10 09:05:51,441:DEBUG:certbot._internal.display.obj:Notifying user: Certificate not yet due for renewal
+2025-08-10 09:05:51,441:DEBUG:certbot._internal.plugins.selection:Requested authenticator standalone and installer None
+2025-08-10 09:05:51,442:DEBUG:certbot._internal.display.obj:Notifying user: 
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+2025-08-10 09:05:51,442:DEBUG:certbot._internal.display.obj:Notifying user: The following certificates are not due for renewal yet:
+2025-08-10 09:05:51,442:DEBUG:certbot._internal.display.obj:Notifying user:   /etc/letsencrypt/live/mtvd-design.com/fullchain.pem expires on 2025-10-03 (skipped)
+2025-08-10 09:05:51,442:DEBUG:certbot._internal.display.obj:Notifying user: No renewals were attempted.
+2025-08-10 09:05:51,442:DEBUG:certbot._internal.display.obj:Notifying user: - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+2025-08-10 09:05:51,442:DEBUG:certbot._internal.renewal:no renewal failures
+2025-08-10 16:41:14,317:DEBUG:certbot._internal.main:certbot version: 1.21.0
+2025-08-10 16:41:14,317:DEBUG:certbot._internal.main:Location of certbot entry point: /usr/bin/certbot
+2025-08-10 16:41:14,317:DEBUG:certbot._internal.main:Arguments: ['-q']
+2025-08-10 16:41:14,318:DEBUG:certbot._internal.main:Discovered plugins: PluginsRegistry(PluginEntryPoint#manual,PluginEntryPoint#null,PluginEntryPoint#standalone,PluginEntryPoint#webroot)
+2025-08-10 16:41:14,331:DEBUG:certbot._internal.log:Root logging level set at 40
+2025-08-10 16:41:14,336:DEBUG:certbot._internal.display.obj:Notifying user: Processing /etc/letsencrypt/renewal/mtvd-design.com.conf
+2025-08-10 16:41:14,343:DEBUG:certbot._internal.plugins.selection:Requested authenticator <certbot._internal.cli.cli_utils._Default object at 0x7f43f0117eb0> and installer <certbot._internal.cli.cli_utils._Default object at 0x7f43f0117eb0>
+2025-08-10 16:41:14,358:INFO:certbot.ocsp:Cannot extract OCSP URI from /etc/letsencrypt/archive/mtvd-design.com/cert1.pem
+2025-08-10 16:41:14,365:DEBUG:certbot._internal.display.obj:Notifying user: Certificate not yet due for renewal
+2025-08-10 16:41:14,366:DEBUG:certbot._internal.plugins.selection:Requested authenticator standalone and installer None
+2025-08-10 16:41:14,366:DEBUG:certbot._internal.display.obj:Notifying user: 
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+2025-08-10 16:41:14,366:DEBUG:certbot._internal.display.obj:Notifying user: The following certificates are not due for renewal yet:
+2025-08-10 16:41:14,366:DEBUG:certbot._internal.display.obj:Notifying user:   /etc/letsencrypt/live/mtvd-design.com/fullchain.pem expires on 2025-10-03 (skipped)
+2025-08-10 16:41:14,366:DEBUG:certbot._internal.display.obj:Notifying user: No renewals were attempted.
+2025-08-10 16:41:14,366:DEBUG:certbot._internal.display.obj:Notifying user: - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+2025-08-10 16:41:14,366:DEBUG:certbot._internal.renewal:no renewal failures
+2025-08-11 09:45:51,369:DEBUG:certbot._internal.main:certbot version: 1.21.0
+2025-08-11 09:45:51,369:DEBUG:certbot._internal.main:Location of certbot entry point: /usr/bin/certbot
+2025-08-11 09:45:51,369:DEBUG:certbot._internal.main:Arguments: ['-q']
+2025-08-11 09:45:51,369:DEBUG:certbot._internal.main:Discovered plugins: PluginsRegistry(PluginEntryPoint#manual,PluginEntryPoint#null,PluginEntryPoint#standalone,PluginEntryPoint#webroot)
+2025-08-11 09:45:51,378:DEBUG:certbot._internal.log:Root logging level set at 40
+2025-08-11 09:45:51,381:DEBUG:certbot._internal.display.obj:Notifying user: Processing /etc/letsencrypt/renewal/mtvd-design.com.conf
+2025-08-11 09:45:51,386:DEBUG:certbot._internal.plugins.selection:Requested authenticator <certbot._internal.cli.cli_utils._Default object at 0x7f95cef6beb0> and installer <certbot._internal.cli.cli_utils._Default object at 0x7f95cef6beb0>
+2025-08-11 09:45:51,397:INFO:certbot.ocsp:Cannot extract OCSP URI from /etc/letsencrypt/archive/mtvd-design.com/cert1.pem
+2025-08-11 09:45:51,402:DEBUG:certbot._internal.display.obj:Notifying user: Certificate not yet due for renewal
+2025-08-11 09:45:51,402:DEBUG:certbot._internal.plugins.selection:Requested authenticator standalone and installer None
+2025-08-11 09:45:51,402:DEBUG:certbot._internal.display.obj:Notifying user: 
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+2025-08-11 09:45:51,402:DEBUG:certbot._internal.display.obj:Notifying user: The following certificates are not due for renewal yet:
+2025-08-11 09:45:51,402:DEBUG:certbot._internal.display.obj:Notifying user:   /etc/letsencrypt/live/mtvd-design.com/fullchain.pem expires on 2025-10-03 (skipped)
+2025-08-11 09:45:51,402:DEBUG:certbot._internal.display.obj:Notifying user: No renewals were attempted.
+2025-08-11 09:45:51,402:DEBUG:certbot._internal.display.obj:Notifying user: - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+2025-08-11 09:45:51,402:DEBUG:certbot._internal.renewal:no renewal failures

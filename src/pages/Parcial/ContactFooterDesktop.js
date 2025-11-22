@@ -1,8 +1,8 @@
 import React, { useState, useContext } from 'react';
-import { FaLinkedin, FaPinterest, FaYoutube, FaInstagram, FaEnvelope, FaCopy } from 'react-icons/fa';
+import { FaLinkedin, FaPinterest, FaYoutube, FaInstagram, FaEnvelope, FaCopy, FaWhatsapp  } from 'react-icons/fa';
 import logoSlogan from '../../assets/images/logo-slogan.png'; // Ajusta la ruta según tu proyecto
+import logoSloganES from '../../assets/images/logo-sloganES.png';
 import { LanguageContext } from "../../context/LanguageContext";
-
 const ContactFooterDesktop = () => {
 const { lang, toggleLang } = useContext(LanguageContext);
 
@@ -12,6 +12,7 @@ const { lang, toggleLang } = useContext(LanguageContext);
     USA:       { email: "arquitectos@estudiomontevideo.com", cellphone: "+5493516251960" },
     ARGENTINA: { email: "arquitectos@estudiomontevideo.com", cellphone: "+5493516251960" }
   };
+
 
   if (lang === "EN") {
     for (const key in defaultEmails) {
@@ -45,7 +46,10 @@ const { lang, toggleLang } = useContext(LanguageContext);
       })
       .catch(err => console.error("❌ Error al copiar:", err));
   };
-
+ const logoSrc = lang === 'ES' ? logoSloganES : logoSlogan;
+  // Nº sin “+” ni espacios para el enlace
+  const waNumber = lang === 'ES' ? '5491153204871' : '34622641468';
+  const waUrl  = `https://wa.me/${waNumber}`;
   return (
     
     <div >
@@ -63,7 +67,7 @@ const { lang, toggleLang } = useContext(LanguageContext);
   }}
 >
     <img
-  src={logoSlogan}
+  src={logoSrc}
   alt="Logo Slogan"
   className="logo-slogan"
   style={{
@@ -107,6 +111,10 @@ const { lang, toggleLang } = useContext(LanguageContext);
             
           <FaEnvelope className="social-icon" />
         </a>
+           {/* ─── WhatsApp dinámico ─── */}
+      <a href={waUrl} target="_blank" rel="noopener noreferrer">
+        <FaWhatsapp className="social-icon" />
+      </a>
       </div>
             </div>
 

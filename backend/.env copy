@@ -1,0 +1,12 @@
+SMTP_HOST=smtp.hostinger.com
+SMTP_PORT=465
+SMTP_SECURE=true
+SMTP_USER=contact@mtvd-design.com
+SMTP_PASS=Mingo100Ever!
+
+SMTP_HOST=smtp.gmail.com
+SMTP_PORT=465
+SMTP_SECURE=true
+SMTP_USER=jagodnikmartin@gmail.com
+SMTP_PASS=evup juub icty ylkn
+

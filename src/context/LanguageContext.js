@@ -8,33 +8,46 @@ const spanishSpeakingCountries = [
 
 const detectLanguageFromIP = async () => {
   try {
-    const res = await fetch("https://ipapi.co/json/");
-    const data = await res.json();
-    const countryCode = data.country;
-    return spanishSpeakingCountries.includes(countryCode) ? "ES" : "EN";
-  } catch (err) {
-    console.warn("🌍 No se pudo detectar el país por IP.");
-    return "EN"; // idioma por defecto
+    const res   = await fetch('https://ipapi.co/json/');
+    const data  = await res.json();
+    const code  = data.country;
+    const lang  = spanishSpeakingCountries.includes(code) ? 'ES' : 'EN';
+    return { lang, countryCode: code };
+  } catch {
+    return { lang: 'EN', countryCode: '??' };
   }
 };
-
+/* useEffect(() => {
+  if (country) {
+    fetch('/api/visits', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ country }),
+    }).catch(() => {});
+  }
+}, [country]); */
 
 export const LanguageProvider = ({ children }) => {
   /* const [lang, setLang] = useState(() => localStorage.getItem('lang') || 'EN'); */
 const [lang, setLang] = useState('EN');
+const [country, setCountry] = useState(null);
 
 useEffect(() => {
   const savedLang = localStorage.getItem('lang');
+const savedCtry = localStorage.getItem('country');
 
-  if (savedLang) {
-    setLang(savedLang);
-  } else {
-    detectLanguageFromIP().then((detectedLang) => {
-      setLang(detectedLang);
-      localStorage.setItem('lang', detectedLang);
-    });
-  }
-}, []);
+  if (savedLang && savedCtry) {
+      setLang(savedLang);
+      setCountry(savedCtry);
+    } else {
+      detectLanguageFromIP().then(({ lang: detLang, countryCode }) => {
+        setLang(detLang);
+        setCountry(countryCode);
+        localStorage.setItem('lang',     detLang);
+        localStorage.setItem('country',  countryCode);
+      });
+    }
+  }, []);
   const toggleLang = () => {
     const newLang = lang === 'EN' ? 'ES' : 'EN';
     setLang(newLang);

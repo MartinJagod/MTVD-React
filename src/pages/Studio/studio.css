@@ -422,3 +422,95 @@ li {
   /* resto de estilos */
 }
   }
+  .team-design-reveal {
+  position: relative;
+  width: 100vw;
+  height: 30vw;
+  
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+.design-title {
+    position: relative;
+    z-index: 2;
+    font-size: 2rem;
+    color: #0d0d0d;
+    /* text-align: center; */
+    font-weight: 700;
+    margin-left: -50vw;
+    width: 100%
+1308px
+;
+}
+.yellow-reveal {
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 33vw;
+  width: 50vw;
+  background: #ffd100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform .8s cubic-bezier(.22,1,.36,1);
+  z-index: 3;
+}
+.yellow-reveal.slide {
+  transform: translateX(100%);
+}
+.star-reveal {
+  width: 64px;
+  cursor: pointer;
+}
+.studio-parallax-block {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 0;
+}
+.parallax-wrapper-studio {
+  width: 100vw;    /* O el tamaño que quieras */
+  
+  height: 66vw;   /* O el alto que quieras */
+  overflow: hidden;
+  position: relative;
+  margin: 0 auto;
+}
+.parallax-image-studio {
+  position: absolute;
+  left: 0; top: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  will-change: transform;
+  transition: transform .25s;
+}
+.studio-parallax-block {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: stretch;
+  margin: 0 0 0 0;
+  padding: 0;
+}
+
+.parallax-wrapper-studio {
+  width: 100vw;   /* o lo que prefieras */
+  height: 50vw;  /* altura fija para efecto limpio */
+  overflow: hidden;
+  position: relative;
+  background: #eee;
+  box-shadow: 0 4px 32px rgba(0,0,0,0.07);
+}
+
+.parallax-image-studio {
+  position: absolute;
+  left: 0; top: 0;
+  width: 120%; height: 120%;
+  object-fit: cover;
+  will-change: transform;
+  transition: transform .22s cubic-bezier(.22,1,.36,1);
+}

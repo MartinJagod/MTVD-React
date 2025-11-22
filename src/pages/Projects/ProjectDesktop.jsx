@@ -39,7 +39,7 @@ function ProjectDesktop() {
     if (lang === "ES" && projectData?.contador2) {
         projectData = {
             ...projectData,
-            contador2: Math.round(projectData.contador2 * SQFT_TO_SQM),
+            contador2: Math.round(projectData.contador2 ),
             nombre2: "m²",
         };
     }

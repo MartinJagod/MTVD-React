@@ -1,0 +1,60 @@
+/* ---- Privacy page: estilos compatibles con Studio ---- */
+
+.privacy-page .studio-text {
+  /* Empuja el contenido por el Navbar fijo */
+  padding-top: 110px;        /* desktop */
+  padding-left: 7%;
+  padding-right: 7%;
+  padding-bottom: 40px;
+}
+
+/* Título reusando .studio-title */
+.privacy-page .studio-title {
+  display: block;
+  margin-bottom: 12px;
+}
+
+/* Lista con bullets “custom”, porque en studio.css los ul no tienen bullets */
+.privacy-page .privacy-list {
+  margin: 12px 0 24px 0;
+  padding: 0;
+  display: grid;
+  gap: 10px;
+}
+.privacy-page .privacy-list li {
+  position: relative;
+  padding-left: 20px;
+  line-height: 1.5;
+  text-align: justify;        /* como el resto de los párrafos */
+  font-size: 1.05rem;
+}
+.privacy-page .privacy-list li::before {
+  content: "•";
+  position: absolute;
+  left: 0;
+  top: 0;
+  line-height: 1.2;
+}
+
+/* Enlaces dentro del texto */
+.privacy-page a {
+  text-decoration: underline;
+}
+
+/* Mobile tweaks */
+@media (max-width: 767px) {
+  .privacy-page .studio-text {
+    padding-top: 90px;        /* un poco menos en mobile */
+    padding-left: 6%;
+    padding-right: 6%;
+  }
+  .privacy-page .privacy-list li {
+    font-size: 1rem;
+  }
+}
+.politicas-text{
+
+    margin-top: 4%;
+    padding: 2% 7%;
+    text-align: left;
+}

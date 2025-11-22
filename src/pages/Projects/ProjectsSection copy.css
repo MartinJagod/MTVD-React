@@ -69,6 +69,7 @@ div.search-bar{
     outline: none;
     text-decoration: none;
     text-align: center;
+
     
     
 }
@@ -108,8 +109,8 @@ div.search-bar{
 .subcategories {
     display: flex; /* Cambia block por flex */
     flex-wrap: nowrap; /* Asegura que todo esté en una sola línea */
-        justify-content: center;
-    gap: 4%; /* Espaciado entre botones */
+    justify-content: space-evenly;
+    gap: 1px; /* Espaciado entre botones */
     padding: 5px 20px; /* Mantén el padding si es necesario */
     overflow: hidden; /* Oculta cualquier desbordamiento */
     white-space: nowrap; /* Evita que el texto se rompa en varias líneas */
@@ -120,16 +121,14 @@ div.search-bar{
     padding:5px;
     border: none;
     background: none;
-    font-size: 0.8rem;
-    font-weight: 700;
+    font-size: 1rem;
     cursor: pointer;
-    color: #222;
+    color: #333;
     transition: color 0.3s;
     flex-shrink: 1; /* Permite que los botones se encojan si es necesario */
     min-width: 0; /* Asegura que el tamaño mínimo se ajuste */
     /*text-overflow: ellipsis;  Agrega puntos suspensivos si el texto se corta */
     overflow: hidden; /* Oculta texto desbordado */
-    margin-top: 0;
 }
 
 .subcategory-button.active {
@@ -165,7 +164,7 @@ div.search-bar{
 
 .divider-line {
     border: 0;
-    border-top: 1px solid #222;
+    border-top: 1px solid #333;
     width: 80%;
     margin: 20px auto;
 }
@@ -187,13 +186,13 @@ div.search-bar{
 
 .social-icons {
     display: flex;
-    color: #222;
+    color: #333;
     justify-content: left;
     gap: 5px;
     margin-top: 15px;
 }
 .social-icon {
-    color: #222;
+    color: #333;
 }
 .menu-icon-project{
     font-size: 29px;
@@ -431,7 +430,7 @@ div.search-bar{
 /* el resto de la página debe empezar después del bloque fijo */
 .projects-scrollable-content,
 .projects-section > .projects-scrollable-content {
-  margin-top: 28%;   /* ≈ altura total de .projects-fixed-top */
+  margin-top: 8.5%;   /* ≈ altura total de .projects-fixed-top */
 }
 @media (max-width: 768px) {
   .projects-scrollable-content {
@@ -497,11 +496,12 @@ div.search-bar{
 .menu-items-split-desktop {
   display: flex;
   justify-content: center;
-  gap: 3%;
+  gap: 40px;
 }
 
 .menu-left-projects {
   display: flex;
+  gap: 40px;
   align-items: center;
 }
 
@@ -525,7 +525,7 @@ div.search-bar{
 }
 
 .menu-link-desktop:hover {
-  color: #222;
+  color: #666;
 }
 /* ===== MENÚ DESKTOP - PROJECTSSECTION ===== */
 .section-selector-projects {
@@ -533,7 +533,7 @@ div.search-bar{
   justify-content: center;
   padding: 0px 20px;
   align-items: center;
-  margin-top: 17%;
+  margin-top: 1.8%;
 }
 
 .desktop-menu-projetcs {
@@ -554,7 +554,7 @@ div.search-bar{
   align-items: center;
   width: 100%; /* Ancho del contenedor de botones */
   
-  gap: 3%;
+  gap: 18%;
 }
 
 .menu-link-desktop-section {
@@ -563,7 +563,7 @@ div.search-bar{
   font-family: "Montserrat";
   font-size: 1.3rem;
   font-weight: 600;
-  color: #333; /* Inactivo */
+  color: #bbb; /* Inactivo */
   cursor: pointer;
   transition: all 0.3s ease;
   
@@ -573,36 +573,58 @@ div.search-bar{
   white-space: nowrap;
   margin-top: 0.5%;
   width: 12%;
-  border: #222 2px solid;
+  border: #333 1px solid;
 }
 
 .menu-link-desktop-section.active {
-  color: #222; /* Activo - más oscuro */
+  color: #444; /* Activo - más oscuro */
   font-weight: 800;
   background-color: #f7780f;
 }
 
 .menu-link-desktop-section:hover {
-  color: #222;
+  color: #666;
 }
-    .menu-link-desktop-section {
-        border: #222 2px solid;
-        font-size: 1.3rem;
-        width: auto;
-        flex: 1 1;
-    }
-    .subcategories {
-        margin-left: 0;
+@media (min-width: 370px) and (max-width: 425px) {
+ .header-navbar {
+    position: fixed;
+    top: 5px;
+    left: 0;
+    width: 100%;
+    background: #ffffff !important;
+    z-index: 11;
+}
+    .section-selector-projects {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-top: 17.8%;
     }
 
-@media (min-width: 426px) and (max-width: 768px) {
-  .menu-left-projects {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 80%;
-    gap: 15%;
+.menu-link-desktop-section {
+    border: #333 1px solid;
+    font-size: 16px;
+
+    }
+    .projects-section > .projects-scrollable-content {
+  margin-top: 21.5%;   /* ≈ altura total de .projects-fixed-top */
 }
+    .subcategory-button {
+    font-family: "Montserrat";
+    padding: 5px;
+    border: none;
+    background: none;
+    font-size: 0.7rem;
+    cursor: pointer;
+    color: #333;
+    transition: color 0.3s;
+    flex-shrink: 1;
+    min-width: 0;
+    overflow: hidden;
+}
+
+}
+@media (min-width: 426px) and (max-width: 768px) {
 .projects-section .projects-header, .projects-section .header-navbar {
     position: fixed;
     top: 50px;
@@ -626,7 +648,6 @@ div.search-bar{
 @media (min-width: 769px) and (max-width: 1200px) {
   .menu-left-projects {
     width: 70%;
-    
   }
   
   .menu-link-desktop-section {
@@ -638,7 +659,6 @@ div.search-bar{
 @media (min-width: 768px) and (max-width: 992px) {
   .menu-left-projects {
     width: 80%;
-   
   }
   
   .menu-link-desktop-section {
@@ -649,7 +669,7 @@ div.search-bar{
     margin-top: 17%;
 }
 .menu-link-desktop-section {
-    border: #222 2px solid;
+    border: #333 1px solid;
     width: 30%;
     font-size: 1rem;
 
@@ -659,34 +679,17 @@ div.search-bar{
         justify-content: center;
         padding: 9px 20px;
         align-items: center;
-        margin-top: 6.5%;
+        margin-top: 1.9%;
     }
-    .subcategories {
-    display: flex; /* Cambia block por flex */
-    flex-wrap: nowrap; /* Asegura que todo esté en una sola línea */
-        justify-content: center;
-    gap: 1%; /* Espaciado entre botones */
-    padding: 5px 20px; /* Mantén el padding si es necesario */
-    overflow: hidden; /* Oculta cualquier desbordamiento */
-    white-space: nowrap; /* Evita que el texto se rompa en varias líneas */
-}
 }
 
-/* Regla general para móviles que OCULTA el menú */
-/* @media (max-width: 767px) {
+@media (max-width: 767px) {
+  /* Mobile usa el select, esconde los botones */
   .desktop-menu-projetcs {
     display: none !important;
   }
-} */
-
-@media (min-width: 1024px) {
-  .section-selector-projects {
-    display: flex;
-    justify-content: center;
-    padding: 0px 20px;
-    align-items: center;
-    margin-top: 2.9%;
 }
+@media (min-width: 1024px) {
   .desktop-menu .menu-link-desktop {
         color: #222;
         font-family: "Montserrat";
@@ -697,7 +700,6 @@ div.search-bar{
         .menu-left-projects {
         width: 100%;
         margin-top: 0.5%;
-        
     }
 
     .desktop-menu-projetcs nav {
@@ -708,67 +710,36 @@ div.search-bar{
         justify-content: center;
         width: 100vw;
         font-size: 1.2rem;
-        margin-top: 4%;
+        margin-top: 2.4%;
     }
     .menu-link-desktop-section {
-    border: #222 2px solid;
+    border: #333 1px solid;
     width: 16%;
     }
        .menu-left-projects {
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 80%; /* Ancho del contenedor de botones */
-  gap: 18%;
+  width: 100%; /* Ancho del contenedor de botones */
+  gap: 14%;
 }
    .projects-scrollable-content, .projects-section > .projects-scrollable-content {
     margin-top: 12.5%;
 }
-.subcategories {
-    display: flex; /* Cambia block por flex */
-    flex-wrap: nowrap; /* Asegura que todo esté en una sola línea */
-        justify-content: center;
-    gap: 3%; /* Espaciado entre botones */
-    padding: 5px 20px; /* Mantén el padding si es necesario */
-    overflow: hidden; /* Oculta cualquier desbordamiento */
-    white-space: nowrap; /* Evita que el texto se rompa en varias líneas */
-}
 
 }
- @media (min-width: 2039px){
-       
-           .menu-left-projects {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      width: 70%; /* Ancho del contenedor de botones */
-      gap: 25%;
-    }
-        .subcategory-button {
-            font-family: "Montserrat";
-            font-size: 1rem;
-        }
-    }
 @media (min-width: 1439px) and (max-width: 1623px) {
-  .section-selector-projects {
-    display: flex;
-    justify-content: center;
-    padding: 0px 20px;
-    align-items: center;
-    margin-top: 3.1%;
-  }
-  
-  .desktop-menu .menu-link-desktop {
-    color: #222;
+   .desktop-menu .menu-link-desktop {
+        color: #222;
         font-family: "Montserrat";
         margin-top: 50px;
         font-size: 1.3rem;
         font-weight: 700;
-      }
-      .projects-scrollable-content, .projects-section > .projects-scrollable-content {
-        margin-top: 10.1%;
-      }
-      .desktop-menu-projetcs nav {
+    }
+    .projects-scrollable-content, .projects-section > .projects-scrollable-content {
+    margin-top: 10.1%;
+}
+.desktop-menu-projetcs nav {
         display: flex;
         align-items: center;
         flex-direction: row;
@@ -777,68 +748,63 @@ div.search-bar{
         width: 100vw;
         font-size: 1.2rem;
         margin-top: 1.8%;
-      }
-      .menu-link-desktop-section {
-        border: #222 2px solid;
-        padding: 5px 8px;
-        font-size: 1.3rem;
-        width: 12%;
-      }
-      .menu-left-projects {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        width: 70%; /* Ancho del contenedor de botones */
-        gap: 10%;
-      }
-      .subcategories {
+    }
+    .menu-link-desktop-section {
+    border: #333 1px solid;
+    width: 12%;
+    }
+    .menu-left-projects {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%; /* Ancho del contenedor de botones */
+  gap: 15%;
+}
+    .subcategories {
         
         margin-top: 0.5%;
-        
-      }
-      .subcategory-button {
-        
-        font-size: 0.9rem;
-        
-      }
+    }
+
 }
 
 
-@media (min-width: 1624px) and (max-width: 2038px) {
-  
-  .desktop-menu .menu-link-desktop {
-    color: #222;
+@media (min-width: 1624px) {
+
+    .desktop-menu .menu-link-desktop {
+        color: #222;
         font-family: "Montserrat";
         margin-top: 50px;
-        font-size: 1.5rem;
+        font-size: 2rem;
         font-weight: 700;
-      }
-      .menu-link-desktop-section {
-        background: none;
-        font-family: "Montserrat";
-        font-size: 1.5rem;
-        border: #222 2px solid;
-      }
-      .section-selector-projects {
-        display: flex;
-        justify-content: center;
-        padding: 0px 20px;
-        align-items: center;
-        margin-top: 3%;
-      }
-      .subcategory-button {
-        font-family: "Montserrat";
-        font-size: 1.3rem;
-        
-      }
-      .menu-left-projects {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        width: 70%; /* Ancho del contenedor de botones */
-        gap: 18%;
-      }
-      .desktop-menu-projetcs nav {
+    }
+    .menu-link-desktop-section {
+    background: none;
+    font-family: "Montserrat";
+    font-size: 2rem;
+border: #333 1px solid;
+}
+.section-selector-projects {
+  display: flex;
+  justify-content: center;
+  padding: 0px 20px;
+  align-items: center;
+  margin-top: 0;
+}
+.subcategory-button {
+    font-family: "Montserrat";
+    
+    font-size: 1.3rem;
+    
+}
+       .menu-left-projects {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%; /* Ancho del contenedor de botones */
+  gap: 14%;
+  margin-bottom: 20px ;
+}
+    .desktop-menu-projetcs nav {
         display: flex;
         align-items: center;
         flex-direction: row;
@@ -847,72 +813,8 @@ div.search-bar{
         width: 100vw;
         font-size: 1.2rem;
         margin-top: 1.5%;
-      }
-      .scrollable-content, .projects-section > .projects-scrollable-content {
-        margin-top: 10%;
-      }
     }
-    
-    /* --- SOLUCIÓN MOVIDA AL FINAL PARA TENER PRIORIDAD --- */
-    @media (min-width: 350px) and (max-width: 425px) {
-      /* FORZAR VISIBILIDAD: Sobrescribe la regla de max-width: 767px */
-      .desktop-menu-projetcs {
-        display: flex !important;
-        width: 100%;
-      }
-      
-      .header-navbar {
-        position: fixed;
-        top: 5px;
-        left: 0;
-        width: 100%;
-        background: #ffffff !important;
-        z-index: 11;
-      }
-      
-      .section-selector-projects {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        margin-top: 14.8%;
-        padding: 0 5px; 
-      }
-      
-      .menu-left-projects {
-        display: flex;
-        justify-content: space-between; 
-        align-items: center;
-        width: 90%;
-        gap: 5px; 
-      }
-      
-      .menu-link-desktop-section {
-        border: #222 2px solid;
-        font-size: 12px; 
-        width: auto;     
-        flex: 1;         
-        padding: 4px 2px;
-      }
-      
-      .projects-section > .projects-scrollable-content {
-        margin-top: 26%;   
-      }
-      
-      .subcategory-button {
-        font-family: "Montserrat";
-        padding: 5px;
-        border: none;
-        background: none;
-        font-size: 0.7rem;
-        cursor: pointer;
-        color: #222;
-        transition: color 0.3s;
-        flex-shrink: 1;
-        min-width: 0;
-        overflow: hidden;
-      }
-      .projects-scrollable-content, .projects-section > .projects-scrollable-content {
-        margin-top: 27.5%;
-      }
-    }
-   
+    .scrollable-content, .projects-section > .projects-scrollable-content {
+    margin-top: 7%;
+}
+}

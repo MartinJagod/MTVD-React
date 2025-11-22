@@ -1,0 +1,595 @@
+:root {
+  --yellow: #ffd100;   /* ya existe */
+  --orange: #ff7a00;   /* ajustá a tu naranja institucional */
+  --green:  #00b050;   /* ya lo usás en el bloque verde */
+  --blue:   #0077c8;   /* ajustá a tu azul institucional */
+
+  --dark: #0d0d0d;
+  --gray: #666;
+  --font-main:  'Montserrat', sans-serif;
+}
+
+/* Reset mínimo  */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: "Montserrat", sans-serif;
+  color: #333;
+}
+
+body {
+  font-family: var(--font-main);
+  color: var(--dark);
+  background: #fafafa;
+}
+
+/* ╭─────────────────────────╮
+   │  HERO VIDEO + NAVBAR    │
+   ╰─────────────────────────╯ */
+.studio-header-new {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.studio-hero-video {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 1;
+}
+
+/* Controles sobre el vídeo */
+.mute-button,
+.full-button {
+  position: absolute;
+  top: 95vh;
+  right: 1rem;
+  width: 40px;
+  height: 40px;
+  border: none;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.45);
+  color: #fff;
+  font-size: 18px;
+  cursor: pointer;
+  z-index: 5;
+  transition: background 0.2s;
+}
+
+.full-button {
+  right: 4.25rem;
+}
+
+.mute-button:hover,
+.full-button:hover {
+  background: rgba(0, 0, 0, 0.8);
+}
+
+/* Slogan centrado */
+.studio-slogan {
+  position: absolute;
+  bottom: 10vh;
+  left: 50%;
+  transform: translateX(-50%);
+  text-align: center;
+  z-index: 3;
+  padding: 0 1rem;
+}
+
+.studio-slogan h1 {
+  color: #fff;
+  font-size: clamp(1.75rem, 4vw, 3rem);
+  font-weight: 600;
+  text-shadow: 0 3px 14px rgba(0, 0, 0, 0.6);
+}
+
+/* ╭─────────────────────────╮
+   │  INTRO                 │
+   ╰─────────────────────────╯ */
+.studio-intro {
+    font-family: "Montserrat";
+  max-width: 100vw;
+  margin: 4rem auto;
+  text-align: center;
+  padding: 0 1rem;
+}
+
+.studio-intro h2 {
+
+  font-size: clamp(3rem, 5vw, 5vw);
+  font-weight: 750;
+  margin-bottom: 1.4rem;
+}
+@media (max-width: 768px) {
+  .studio-intro h2 {
+    font-size: 3rem;
+    font-weight: 850;
+    margin-bottom: 1rem;
+     line-height: 1.1;
+  }
+  
+
+}
+.studio-title {
+    font-size: 3rem;
+    font-weight: 850;
+    margin-bottom: 1rem;
+}
+
+.studio-intro p {
+          color: #000;
+        font-family: Montserrat;
+        font-size: 2.3vw;
+        font-weight: 600;
+  line-height: 1.65;
+  text-align: left;
+    padding: 0 1%
+}
+.studio-intro {
+          color: #000;
+        font-family: Montserrat;
+        font-size: 2.3vw;
+        font-weight: 600;
+  line-height: 1.65;
+  text-align: left;
+    padding: 0 4%
+}
+
+/* ╭─────────────────────────╮
+   │  PARALLAX BLOQUES      │
+   ╰─────────────────────────╯ */
+.studio-parallax-block {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 0;
+}
+
+/* contenedor que oculta excedente de las fotos parallax */
+.studio-parallax-block .image-wrapper,
+.studio-team-block .image-wrapper {
+  width: 100%;
+  overflow: hidden; /* 🔑 ocultar excedente */
+  position: relative;
+}
+
+.image-wrapper img {
+  display: block;
+  width: 100%;
+  height: auto;
+  will-change: transform;
+  transition: transform 0.3s ease-out;
+  pointer-events: none;
+}
+
+.text-block {
+  padding: 2rem 1rem;
+  text-align: center;
+}
+
+/* ╭─────────────────────────╮
+   │  TEAM BLOQUES          │
+   ╰─────────────────────────╯ */
+.studio-team-block {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 2rem;
+  padding: 4rem 1rem;
+  height: 37vw;
+}
+
+.studio-team-block.design .text-side {
+  order: 1;
+}
+
+.studio-team-block.arch .text-side {
+  order: 2;
+}
+
+.text-side {
+  flex: 1 1 320px;
+  text-align: left;
+}
+
+.text-side h3 {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}
+
+.arrow-animate {
+  width: 48px;
+  margin-top: 1rem;
+  opacity: 0;
+  transform: translateY(-6px);
+  transition: opacity 0.3s ease-out;
+}
+
+.arrow-animate.animate {
+  opacity: 1;
+  animation: arrow-bounce 1s infinite;
+}
+
+@keyframes arrow-bounce {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(6px);
+  }
+}
+
+/* ╭─────────────────────────╮
+   │  MAPA                  │
+   ╰─────────────────────────╯ */
+.studio-map-block {
+  position: relative;
+  margin: 0;
+}
+
+.map-image {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.legend {
+  position: absolute;
+  bottom: 1rem;
+  right: 1rem;
+  background: rgba(0, 0, 0, 0.45);
+  color: #fff;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  z-index: 2;
+}
+
+/* ╭─────────────────────────╮
+   │  ROLES / COLUMNS       │
+   ╰─────────────────────────╯ */
+.studio-columns {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 2rem;
+  padding: 4rem 1rem;
+  background: #fff;
+}
+
+.column h4 {
+  font-size: 1.25rem;
+  margin-bottom: 0.75rem;
+  font-weight: 600;
+}
+
+.column ul {
+  list-style: none;
+}
+
+.column li {
+  line-height: 1.5;
+  color: var(--gray);
+  font-size: 0.95rem;
+}
+
+/* ╭─────────────────────────╮
+   │  CLIENTS + FOOTER      │
+   ╰─────────────────────────╯ */
+.studio-end-section {
+  padding: 4rem 0 0;
+  background: #fff;
+}
+
+/* Helpers responsive */
+.desktop-hide {
+  display: none;
+}
+
+.mobile-hide {
+  display: block;
+}
+
+@media (min-width: 768px) {
+  .desktop-hide {
+    display: block;
+  }
+  .mobile-hide {
+    display: none;
+  }
+}
+.image-wrapper {
+    position: relative;
+    border-radius: 0px; 
+    overflow: hidden;
+}
+.yellow-reveal {
+    position: absolute;
+    left: 0;
+    top: 0%;
+    height: 30vw;
+    width: 50vw;
+    background: #ffd100;
+    display: flex
+;
+    align-items: center;
+    justify-content: center;
+    transition: transform .8s 
+cubic-bezier(.22, 1, .36, 1);
+    z-index: 3;
+}
+ .design-title {
+    
+    font-size: 4rem;
+  
+}
+@media (max-width: 700px) {
+  .studio-intro p {
+   font-size: .8rem;
+    line-height: 1.5;
+    margin-bottom: 1rem;
+    text-align: justify;
+  }
+  .design-title {
+    
+    font-size: 1rem;
+  
+}
+}
+/* ───────────────────────────────────────────────
+   BLOQUE VERDE — movimiento de derecha a izquierda
+─────────────────────────────────────────────── */
+.team-arch-reveal {
+  position: relative;
+  height: 30vw;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  overflow: hidden;
+  margin-top: -2px;
+}
+
+.green-reveal {
+  position: absolute;
+  right: 0;
+  top: 0;
+  height: 30vw;
+  width: 50vw;
+  background: #00b050; /* verde */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.8s cubic-bezier(.22, 1, .36, 1);
+  transform: translateX(0); /* parte desde la derecha */
+  z-index: 3;
+}
+
+.green-reveal.slide-left {
+  transform: translateX(-100%); /* entra hacia la izquierda */
+}
+
+.design-title.right {
+  position: relative;
+  z-index: 4;
+  font-size: 4rem;
+  font-weight: 700;
+  color: #000;
+  text-align: right;
+  padding-right: 2%;
+  z-index: -1;
+}
+
+/* mobile */
+@media (max-width: 700px) {
+  .team-arch-reveal {
+    height: 30vw;
+  }
+  .green-reveal {
+    width: 50%;
+    height: 30vw;
+  }
+  .design-title.right {
+    font-size: 1rem;
+    text-align: center;
+    padding-right: 5%;
+    z-index: -1;
+  }
+}
+.parallax-image {
+    position: absolute;
+    left: 0;
+    top: -30px;
+    left:-11%;
+    width: 120%;
+    height: 120%;
+    object-fit: cover;
+    will-change: transform;
+    transition: transform .22s 
+cubic-bezier(.22, 1, .36, 1);
+}
+.parallax-image2 {
+    position: absolute;
+    left: 0;
+    top: -30px;
+    left:-11%;
+    width: 120%;
+    height: 120%;
+    object-fit: cover;
+    will-change: transform;
+    transition: transform .22s 
+cubic-bezier(.22, 1, .36, 1);
+}
+.design-title {
+   
+    margin-left: 5%;
+}
+.team-column {
+    flex: 1 1;
+    text-align: left;
+    margin-left: 10%;
+}
+.team-column-Archi{
+    margin-right: 15%;
+
+}
+.team-columns-wrapper {
+  padding: 4rem 5%;
+  background: #fff;
+  text-align: left;
+}
+
+.team-columns {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 3rem;
+  margin-top: 2rem;
+}
+
+.team-column {
+  flex: 1 1 30%;
+  min-width: 250px;
+}
+
+.team-column h4 {
+  font-size: 1.4rem;
+  margin-bottom: 0.75rem;
+  font-weight: 700;
+}
+
+.team-column ul {
+  list-style: none;
+  padding: 0;
+}
+
+.team-column li {
+  line-height: 1.6;
+  font-size: 1rem;
+  color: #333;
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .team-columns {
+    flex-direction: column;
+  }
+  .yellow-reveal {
+    position: absolute;
+    left: 0;
+    top: 0%;
+    height: 50vw;
+    width: 50vw;
+    background: #ffd100;
+    display: flex
+;
+    align-items: center;
+    justify-content: center;
+    transition: transform .8s 
+cubic-bezier(.22, 1, .36, 1);
+    z-index: 3;
+}
+.team-design-reveal {
+    position: relative;
+    width: 100vw;
+    height: 50vw;
+    display: flex
+;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+.team-column ul {
+    list-style: none;
+    padding: 0;
+    font-size: 0.5rem;
+}
+.team-column-Archi {
+    margin-right: 15%;
+    list-style: none;
+    padding: 0;
+    font-size: 0.5rem;
+}
+    .green-reveal {
+        width: 50%;
+        height: 50vw;
+    }
+    
+.team-arch-reveal {
+    position: relative;
+    height: 50vw;
+    display: flex
+;
+    align-items: center;
+    justify-content: flex-end;
+    overflow: hidden;
+    margin-top: -2px;
+}
+.parallax-image {
+    position: absolute;
+    left: 0;
+    top: -15px;
+    left: -13%;
+    width: 126%;
+    height: 126%;
+    object-fit: cover;
+    will-change: transform;
+    transition: transform .22s 
+cubic-bezier(.22, 1, .36, 1);
+}
+.parallax-image2 {
+    position: absolute;
+    left: 0;
+    top: -15px;
+    left: -13%;
+    width: 126%;
+    height: 126%;
+    object-fit: cover;
+    will-change: transform;
+    transition: transform .22s 
+cubic-bezier(.22, 1, .36, 1);
+}
+.text-block {
+    padding: 0px; 
+    text-align: center;
+}
+.parallax-image2 {
+        position: absolute;
+        left: 0;
+        top: -32px;
+        left: -13%;
+        width: 126%;
+        height: 126%;
+        object-fit: cover;
+        will-change: transform;
+        transition: transform .22s 
+cubic-bezier(.22, 1, .36, 1);
+    }
+        .team-arch-reveal {
+        
+        margin-top: 0px;
+    }
+}
+.studio-map { height: 90vh; width: 100%; filter: grayscale(60%); }  /* o 74vh si te gusta más alto */
+
+@media (min-width: 768px) {
+  .team-column ul li {
+    margin-bottom: 5px;
+    font-size: 2em;
+    text-align: left;
+  }
+  
+  .team-column-Archi li {
+    margin-bottom: 5px;
+    font-size: 2em;
+    text-align: left;
+  }
+}

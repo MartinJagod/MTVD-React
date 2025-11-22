@@ -2,7 +2,6 @@ import React, { useEffect, useState, useRef, useCallback, useMemo, useContext } 
 import { useNavigate } from "react-router-dom";
 import { LanguageContext } from '../../context/LanguageContext';
 
-import './Home.css';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import home1 from '../../assets/images/home1.jpg';
 import homeVideo from '../../assets/images/homeVideo.mp4'; // Importa el video
@@ -26,6 +25,7 @@ import CarouselLogos from "../Parcial/CarouselLogos";
 import ContactFooterDesktop from '../Parcial/ContactFooterDesktop'; // Ajusta la ruta según tu estructura de carpetas
 import projectsData from '../Projects/projectsData';
 import projectsDataES from '../Projects/projectsDataES';
+import './Home.css';
 
 
 /* rango → categoría */
@@ -714,11 +714,16 @@ toggleMute();
     useEffect(() => {
         const observerYellowBox = new IntersectionObserver((entries) => {
             entries.forEach((entry) => {
-                if (entry.isIntersecting) {
-                    setRotateYellowBox((prev) => !prev); // Alterna el estado cada vez que entra en pantalla
+                if (!entry.isIntersecting) {
+                    // Si está fuera de pantalla, muestra el front
+                    setRotateYellowBox(false);
+                } else if (entry.intersectionRatio >= 0.1) {
+                    // Cuando entra al 10% visible, gira al back
+                    setRotateYellowBox(true);
                 }
             });
-        }, { threshold: 1 }); // Detecta cuando el 80% del elemento es visible
+        }, 
+        { threshold: [0.1]  }); // Detecta cuando el 80% del elemento es visible
 
         const yellowBoxElement = yellowBoxRef.current;
         if (yellowBoxElement) {
@@ -733,27 +738,35 @@ toggleMute();
     }, []);
     // Fin animación de cajas naranja
     // Inicio animación de cajas naranja 
-
-    useEffect(() => {
-        const observerYellowBox = new IntersectionObserver((entries) => {
+useEffect(() => {
+    const observerYellowBox = new IntersectionObserver(
+        (entries) => {
             entries.forEach((entry) => {
-                if (entry.isIntersecting) {
-                    setRotateYellowBoxDesktop((prev) => !prev); // Alterna el estado cada vez que entra en pantalla
+                if (!entry.isIntersecting) {
+                    // Si está fuera de pantalla, muestra el front
+                    setRotateYellowBoxDesktop(false);
+                } else if (entry.intersectionRatio >= 0.1) {
+                    // Cuando entra al 10% visible, gira al back
+                    setRotateYellowBoxDesktop(true);
                 }
             });
-        }, { threshold: 0.1 }); // Detecta cuando el 80% del elemento es visible
+        },
+        { threshold: [0.1] } // Detecta el cruce del 10% de visibilidad
+    );
 
-        const yellowBoxElement = yellowBoxDesktopRef.current;
+    const yellowBoxElement = yellowBoxDesktopRef.current;
+    if (yellowBoxElement) {
+        observerYellowBox.observe(yellowBoxElement);
+    }
+
+    return () => {
         if (yellowBoxElement) {
-            observerYellowBox.observe(yellowBoxElement);
+            observerYellowBox.unobserve(yellowBoxElement);
         }
+    };
+}, []);
 
-        return () => {
-            if (yellowBoxElement) {
-                observerYellowBox.unobserve(yellowBoxElement);
-            }
-        };
-    }, []);
+
     // Fin animación de cajas naranja
     // Inicio reinicio video
     const videoRef = useRef(null);
@@ -1121,7 +1134,7 @@ toggleMute();
                         ref={slideStudioBoxRef} onClick={goToStudio}
                     >
                     {/*     <img src={groupImage} alt="Group Icon" className="icon-image" onClick={goToStudio} /> */}
-                    {slideStudioBox && <span className="text-Awards" style={{color:"#ffffff"}}>{lang === 'ES' ? <> Nuestro<br /> equipo</> : 'Our team'}</span>}
+                     <span className="text-Awards" style={{color:"#ffffff"}}>{lang === 'ES' ? <> Nuestro<br /> equipo</> : 'Our team'}</span>
 
                     </div>
                     <div onClick={goToStudio}
@@ -1189,7 +1202,7 @@ toggleMute();
                     <span className="project-box-desktop" style={lang === 'ES' ? { paddingLeft: '15%' } : undefined}>{lang === 'ES' ? 'que cuentan' : 'To create'}</span>
                     <span className="project-box-desktop" style={lang === 'ES' ? { paddingLeft: '15%' } : undefined}>{lang === 'ES' ? 'historias' : 'exciting'}</span>
                     <span className="project-box-desktop" style={lang === 'ES' ? { paddingLeft: '15%' } : undefined} >{lang === 'ES' ? 'y potencian' : 'places'}</span>
-                    <span className="project-box-desktop" style={lang === 'ES' ? { paddingLeft: '15%' } : undefined} >{lang === 'ES' ? 'marcas.' : 'places'}</span>
+                    <span className="project-box-desktop" style={lang === 'ES' ? { paddingLeft: '15%' } : undefined} >{lang === 'ES' ? 'marcas.' : ''}</span>
 
                     <div className="desktopmoving-line2" ref={desktopline2Ref}></div>
 
@@ -1356,7 +1369,7 @@ toggleMute();
                             className={`custom-orange-box-desktop ${slideStudioBoxDesktop ? 'custom-slide-orange-desktop' : ''}`}
                             onClick={goToStudio}
                         >
-                            {slideStudioBoxDesktop && <span className="text-Awards-desktop" style={{textAlign:"left", color:"#ffffff"}}>{lang === 'ES' ? <>Nuestro<br />equipo</> : 'Our team'}</span>}
+                             <span className="text-Awards-desktop" style={{textAlign:"left", color:"#ffffff"}}>{lang === 'ES' ? <>Nuestro<br />equipo</> : 'Our team'}</span>
                             {/* <img src={groupImage} alt="Group Icon" className="star-image-star-desktop" onClick={goToStudio} />
  */}
                         </div>

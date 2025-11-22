@@ -2166,3 +2166,13 @@ modificacion video */
 .navbar-slide-up {
   transform: translateY(-100%);
 }
+
+@media (min-width: 3024px) and (min-height: 1964px) {
+
+  .custom-orange-box-desktop {
+    margin-left: 1%;
+    /* agrega aquí cualquier otro tweak, ejemplo: */
+    /* width: 420px; height: 420px; */
+  }
+
+}

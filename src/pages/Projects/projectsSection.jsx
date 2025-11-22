@@ -1,254 +1,285 @@
 import React, { useEffect, useState, useRef, useMemo, useContext } from 'react';
 import { useNavigate, useSearchParams, Link } from 'react-router-dom';
-import {subcategoriaProyectosData, subcategoriaProyectosDataES} from './subcategoriasProyectosData';   // ①
+import { subcategoriaProyectosData, subcategoriaProyectosDataES } from './subcategoriasProyectosData';
+import './projectsHome.css';
 import './ProjectsSection.css';
+
+// Componentes Parciales
 import Navbar from '../Parcial/Navbar';
 import ContactFooter from '../Parcial/ContactFooter';
-import projectsData from './projectsData';  
-import ContactFooterDesktop from '../Parcial/ContactFooterDesktop'; // Ajusta la ruta según tu estructura de carpetas
-import API_BASE from '../../apiBase';
+import ContactFooterDesktop from '../Parcial/ContactFooterDesktop';
 
+// Datos y API
+import projectsData from './projectsData';
+import API_BASE from '../../apiBase';
 import { LanguageContext } from '../../context/LanguageContext';
-// fuera del componente, o con useCallback si prefieres
+
+// Helper para formatear nombres (camelCase a Texto)
 const formatName = (str) =>
   str.replace(/([A-Z])/g, ' $1').trim();
 
 function ProjectsSection() {
-   const { lang } = useContext(LanguageContext);   // EN | ES
-   const TITLE_MAP = {
-  Design:       { EN: 'Design',       ES: 'Diseño' },
-  Architecture: { EN: 'Architecture', ES: 'Arquitectura' },
-  Branding:     { EN: 'Brands',     ES: 'Marcas' },   // o 'Branding' si prefieres
-};
+  const { lang } = useContext(LanguageContext); // EN | ES
+
+  // Mapa de Títulos
+  const TITLE_MAP = {
+    Design:       { EN: 'Design',       ES: 'Diseño' },
+    Architecture: { EN: 'Architecture', ES: 'Arquitectura' },
+    Branding:     { EN: 'Brands',       ES: 'Marcas' },
+  };
+
+  // Configuración de colores para los botones activos
+  const SECTION_STYLES = {
+    Design:       { bg: '#FEC93A', color: '#333' }, // Amarillo - Texto oscuro
+    Architecture: { bg: '#3B76F3', color: '#333' }, // Azul - Texto blanco
+    Branding:     { bg: '#44B87E', color: '#333' }, // Verde - Texto blanco
+  };
+
   const [searchParams] = useSearchParams();
-  const [category, setCategory] = useState('All');
-  const sections = ['Design', 'Architecture', 'Branding'];
-  const [section, setSection] = useState('Design');
   const navigate = useNavigate();
-  const [filteredImages, setFilteredImages] = useState([]);
-  const [fileNameSelected, setFileNameSelected] = useState("");
-  const [images, setImages] = useState([]);        // ← antes filteredImages
+
+  // Estado principal: 'Design', 'Architecture', 'Branding' o 'All'
+  const [section, setSection] = useState('All');
+
+  // Estados de datos
+  const [images, setImages] = useState([]);         
+  const [filteredImages, setFilteredImages] = useState([]); 
   const [subcatFilter, setSubcatFilter] = useState('');
-  // Estados para control del menú
+  const [fileNameSelected, setFileNameSelected] = useState("");
+
+  // Estados de UI
   const [showInput, setShowInput] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
-  const [isSliding, setIsSliding] = useState(false);
-/* helper para deducir la categoría según el id */
-const getCategoryById = (id) => {
-  if (id <= 5000)  return 'design';
-  if (id <= 8000)  return 'architecture';
-  return 'branding';           // 8001–10000
-};
   
-/* ─── Índice de búsqueda que cambia con `section` ─── */
-const searchIndex = useMemo(() => {
-  return Object.entries(projectsData).flatMap(([idStr, p]) => {
-    const id = Number(idStr);
-    const category = getCategoryById(id);      // design / architecture / branding
+  // Refs
+  const isSliding = useRef(false);
 
-    // Filtramos: solo proyectos de la sección visible
-    if (category !== section.toLowerCase()) return [];
+  // --- HELPERS ---
 
-    const fullText = [
-      p.nombreproyecto,
-      p.frase1, p.frase2, p.frase3,
-      p.location,
-      p.encabezado,
-      p.parrafo1, p.parrafo2,
-      p.nombre1, p.nombre2,
-      p.contador1?.toString(),
-      p.contador2?.toString()
-    ]
-      .filter(Boolean)
-      .join(' | ')
+  /* Deduce la categoría según el ID del proyecto */
+  const getCategoryById = (id) => {
+    if (id <= 5000) return 'design';
+    if (id <= 8000) return 'architecture';
+    return 'branding'; // 8001–10000
+  };
+
+  /* Normaliza cadenas para búsqueda/comparación */
+  const normalize = (str) =>
+    str
+      .toLowerCase()
       .normalize('NFD')
-      .replace(/\p{Diacritic}/gu, '')
-      .toLowerCase();
+      .replace(/[\u0300-\u036f]/g, '') 
+      .replace(/\.[^/.]+$/, '')        
+      .replace(/\d+$/, '')             
+      .replace(/[^a-z0-9]/g, '');      
 
-    return [{
-      label: p.nombreproyecto,
-      projectName: p.nombreproyecto,
-      category,          // para navegar
-      fullText
-    }];
-  });
-}, [section]);
+  // --- MEMOS ---
 
-/* ─── ② helper para clave canónica ─── */
-const normalize = (str) =>
-  str
-    .toLowerCase()
-    .normalize('NFD')
-    .replace(/[\u0300-\u036f]/g, '')
-    .replace(/\.[^/.]+$/, '')    // sin extensión
-    .replace(/\d+$/, '')         // sin números finales
-    .replace(/[^a-z0-9]/g, '');  // sin espacios ni signos
+  /* Índice de búsqueda para la Navbar */
+  const searchIndex = useMemo(() => {
+    return Object.entries(projectsData).flatMap(([idStr, p]) => {
+      const id = Number(idStr);
+      const category = getCategoryById(id);
 
-  /*  const goToProjects = () => {
-       navigate("/projectsHome"); // Cambia a la ruta /projects
-   };
-*/
-const proyectosData = lang === "ES"
-  ? subcategoriaProyectosDataES
-  : subcategoriaProyectosData;
+      if (section !== 'All' && category !== section.toLowerCase()) return [];
 
+      const fullText = [
+        p.nombreproyecto,
+        p.frase1, p.frase2, p.frase3,
+        p.location,
+        p.encabezado,
+        p.parrafo1, p.parrafo2,
+        p.nombre1, p.nombre2,
+        p.contador1?.toString(),
+        p.contador2?.toString()
+      ]
+        .filter(Boolean)
+        .join(' | ')
+        .normalize('NFD')
+        .replace(/\p{Diacritic}/gu, '')
+        .toLowerCase();
 
-// 2️⃣  Usala en el useMemo
-const nameLookup = useMemo(() => {
-  const map = {};
-  proyectosData.forEach(p => {
-    const key = normalize(p.nombre);
-    (map[key] ||= []).push({ id: p.id, subCategoria: p.subCategoria });
-  });
-  return map;
-}, [proyectosData]);   // 👈 importante: se recalcula si cambia el idioma
+      return [{
+        label: p.nombreproyecto,
+        projectName: p.nombreproyecto,
+        category,
+        fullText
+      }];
+    });
+  }, [section]);
 
-// 3️⃣  Rango de secciones (si querés traducir las claves, hacelo aquí)
-const sectionRanges = {
-  Design:        [1,    5000],
-  Architecture:  [5001, 8000],
-  Branding:      [8001, 10000],
-};
+  /* Datos de subcategorías según idioma */
+  const proyectosDataLocal = lang === "ES"
+    ? subcategoriaProyectosDataES
+    : subcategoriaProyectosData;
 
-  /* ─── fetch + enriquecimiento ─── */
+  /* Mapa de búsqueda rápida para metadatos */
+  const nameLookup = useMemo(() => {
+    const map = {};
+    proyectosDataLocal.forEach(p => {
+      const key = normalize(p.nombre);
+      (map[key] ||= []).push({ id: p.id, subCategoria: p.subCategoria });
+    });
+    return map;
+  }, [proyectosDataLocal]);
+
+  // Rangos de ID por sección
+  const sectionRanges = {
+    Design:       [1, 5000],
+    Architecture: [5001, 8000],
+    Branding:     [8001, 10000],
+  };
+
+  // --- EFECTOS ---
+
+  /* 1. Carga de proyectos desde la API */
   useEffect(() => {
-     fetch(`${API_BASE}/projects-home`)
+    fetch(`${API_BASE}/projects-home`)
       .then(r => r.json())
       .then(data => {
-        const hits = data?.[section.toLowerCase()]?.hits ?? [];
+        let hits = [];
+        let minId = 0;
+        let maxId = 10000;
 
-        const [minId, maxId] = sectionRanges[section];    // rango vigente
+        if (section === 'All') {
+          const d = data?.design?.hits ?? [];
+          const a = data?.architecture?.hits ?? [];
+          const b = data?.branding?.hits ?? [];
+          hits = [...d, ...a, ...b];
+          minId = 1;
+          maxId = 10000;
+        } else {
+          hits = data?.[section.toLowerCase()]?.hits ?? [];
+          if (sectionRanges[section]) {
+            [minId, maxId] = sectionRanges[section];
+          }
+        }
 
-       const enriched = hits.flatMap(url => {
-  const raw   = decodeURIComponent(url.split('/').pop())
-                 .replace(/\.[^/.]+$/, '')
-                 .replace(/\d+$/, '');
-  const key   = normalize(raw);
-  const metas = nameLookup[key] || [];          // ← ahora es array
-  const meta  = metas.find(m => m.id >= minId && m.id <= maxId);
+        const enriched = hits.flatMap(url => {
+          const raw = decodeURIComponent(url.split('/').pop())
+            .replace(/\.[^/.]+$/, '')
+            .replace(/\d+$/, '');
+          
+          const key = normalize(raw);
+          const metas = nameLookup[key] || [];
+          
+          const meta = metas.find(m => m.id >= minId && m.id <= maxId);
 
-  if (!meta) return [];                         // no hay coincidencia válida
+          if (!meta) return [];
 
-  return {
-    url,
-    name: raw,
-    id: meta.id,
-    subCategoria: meta.subCategoria,
-  };
-});
+          return {
+            url,
+            name: raw,
+            id: meta.id,
+            category: getCategoryById(meta.id),
+            subCategoria: meta.subCategoria,
+          };
+        });
 
         setImages(enriched.sort(() => Math.random() - 0.5));
       })
-      .catch(() => setImages([]));
+      .catch((err) => {
+        console.error("Error fetching projects:", err);
+        setImages([]);
+      });
   }, [section, nameLookup]);
 
+  /* 2. Fetch secundario (Backup) */
+  useEffect(() => {
+    if (section === 'All') return; 
 
-  /* ─── filtrado por sub-categoría (siguiente paso) ─── */
-  const visible = images.filter(
-    (img) => !subcatFilter || img.subCategoria === subcatFilter
-  );
+    fetch(`${API_BASE}/projects-home`)
+      .then(response => response.json())
+      .then(data => {
+        const shuffle = (arr) => [...arr].sort(() => Math.random() - 0.5);
+        const categoryData = data[section.toLowerCase()];
 
+        if (categoryData && categoryData.hits) {
+          setFilteredImages(shuffle(categoryData.hits));
+        } else {
+          setFilteredImages([]);
+        }
+      })
+      .catch(error => {
+        setFilteredImages([]);
+      });
+  }, [section]);
 
-  const extractProjectName = (imageUrl) => {
-    if (!imageUrl) return '';
-    const fileName = decodeURIComponent(imageUrl.substring(imageUrl.lastIndexOf('/') + 1));
-    return fileName.replace(/\.[^/.]+$/, '').replace(/\d+$/, '');
+  /* 3. Actualizar fileNameSelected */
+  const getFileName = (imageUrl) => {
+    if (!imageUrl) return "";
+    let fileName = imageUrl.substring(imageUrl.lastIndexOf("/") + 1);
+    fileName = decodeURIComponent(fileName);
+    let fileNameWithoutExtension = fileName.replace(/\.[^/.]+$/, "");
+    return fileNameWithoutExtension.replace(/\d+$/, "");
   };
-  const goToProject = (category, projectName) => {
-    navigate(`/project/${category}/${projectName}`);
-  };
+
+  useEffect(() => {
+    if (filteredImages.length > 0) {
+      const firstImage = filteredImages[0];
+      setFileNameSelected(getFileName(firstImage));
+    }
+  }, [filteredImages]);
+
+  /* 4. Limpiar filtro de subcategoría */
+  useEffect(() => {
+    setSubcatFilter('');
+  }, [section]);
+
+  /* 5. Animación del menú */
   useEffect(() => {
     if (menuOpen) {
       const links = document.querySelectorAll('.menu-link');
       const dash = document.querySelector('.menu-dash');
-
       const timeout = setTimeout(() => {
         links.forEach((link, index) => {
           setTimeout(() => {
             link.classList.add('animate-color');
-            dash.className = `menu-dash ${link.classList[1]}`;
-
+            if (dash) dash.className = `menu-dash ${link.classList[1]}`;
             setTimeout(() => {
               link.classList.remove('animate-color');
-              if (index === links.length - 1) {
+              if (index === links.length - 1 && dash) {
                 dash.className = 'menu-dash';
               }
             }, 200);
           }, index * 200);
         });
       }, 500);
-
       return () => clearTimeout(timeout);
     }
   }, [menuOpen]);
 
-  const subcategories = {
-    Design: ['Retail', 'Restaurant', 'Office', 'Hotel', 'Mixeduse', 'Mall'],
-    Architecture: ['Commercial', 'Office', 'Hotel', 'MixedUse', 'Residential', 'Planning'],
-    Branding: ['Design', 'Architecture'],
-  };
-
-  // Obtener sección de la URL
+  /* 6. Leer sección de la URL */
   useEffect(() => {
+    const sectionsList = ['Design', 'Architecture', 'Branding'];
     const sectionFromUrl = searchParams.get('section');
-    if (sectionFromUrl && sections.includes(sectionFromUrl)) {
+    if (sectionFromUrl && sectionsList.includes(sectionFromUrl)) {
       setSection(sectionFromUrl);
     }
   }, [searchParams]);
 
-  // 🔹 Fetch de imágenes desde la API según la sección
-  useEffect(() => {
-    console.log("📡 Solicitando imágenes de la API para:", section);
 
-     fetch(`${API_BASE}/projects-home`)
-      .then(response => response.json())
-      .then(data => {
-        console.log("✅ Datos recibidos:", data);
-
-        const shuffle = (arr) => [...arr].sort(() => Math.random() - 0.5);
-
-        const category = data[section.toLowerCase()];
-
-        if (category && category.hits) {
-          setFilteredImages(shuffle(category.hits));
-        } else {
-          setFilteredImages([]);
-        }
-      })
-      .catch(error => {
-        console.error("❌ Error al obtener imágenes:", error);
-        setFilteredImages([]);
-      });
-  }, [section]);
-
-  const getFileName = (imageUrl) => {
-    if (!imageUrl) return "";
-
-    let fileName = imageUrl.substring(imageUrl.lastIndexOf("/") + 1);
-    fileName = decodeURIComponent(fileName);
-    let fileNameWithoutExtension = fileName.replace(/\.[^/.]+$/, "");
-
-    return fileNameWithoutExtension.replace(/\d+$/, "");
-  };
-  useEffect(() => {
-    if (filteredImages.length > 0) {
-      const firstImage = filteredImages[0];
-      const name = getFileName(firstImage);
-      setFileNameSelected(name);
-    }
-  }, [filteredImages]);
-
-
-  useEffect(() => {
-    setSubcatFilter('');        // al cambiar sección
-  }, [section]);
-  const subcatsInSection = [...new Set(images.map(i => i.subCategoria))].sort();
+  // --- HANDLERS ---
 
   const handleSelectProject = (item) => {
     const slug = encodeURIComponent(item.projectName.replace(/\s+/g, ''));
     navigate(`/project/${item.category}/${slug}`);
-    setShowInput(false);           // cierra el buscador si estaba abierto
+    setShowInput(false);
   };
+
+  const toggleSection = (sec) => {
+    if (section === sec) {
+      setSection('All'); 
+    } else {
+      setSection(sec);
+    }
+  };
+
+  const visible = images.filter(
+    (img) => !subcatFilter || img.subCategoria === subcatFilter
+  );
+  
+  const subcatsInSection = [...new Set(images.map(i => i.subCategoria))].sort();
 
   return (
     <div className="projects-section">
@@ -257,66 +288,50 @@ const sectionRanges = {
         {/* Header */}
         <header className="projects-header" style={{ position: 'fixed', top: 0, width: '100%' }}>
           <Navbar
-            /* isSliding={isSliding} */
             menuOpen={menuOpen}
             setMenuOpen={setMenuOpen}
             showInput={showInput}
             setShowInput={setShowInput}
             page="ProjectsSection"
-            searchData={searchIndex}          /* ← índice filtrado */
+            searchData={searchIndex}
             onSelect={handleSelectProject}
           />
         </header>
 
-        {/* Section Selector */}
+        {/* Selector de Sección */}
         <div className="section-selector-projects">
-          <div className="mobile-hide section-selector-projects desktop-menu-projetcs   ">
+          {/* Se eliminaron los estilos inline que forzaban el centrado */}
+          <div className="desktop-menu-projetcs">
             <nav className="menu-items-split-desktop">
               <div className="menu-left-projects">
-                <button
-                  className={`menu-link-desktop active`}
-                  onClick={() => setSection(section)}
-                >
-                  {TITLE_MAP[section][lang]}
-                </button>
-              </div>
-              <div className="menu-right-projects">
-                {['Design', 'Architecture', 'Branding']
-                  .filter((sec) => sec !== section)
-                  .map((sec) => (
+                {['Design', 'Architecture', 'Branding'].map((sec) => {
+                  const isActive = section === sec;
+                  
+                  // Estilos dinámicos
+                  const style = isActive ? {
+                    backgroundColor: SECTION_STYLES[sec].bg,
+                    color: SECTION_STYLES[sec].color,
+                    borderColor: SECTION_STYLES[sec].bg, 
+                    fontWeight: '800'
+                  } : {};
+
+                  return (
                     <button
                       key={sec}
-                      className={` menu-link-desktop`}
-                      onClick={() => setSection(sec)}
+                      className={`menu-link-desktop-section ${isActive ? 'active' : ''}`}
+                      onClick={() => toggleSection(sec)}
+                      style={style}
                     >
-                       {TITLE_MAP[sec][lang]}
+                      {TITLE_MAP[sec][lang]}
                     </button>
-                  ))}
+                  );
+                })}
               </div>
             </nav>
           </div>
-
-
-          <select
-            className=" desktop-hide section-input-section"
-            value={section}
-            onChange={(e) => {
-              setSection(e.target.value);
-            }}
-          >
-            {sections.map((sec, index) => (
-              <option className='section-input-section-option' key={index} value={sec}>
-                 {TITLE_MAP[sec][lang]}
-              </option>
-            ))}
-          </select>
-
-          <Link to="/projectsHome" className=" desktop-hide filter-selector">
-             {lang === 'ES' ? 'Todos' : 'All'}
-          </Link>
         </div>
 
-        {/* Subcategories */}
+        {/* Subcategorías */}
         <div className="subcategories">
           {subcatsInSection.map(sub => (
             <button
@@ -331,53 +346,50 @@ const sectionRanges = {
 
       </div>
 
-
+      {/* Contenido Scrollable */}
       <div className="projects-section">
         <div className="projects-scrollable-content">
 
-
-          {/* Grid móvil masonry a dos columnas */}
           <div className="desktop-hide image-grid masonry">
             <div className="column-project">
-              {visible.filter((_, i) => i % 2 === 0).map(({ url, name }, i) => (
+              {visible.filter((_, i) => i % 2 === 0).map((item, i) => (
                 <div className="image-wrapper" key={i}>
                   <img
-                    src={url}
-                    alt={name}
+                    src={item.url}
+                    alt={item.name}
                     className="project-image"
-                    onClick={() => navigate(`/project/${section}/${name}`)}
+                    onClick={() => navigate(`/project/${item.category}/${item.name}`)}
                   />
-                  <div className="image-label-section">{formatName(name)}</div>
+                  <div className="image-label-section">{formatName(item.name)}</div>
                 </div>
               ))}
             </div>
 
             <div className="column-project">
-              {visible.filter((_, i) => i % 2 !== 0).map(({ url, name }, i) => (
+              {visible.filter((_, i) => i % 2 !== 0).map((item, i) => (
                 <div className="image-wrapper" key={i}>
                   <img
-                    src={url}
-                    alt={name}
+                    src={item.url}
+                    alt={item.name}
                     className="project-image"
-                    onClick={() => navigate(`/project/${section}/${name}`)}
+                    onClick={() => navigate(`/project/${item.category}/${item.name}`)}
                   />
-                  <div className="image-label-section">{formatName(name)}</div>
+                  <div className="image-label-section">{formatName(item.name)}</div>
                 </div>
               ))}
             </div>
           </div>
 
-          {/* Grid desktop de una sola columna (o masonry) */}
           <div className="mobile-hide image-list-desktop masonry">
-            {visible.map(({ url, name }, i) => (
+            {visible.map((item, i) => (
               <div className="image-wrapper" key={i}>
                 <img
-                  src={url}
-                  alt={name}
+                  src={item.url}
+                  alt={item.name}
                   className="project-image"
-                  onClick={() => navigate(`/project/${section}/${name}`)}
+                  onClick={() => navigate(`/project/${item.category}/${item.name}`)}
                 />
-                <div className="image-label-section">{formatName(name)}</div>
+                <div className="image-label-section">{formatName(item.name)}</div>
               </div>
             ))}
           </div>
@@ -386,14 +398,12 @@ const sectionRanges = {
 
         {/* Footer */}
         <div>
-         
-                <footer className="studio-footer mobile-hide">
-                <ContactFooterDesktop />
-            </footer>
-            {/* Pie de página */}
-            <footer className="studio-footer desktop-hide">
-                <ContactFooter />
-            </footer>
+          <footer className="studio-footer mobile-hide">
+            <ContactFooterDesktop />
+          </footer>
+          <footer className="studio-footer desktop-hide">
+            <ContactFooter />
+          </footer>
         </div>
       </div>
     </div>

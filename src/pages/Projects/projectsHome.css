@@ -358,7 +358,7 @@ body {
 
   .menu-left-projects {
     display: flex;
-    max-width: 10%;
+   
   }
 
   .menu-right-projects {
@@ -512,7 +512,7 @@ body {
 
   .projects-content {
 
-    margin-top: -1%;
+    margin-top: 1%;
   }
 }
 

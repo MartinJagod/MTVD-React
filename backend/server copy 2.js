@@ -1,15 +1,12 @@
 /* ────────────────────────────────────────────────────────────────── */
 /*  server/index.js                                                  */
 /* ────────────────────────────────────────────────────────────────── */
-const fs      = require('fs');
-const path    = require('path');
-require('dotenv').config({
-  path: path.join(__dirname, '.env'),  // ← carga siempre backend/.env
-});
+require('dotenv').config();
 const express = require('express');
 const cors    = require('cors');
-const nodemailer = require('nodemailer');
-
+const fs      = require('fs');
+const path    = require('path');
+const contactRouter = require('./routes/contact');
 const app       = express();
 const PORT      = process.env.PORT || 5000;
 const SERVER_IP = '193.203.182.77';          // IP pública o localhost
@@ -18,7 +15,7 @@ const SERVER_IP = '193.203.182.77';          // IP pública o localhost
 /* 1. Configuración básica                                            */
 /* ------------------------------------------------------------------ */
 app.use(cors({ origin: '*' }));              // CORS abierto
-app.use(express.json());     
+app.use(express.json()); 
 
 const BUILD_PATH  = path.join(__dirname, '../build');
 const IMAGES_ROOT = path.join(BUILD_PATH, 'assets', 'images');
@@ -79,6 +76,9 @@ function readImagesRec(dir) {
 
   return result;
 }
+
+// monta el endpoint de contacto
+app.use('/api/contact', contactRouter);
 
 /* ------------------------------------------------------------------ */
 /* 3. NUEVA API – popup                                               */
@@ -197,61 +197,6 @@ app.get('*', (req, res, next) => {
   }
   res.sendFile(path.join(BUILD_PATH, 'index.html'));
 });
-/* ────────────────────────────────────────────────────────────────── */
-/*  NUEVA API  –  POST /api/contact                                  */
-/* ────────────────────────────────────────────────────────────────── */
-app.post('/api/contact', async (req, res) => {
-  const {
-    name, email, phone,
-    projectType, projectSize, city,
-    message,
-  } = req.body || {};
-
-  if (!name || !email || !message) {
-    return res.status(400).json({ error: 'Missing required fields.' });
-  }
-
-  /* transportador SMTP */
-  const transporter = nodemailer.createTransport({
-    host:   process.env.SMTP_HOST,
-    port:   Number(process.env.SMTP_PORT),
-    secure: process.env.SMTP_SECURE === 'true',
-    auth: {
-      user: process.env.SMTP_USER,
-      pass: process.env.SMTP_PASS,
-    },
-  });
-
-  const mailOptions = {
-    from: '"MTVD Studio" <contact@mtvd-design.com>',
-    to: ['arquitectos@estudiomontevideo.com', 'contact@mtvd-design.com'],
-    subject: `Nuevo contacto – ${name}`,
-    replyTo: email,
-    html: `
-      <h3>Datos de contacto</h3>
-      <p><b>Nombre:</b> ${name}</p>
-      <p><b>Email:</b> ${email}</p>
-      <p><b>Teléfono:</b> ${phone || '—'}</p>
-
-      <h3>Sobre el proyecto</h3>
-      <p><b>Tipo:</b> ${projectType || '—'}</p>
-      <p><b>Tamaño:</b> ${projectSize || '—'}</p>
-      <p><b>Ciudad:</b> ${city || '—'}</p>
-
-      <h3>Mensaje</h3>
-      <p>${(message || '').replace(/\n/g, '<br>')}</p>
-    `,
-  };
-
-  try {
-    await transporter.sendMail(mailOptions);
-    res.json({ ok: true });
-  } catch (err) {
-    console.error('Mailer error:', err);
-    res.status(500).json({ error: 'Mailer failed.' });
-  }
-});
-/* ────────────────────────────────────────────────────────────────── */
 
 /* ------------------------------------------------------------------ */
 /* 7. Levantar servidor                                               */
@@ -264,4 +209,4 @@ app.use(express.static(path.join(__dirname, 'build'))); // carpeta build
 
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'build', 'index.html'));
-});
+}); 

@@ -1070,7 +1070,7 @@ const projectsData = {
   frase2: "Bricks, balconies, and shared spaces define community.",
   contador1: 2024,
   nombre1: "Year",
-  contador2: 2426.7,
+  contador2: 24260.7,
   nombre2: "ft²",
   location: "Asunción, Paraguay",
   frase3: "A vertical neighborhood echoing Asunción’s domestic spirit.",
