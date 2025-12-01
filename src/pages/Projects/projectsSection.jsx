@@ -1,9 +1,9 @@
 import React, { useEffect, useState, useRef, useMemo, useContext } from 'react';
-import { useNavigate, useSearchParams, Link } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { subcategoriaProyectosData, subcategoriaProyectosDataES } from './subcategoriasProyectosData';
 import './projectsHome.css';
 import './ProjectsSection.css';
-
+import { FaExternalLinkAlt } from 'react-icons/fa';
 // Componentes Parciales
 import Navbar from '../Parcial/Navbar';
 import ContactFooter from '../Parcial/ContactFooter';
@@ -16,7 +16,10 @@ import { LanguageContext } from '../../context/LanguageContext';
 
 // Helper para formatear nombres (camelCase a Texto)
 const formatName = (str) =>
-  str.replace(/([A-Z])/g, ' $1').trim();
+  str
+    .replace(/([A-Z])/g, ' $1')   // Espacio antes de mayúsculas
+    .replace(/([0-9]+)/g, ' $1')  // NUEVO: Espacio antes de números
+    .trim();
 
 function ProjectsSection() {
   const { lang } = useContext(LanguageContext); // EN | ES
@@ -30,21 +33,26 @@ function ProjectsSection() {
 
   // Configuración de colores para los botones activos
   const SECTION_STYLES = {
-    Design:       { bg: '#FEC93A', color: '#333' }, // Amarillo - Texto oscuro
-    Architecture: { bg: '#3B76F3', color: '#333' }, // Azul - Texto blanco
-    Branding:     { bg: '#44B87E', color: '#333' }, // Verde - Texto blanco
+    Design:       { bg: '#FEC93A', color: '#333' }, // Amarillo
+    Architecture: { bg: '#3B76F3', color: '#FFF' }, // Azul
+    Branding:     { bg: '#44B87E', color: '#FFF' }, // Verde
   };
 
-  const [searchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams(); // Agregamos setSearchParams
   const navigate = useNavigate();
 
-  // Estado principal: 'Design', 'Architecture', 'Branding' o 'All'
-  const [section, setSection] = useState('All');
-
+  // Estado inicial: 'All' para que empiece mostrando todo y sin subcategorías
+  const [section, setSection] = useState(() => {
+    const sec = searchParams.get('section');
+    return ['Design', 'Architecture', 'Branding'].includes(sec) ? sec : 'All';
+  });
+  
   // Estados de datos
   const [images, setImages] = useState([]);         
   const [filteredImages, setFilteredImages] = useState([]); 
-  const [subcatFilter, setSubcatFilter] = useState('');
+  const [subcatFilter, setSubcatFilter] = useState(() => {
+    return searchParams.get('sub') || '';
+  });
   const [fileNameSelected, setFileNameSelected] = useState("");
 
   // Estados de UI
@@ -56,14 +64,12 @@ function ProjectsSection() {
 
   // --- HELPERS ---
 
-  /* Deduce la categoría según el ID del proyecto */
   const getCategoryById = (id) => {
     if (id <= 5000) return 'design';
     if (id <= 8000) return 'architecture';
-    return 'branding'; // 8001–10000
+    return 'branding'; 
   };
 
-  /* Normaliza cadenas para búsqueda/comparación */
   const normalize = (str) =>
     str
       .toLowerCase()
@@ -75,7 +81,6 @@ function ProjectsSection() {
 
   // --- MEMOS ---
 
-  /* Índice de búsqueda para la Navbar */
   const searchIndex = useMemo(() => {
     return Object.entries(projectsData).flatMap(([idStr, p]) => {
       const id = Number(idStr);
@@ -107,13 +112,14 @@ function ProjectsSection() {
       }];
     });
   }, [section]);
+const tituloOpen = lang === "ES"
+    ? "Abrir en nueva pestaña"
+    : "Open in new tab";
 
-  /* Datos de subcategorías según idioma */
   const proyectosDataLocal = lang === "ES"
     ? subcategoriaProyectosDataES
     : subcategoriaProyectosData;
 
-  /* Mapa de búsqueda rápida para metadatos */
   const nameLookup = useMemo(() => {
     const map = {};
     proyectosDataLocal.forEach(p => {
@@ -123,7 +129,6 @@ function ProjectsSection() {
     return map;
   }, [proyectosDataLocal]);
 
-  // Rangos de ID por sección
   const sectionRanges = {
     Design:       [1, 5000],
     Architecture: [5001, 8000],
@@ -132,7 +137,7 @@ function ProjectsSection() {
 
   // --- EFECTOS ---
 
-  /* 1. Carga de proyectos desde la API */
+  /* 1. Carga de proyectos */
   useEffect(() => {
     fetch(`${API_BASE}/projects-home`)
       .then(r => r.json())
@@ -156,12 +161,13 @@ function ProjectsSection() {
         }
 
         const enriched = hits.flatMap(url => {
-          const raw = decodeURIComponent(url.split('/').pop())
-            .replace(/\.[^/.]+$/, '')
-            .replace(/\d+$/, '');
-          
-          const key = normalize(raw);
-          const metas = nameLookup[key] || [];
+        // 1. Obtenemos el nombre sin extensión, pero DEJAMOS los números
+  const raw = decodeURIComponent(url.split('/').pop())
+    .replace(/\.[^/.]+$/, ''); 
+  
+  // 2. Para buscar en tu 'lookup', usamos normalize (que ya se encarga de limpiar internamente)
+  const key = normalize(raw);
+  const metas = nameLookup[key] || [];
           
           const meta = metas.find(m => m.id >= minId && m.id <= maxId);
 
@@ -184,7 +190,7 @@ function ProjectsSection() {
       });
   }, [section, nameLookup]);
 
-  /* 2. Fetch secundario (Backup) */
+  /* 2. Fetch secundario */
   useEffect(() => {
     if (section === 'All') return; 
 
@@ -205,7 +211,7 @@ function ProjectsSection() {
       });
   }, [section]);
 
-  /* 3. Actualizar fileNameSelected */
+  /* 3. Helper Filenames */
   const getFileName = (imageUrl) => {
     if (!imageUrl) return "";
     let fileName = imageUrl.substring(imageUrl.lastIndexOf("/") + 1);
@@ -221,12 +227,12 @@ function ProjectsSection() {
     }
   }, [filteredImages]);
 
-  /* 4. Limpiar filtro de subcategoría */
-  useEffect(() => {
+  /* 4. Limpiar filtro al cambiar sección */
+ /*  useEffect(() => {
     setSubcatFilter('');
-  }, [section]);
+  }, [section]); */
 
-  /* 5. Animación del menú */
+  /* 5. Animación Menú */
   useEffect(() => {
     if (menuOpen) {
       const links = document.querySelectorAll('.menu-link');
@@ -249,16 +255,24 @@ function ProjectsSection() {
     }
   }, [menuOpen]);
 
-  /* 6. Leer sección de la URL */
-  useEffect(() => {
+  /* 6. Leer URL */
+  /* useEffect(() => {
     const sectionsList = ['Design', 'Architecture', 'Branding'];
     const sectionFromUrl = searchParams.get('section');
     if (sectionFromUrl && sectionsList.includes(sectionFromUrl)) {
       setSection(sectionFromUrl);
     }
-  }, [searchParams]);
-
-
+  }, [searchParams]); */
+/* NUEVO: Sincronizar URL con el estado actual */
+  useEffect(() => {
+    const params = {};
+    if (section !== 'All') params.section = section;
+    if (subcatFilter) params.sub = subcatFilter;
+    
+    // replace: true evita crear historial infinito si cambias filtros rápido,
+    // pero permite que el botón "Atrás" del navegador funcione para salir de la página.
+    setSearchParams(params, { replace: true });
+  }, [section, subcatFilter, setSearchParams]);
   // --- HANDLERS ---
 
   const handleSelectProject = (item) => {
@@ -267,26 +281,40 @@ function ProjectsSection() {
     setShowInput(false);
   };
 
-  const toggleSection = (sec) => {
+ const toggleSection = (sec) => {
     if (section === sec) {
-      setSection('All'); 
+      setSection('All');
+      setSubcatFilter(''); // Limpiar subcategoría
     } else {
       setSection(sec);
+      setSubcatFilter(''); // Limpiar subcategoría al cambiar de sección mayor
     }
   };
 
-  const visible = images.filter(
+ // --- RENDER HELPERS ---
+
+  // 1. Filtrar 'images' por la sección actual INMEDIATAMENTE.
+  // Esto asegura que si venimos de 'All', usemos los datos que ya tenemos en memoria
+  // para filtrar al instante, sin esperar al fetch del useEffect.
+  const projectsForCurrentSection = useMemo(() => {
+    if (section === 'All') return images;
+    return images.filter(img => img.category === section.toLowerCase());
+  }, [images, section]);
+
+  // 2. Usar esa lista filtrada para calcular 'visible' (Grid de imágenes)
+  const visible = projectsForCurrentSection.filter(
     (img) => !subcatFilter || img.subCategoria === subcatFilter
   );
   
-  const subcatsInSection = [...new Set(images.map(i => i.subCategoria))].sort();
-
+  // 3. Usar la misma lista filtrada para las subcategorías
+  // Ahora solo saldrán las subcategorías de los proyectos que coinciden con la sección
+  const subcatsInSection = [...new Set(projectsForCurrentSection.map(i => i.subCategoria))].sort();
   return (
     <div className="projects-section">
       <div className="projects-fixed-top">
 
-        {/* Header */}
-        <header className="projects-header" style={{ position: 'fixed', top: 0, width: '100%' }}>
+        {/* Header - Sin posición fija inline */}
+        <header className="projects-header">
           <Navbar
             menuOpen={menuOpen}
             setMenuOpen={setMenuOpen}
@@ -300,7 +328,6 @@ function ProjectsSection() {
 
         {/* Selector de Sección */}
         <div className="section-selector-projects">
-          {/* Se eliminaron los estilos inline que forzaban el centrado */}
           <div className="desktop-menu-projetcs">
             <nav className="menu-items-split-desktop">
               <div className="menu-left-projects">
@@ -311,7 +338,7 @@ function ProjectsSection() {
                   const style = isActive ? {
                     backgroundColor: SECTION_STYLES[sec].bg,
                     color: SECTION_STYLES[sec].color,
-                    borderColor: SECTION_STYLES[sec].bg, 
+                   /*  borderColor: SECTION_STYLES[sec].bg,  */
                     fontWeight: '800'
                   } : {};
 
@@ -331,8 +358,9 @@ function ProjectsSection() {
           </div>
         </div>
 
-        {/* Subcategorías */}
-        <div className="subcategories">
+        {/* Subcategorías - SOLO SE MUESTRAN SI HAY SECCIÓN SELECCIONADA */}
+        {section !== 'All' && (
+        <div className={`subcategories ${section !== 'All' ? 'show' : ''}`}>
           {subcatsInSection.map(sub => (
             <button
               key={sub}
@@ -343,12 +371,13 @@ function ProjectsSection() {
             </button>
           ))}
         </div>
+        )}
 
       </div>
 
       {/* Contenido Scrollable */}
       <div className="projects-section">
-        <div className="projects-scrollable-content">
+        <div className={`projects-scrollable-content ${section === 'All' ? 'no-selection' : ''}`}>
 
           <div className="desktop-hide image-grid masonry">
             <div className="column-project">
@@ -361,6 +390,18 @@ function ProjectsSection() {
                     onClick={() => navigate(`/project/${item.category}/${item.name}`)}
                   />
                   <div className="image-label-section">{formatName(item.name)}</div>
+                  <button 
+    className="open-new-tab-btn"
+    title="Abrir en nueva pestaña"
+    onClick={(e) => {
+      e.stopPropagation(); // Evita que se dispare el click de la imagen
+      // Detecta si tu app usa HashRouter (#) o rutas limpias
+      const prefix = window.location.hash ? '/#' : ''; 
+      window.open(`${window.location.origin}${prefix}/project/${item.category}/${item.name}`, '_blank');
+    }}
+  >
+    <FaExternalLinkAlt size={12} />
+  </button>
                 </div>
               ))}
             </div>
@@ -375,6 +416,18 @@ function ProjectsSection() {
                     onClick={() => navigate(`/project/${item.category}/${item.name}`)}
                   />
                   <div className="image-label-section">{formatName(item.name)}</div>
+                   <button 
+    className="open-new-tab-btn"
+    title="Abrir en nueva pestaña"
+    onClick={(e) => {
+      e.stopPropagation(); // Evita que se dispare el click de la imagen
+      // Detecta si tu app usa HashRouter (#) o rutas limpias
+      const prefix = window.location.hash ? '/#' : ''; 
+      window.open(`${window.location.origin}${prefix}/project/${item.category}/${item.name}`, '_blank');
+    }}
+  >
+    <FaExternalLinkAlt size={12} />
+  </button>
                 </div>
               ))}
             </div>
@@ -390,6 +443,18 @@ function ProjectsSection() {
                   onClick={() => navigate(`/project/${item.category}/${item.name}`)}
                 />
                 <div className="image-label-section">{formatName(item.name)}</div>
+                 <button 
+    className="open-new-tab-btn"
+    title={tituloOpen}
+    onClick={(e) => {
+      e.stopPropagation(); // Evita que se dispare el click de la imagen
+      // Detecta si tu app usa HashRouter (#) o rutas limpias
+      const prefix = window.location.hash ? '/#' : ''; 
+      window.open(`${window.location.origin}${prefix}/project/${item.category}/${item.name}`, '_blank');
+    }}
+  >
+    <FaExternalLinkAlt size={12} />
+  </button>
               </div>
             ))}
           </div>

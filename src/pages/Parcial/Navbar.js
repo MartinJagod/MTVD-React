@@ -5,22 +5,26 @@ import './Navbar.css';
 import logoHorizontal from '../../assets/images/logo-horizontal.png';
 import logoHorizontalBlack from '../../assets/images/Logo-horizontal-negro.png';
 import { LanguageContext } from "../../context/LanguageContext";
-// En el componente Navbar
 
+// En el componente Navbar
 const Navbar = ({ isSliding, menuOpen, setMenuOpen, showInput, setShowInput, page, searchData = [], onSelect = () => { } }) => {
     const { lang, toggleLang } = useContext(LanguageContext);
-    const [isBlurred, setIsBlurred] = useState(true);
+    const [isBlurred, setIsBlurred] = useState(false); // Iniciar en false (sin blur) si estamos arriba
     const [searchTerm, setSearchTerm] = useState('');
     const [filteredOptions, setFilteredOptions] = useState([]);
     const location = useLocation();
-    const isHome = location.pathname === '/';
-const [hideOnScroll, setHideOnScroll] = useState(false);
-const lastScrollY = useRef(0);
+
+    // CORRECCIÓN: Usamos 'page' como respaldo para asegurar que detecte el Home
+    // Esto soluciona el problema de que se vea blanca si la ruta varía ligeramente
+    // Se añade validación para HashRouter (/#/)
+    const isHome = location.pathname === '/' || location.pathname === '/#' || page === 'Home';
+
+    const [hideOnScroll, setHideOnScroll] = useState(false);
+    const lastScrollY = useRef(0);
+    
     // Referencias para el menú y el buscador
     const menuRef = useRef(null);
     const searchRef = useRef(null);
-
-
 
     // --------------------- efecto: refrescar opciones cuando cambie la página ---------------------
     useEffect(() => {
@@ -48,32 +52,40 @@ const lastScrollY = useRef(0);
 
         setFilteredOptions(searchData.filter(hayQueCoincidir));
     };
-useEffect(() => {
-  const THRESHOLD_HIDE = 0;   // ← 0 px: basta con un solo tick
-  const THRESHOLD_SHOW = 3;   // ← sube 3 px y ya aparece
 
-  const handleScroll = () => {
-    const y = window.scrollY;
-    const prevY = lastScrollY.current;
+    useEffect(() => {
+        const THRESHOLD_HIDE = 0;   // ← 0 px: basta con un solo tick
+        const THRESHOLD_SHOW = 3;   // ← sube 3 px y ya aparece
 
-    // Blur si pasas 10 px (opcional)
-    setIsBlurred(y > 10);
+        const handleScroll = () => {
+            const y = window.scrollY;
+            const prevY = lastScrollY.current;
+if (page == 'ProjectsSection') {
+                setHideOnScroll(false);
+                return; // Detiene la ejecución aquí, ignorando el scroll
+            }
+            if (page == 'projectsHome') {
+                setHideOnScroll(false);
+                return; // Detiene la ejecución aquí, ignorando el scroll
+            }
+            // Blur si pasas 10 px (opcional)
+            setIsBlurred(y > 10);
 
-    /* ↙️ Bajas → ocultar */
-    if (y > prevY && y > THRESHOLD_HIDE) {
-      setHideOnScroll(true);
-    }
-    /* ↗️ Subes → mostrar */
-    else if (y < prevY - THRESHOLD_SHOW) {
-      setHideOnScroll(false);
-    }
+            /* ↙️ Bajas → ocultar */
+            if (y > prevY && y > THRESHOLD_HIDE) {
+                setHideOnScroll(true);
+            }
+            /* ↗️ Subes → mostrar */
+            else if (y < prevY - THRESHOLD_SHOW) {
+                setHideOnScroll(false);
+            }
 
-    lastScrollY.current = y;
-  };
+            lastScrollY.current = y;
+        };
 
-  window.addEventListener('scroll', handleScroll, { passive: true });
-  return () => window.removeEventListener('scroll', handleScroll);
-}, []);
+        window.addEventListener('scroll', handleScroll, { passive: true });
+        return () => window.removeEventListener('scroll', handleScroll);
+    }, []);
 
 
     useEffect(() => {
@@ -102,14 +114,6 @@ useEffect(() => {
         }
     };
 
-    /*   const handleInputChange = (e) => {
-          const term = e.target.value;
-          setSearchTerm(term);
-          setFilteredOptions(
-              options.filter((opt) => opt.toLowerCase().includes(term.toLowerCase()))
-          );
-      }; */
-
     const toggleMenu = () => {
         setMenuOpen(!menuOpen);
     };
@@ -121,15 +125,16 @@ useEffect(() => {
 
 
     // Determina qué logo usar y el color de los íconos basado en la ruta actual
+    // Si es Home (isHome true) -> Logo blanco y texto blanco
     const logo = isHome ? logoHorizontal : logoHorizontalBlack;
     const iconColor = isHome ? 'white' : 'black';
 
     return (
         <div className={`header-navbar 
-        ${isBlurred ? '' : 'no-blur'} 
+        ${isBlurred ? 'blur' : 'no-blur'} 
          ${hideOnScroll ? 'navbar-slide-up' : ''}
         ${isSliding ? 'navbar-slide-up' : ''} 
-        ${isHome ? 'navbar-home' : 'navbar-other'}`}
+        ${isHome ? 'navbar-home' : 'navbar-other'}`} // Aquí aplica la clase correcta
         >
             <div className="header-content">
                 <Link to="/">
@@ -141,16 +146,16 @@ useEffect(() => {
                     <div className="desktop-menu">
                         <nav className="menu-items" >
                             <Link to="/projectsHome" className="menu-link-desktop projects" style={{ color: iconColor }}>
-                             {lang === 'ES' ? 'Proyectos' : 'Projects'}
+                                {lang === 'ES' ? 'Proyectos' : 'Projects'}
                             </Link>
                             <Link to="/awardsandpress" className="menu-link-desktop press-awards" style={{ color: iconColor }}>
-                            {lang === 'ES' ? 'Prensa y Premios' : 'Press & Awards'}
+                                {lang === 'ES' ? 'Prensa y Premios' : 'Press & Awards'}
                             </Link>
                             <Link to="/studio" className="menu-link-desktop studio" style={{ color: iconColor }}>
-                            {lang === 'ES' ? 'Estudio' : 'Studio'}
+                                {lang === 'ES' ? 'Estudio' : 'Studio'}
                             </Link>
                             <Link to="/contact" className="menu-link-desktop contact" style={{ color: iconColor }}>
-                            {lang === 'ES' ? 'Contacto' : 'Contact'}
+                                {lang === 'ES' ? 'Contacto' : 'Contact'}
                             </Link>
                         </nav>
                     </div>
@@ -159,19 +164,12 @@ useEffect(() => {
                             onClick={toggleLang}
                             className="lang-toggle-btn idiomaNavbar"
                             style={{
-                                  /*       marginTop: "50px",
-                                        marginRight: "10px",
-                                background: "transparent",
-                                border: "none",
-                                padding: "2px",
-                                fontSize: "0.75rem",
-                                cursor: "pointer", */
                                 color: iconColor,
-                            }} 
+                            }}
                             aria-label="Cambiar idioma"
-                            >
+                        >
                             {lang}
-                            </button>
+                        </button>
                         <FaSearch
                             className="search-icon-home-desktop"
                             onClick={handleSearchClick}

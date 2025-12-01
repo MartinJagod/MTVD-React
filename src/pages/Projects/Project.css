@@ -18,8 +18,9 @@ body {
   width: 100vw;
   z-index: 1005;
   padding: 5px;
-  background: linear-gradient(to bottom, rgb(78, 76, 76), rgba(226, 220, 220, 0)); /* Degradado de negro a transparente */
-  transition: background 0.15s ease;
+  backdrop-filter: blur(10px); /* Difumina el fondo detrás */
+  -webkit-backdrop-filter: blur(10px); /* Compatibilidad con Safari */
+  transition: backdrop-filter 0.15s ease, -webkit-backdrop-filter 0.15s ease;
 }
 /* Degradado para el home */
 .navbar-home {
@@ -49,7 +50,14 @@ body {
   color: #ffffff; /* Color del texto dentro del header */
   margin-right: 11px;
 }
-
+.header-navbar.no-blur {
+  backdrop-filter: blur(0px);
+  -webkit-backdrop-filter: blur(0px);
+}
+.header-navbar.blur {
+  backdrop-filter: blur(0px);
+  -webkit-backdrop-filter: blur(0px);
+}
 
 .logo {
   font-size: 24px;
@@ -1359,13 +1367,13 @@ body {
 }
 .half-parallax-image {
   width: 120vw;
-  position: relative; /* Asegura que el contenedor esté posicionado */
-  left: -15%; /* Mueve el contenedor hacia el centro */
+  position: relative;
+  left: -15%;
   top: -30%;
-  transform: translateY(0); /* Escala inicial ligeramente mayor */
-  transition: transform 0.1s ease-out; /* Suavidad en el movimiento */
-  will-change: transform; /* Optimización para animaciones */
-  
+  transform: translateY(0);
+  /* transition: transform 0.1s ease-out; <-- ELIMINA O COMENTA ESTA LÍNEA */
+  will-change: transform;
+
 }
 
 .half-parallax-wrapper {
@@ -1823,15 +1831,15 @@ body.no-scroll {
 }
 
 /* 2️⃣  cualquier .parallax-image-project que resulte horizontal */
-.parallax-image-project.horizontal{
-  width: auto !important;          /* quita el ancho forzado (150 vw o 160 vw)            */
-  height: 110vw !important;        /* hace que mande la altura                            */
+.parallax-image-project.horizontal {
+  width: auto !important;
+  height: 110vw !important;
   position: relative;
-  left:-30%;
-  top:-10%;
-  background-position:center center;
+  left: -30%;
+  top: -10%;
+  background-position: center center;
   transform: translateY(0);
-  transition: transform .1s ease-out;
+  /* transition: transform .1s ease-out; <-- ELIMINA O COMENTA ESTA LÍNEA */
   will-change: transform;
 }
 

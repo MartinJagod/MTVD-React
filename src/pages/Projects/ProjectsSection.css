@@ -121,7 +121,7 @@ div.search-bar{
     border: none;
     background: none;
     font-size: 0.8rem;
-    font-weight: 700;
+    font-weight: 500;
     cursor: pointer;
     color: #222;
     transition: color 0.3s;
@@ -383,7 +383,7 @@ div.search-bar{
   }
   .projects-scrollable-content .image-list-desktop.masonry {
     column-count: 4;
-    margin: 0 2%;
+    margin: 1% 2%;
   }
   .section-selector-projects {
     display: flex
@@ -545,16 +545,17 @@ div.search-bar{
 .menu-items-split-desktop {
   display: flex;
   justify-content: center;
-  width: 100%;
+  width: 90%;
 }
 
 .menu-left-projects {
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 100%; /* Ancho del contenedor de botones */
+  width: 85%; /* Ancho del contenedor de botones */
   
-  gap: 3%;
+  gap: 5%;
+  margin-bottom: 0.5%;
 }
 
 .menu-link-desktop-section {
@@ -602,6 +603,7 @@ div.search-bar{
     align-items: center;
     width: 80%;
     gap: 15%;
+    margin-bottom: 0.5%;
 }
 .projects-section .projects-header, .projects-section .header-navbar {
     position: fixed;
@@ -609,7 +611,7 @@ div.search-bar{
     left: 0;
     width: 100%;
     background: #ffffff !important;
-    z-index: 11;
+    z-index: 9;
 }
 .section-selector-projects {
     display: flex;
@@ -626,7 +628,7 @@ div.search-bar{
 @media (min-width: 769px) and (max-width: 1200px) {
   .menu-left-projects {
     width: 70%;
-    
+    margin-bottom: 0.5%;
   }
   
   .menu-link-desktop-section {
@@ -638,7 +640,7 @@ div.search-bar{
 @media (min-width: 768px) and (max-width: 992px) {
   .menu-left-projects {
     width: 80%;
-   
+   margin-bottom: 0.5%;
   }
   
   .menu-link-desktop-section {
@@ -697,7 +699,7 @@ div.search-bar{
         .menu-left-projects {
         width: 100%;
         margin-top: 0.5%;
-        
+        margin-bottom: 0.5%;
     }
 
     .desktop-menu-projetcs nav {
@@ -706,7 +708,8 @@ div.search-bar{
         flex-direction: row;
         color: #222;
         justify-content: center;
-        width: 100vw;
+        width: 100%; /* CORRECCIÓN */
+    max-width: 100%;
         font-size: 1.2rem;
         margin-top: 4%;
     }
@@ -720,6 +723,7 @@ div.search-bar{
   align-items: center;
   width: 80%; /* Ancho del contenedor de botones */
   gap: 18%;
+  margin-bottom: 0.5%;
 }
    .projects-scrollable-content, .projects-section > .projects-scrollable-content {
     margin-top: 12.5%;
@@ -743,6 +747,7 @@ div.search-bar{
       align-items: center;
       width: 70%; /* Ancho del contenedor de botones */
       gap: 25%;
+              margin-bottom: 0.5%;
     }
         .subcategory-button {
             font-family: "Montserrat";
@@ -774,7 +779,8 @@ div.search-bar{
         flex-direction: row;
         color: #222;
         justify-content: center;
-        width: 100vw;
+        width: 100%; /* CORRECCIÓN */
+    max-width: 100%;
         font-size: 1.2rem;
         margin-top: 1.8%;
       }
@@ -790,6 +796,7 @@ div.search-bar{
         align-items: center;
         width: 70%; /* Ancho del contenedor de botones */
         gap: 10%;
+        margin-bottom: 0.5%;
       }
       .subcategories {
         
@@ -837,6 +844,7 @@ div.search-bar{
         align-items: center;
         width: 70%; /* Ancho del contenedor de botones */
         gap: 18%;
+        margin-bottom: 0.5%;
       }
       .desktop-menu-projetcs nav {
         display: flex;
@@ -844,7 +852,8 @@ div.search-bar{
         flex-direction: row;
         color: #222;
         justify-content: center;
-        width: 100vw;
+        width: 100%; /* CORRECCIÓN */
+    max-width: 100%;
         font-size: 1.2rem;
         margin-top: 1.5%;
       }
@@ -866,7 +875,7 @@ div.search-bar{
         top: 5px;
         left: 0;
         width: 100%;
-        background: #ffffff !important;
+        
         z-index: 11;
       }
       
@@ -882,8 +891,9 @@ div.search-bar{
         display: flex;
         justify-content: space-between; 
         align-items: center;
-        width: 90%;
-        gap: 5px; 
+        width: 80%;
+        gap: 10%; 
+        margin-bottom: 0.5%;
       }
       
       .menu-link-desktop-section {
@@ -915,4 +925,171 @@ div.search-bar{
         margin-top: 27.5%;
       }
     }
-   
+   /* ============================================================
+   ANIMACIÓN Y AJUSTE DE MÁRGENES (SIN SELECCIÓN)
+   ============================================================ */
+
+/* 1. Habilitar la transición suave para el margen */
+.projects-scrollable-content, 
+.projects-section > .projects-scrollable-content {
+    transition: margin-top 5s ease-in-out; /* Efecto swipe suave */
+}
+
+/* 2. Definición de márgenes cuando NO hay selección (clase .no-selection) */
+
+/* MOBILE (350px - 425px) */
+@media (min-width: 350px) and (max-width: 425px) {
+    .projects-scrollable-content.no-selection, 
+    .projects-section > .projects-scrollable-content.no-selection {
+        margin-top: 19.5%;
+    }
+}
+
+/* TABLET (768px - 992px) */
+@media (min-width: 768px) and (max-width: 992px) {
+    .projects-scrollable-content.no-selection, 
+    .projects-section > .projects-scrollable-content.no-selection {
+        margin-top: 13%;
+    }
+}
+
+/* DESKTOP (1024px+) */
+@media (min-width: 1024px) {
+    .projects-scrollable-content.no-selection, 
+    .projects-section > .projects-scrollable-content.no-selection {
+        margin-top: 9.5%;
+    }
+}
+
+/* LARGE DESKTOP (1439px - 1623px) */
+@media (min-width: 1439px) and (max-width: 1623px) {
+    .projects-scrollable-content.no-selection, 
+    .projects-section > .projects-scrollable-content.no-selection {
+        margin-top: 8.1%;
+    }
+}
+.projects-scrollable-content, 
+.projects-section > .projects-scrollable-content {
+    /* Forzamos la transición en todas las propiedades para asegurar que lo tome */
+    transition: margin-top 0.8s cubic-bezier(0.2, 1, 0.3, 1) !important;
+    will-change: margin-top; /* Avisa al navegador que prepare la animación */
+}
+/*============================================================
+   REGLA MAESTRA DE MOVIMIENTO SUAVE
+   ============================================================ */
+.projects-scrollable-content, 
+.projects-section > .projects-scrollable-content {
+    /* Esta línea es la clave: Define CÓMO se mueve, no CUÁNTO */
+    transition: margin-top 0.8s cubic-bezier(0.25, 1, 0.5, 1) !important;
+    
+    /* Optimización para que no vibre */
+    will-change: margin-top;
+}
+/* ============================================================
+   ANIMACIÓN DE SUBCATEGORÍAS (Secuencial)
+   ============================================================ */
+
+/* ESTADO BASE (OCULTO) */
+.subcategories {
+    /* Layout */
+    display: flex;
+    justify-content: center;
+    gap: 4%;
+    padding: 0 20px; 
+    overflow: hidden;
+    white-space: nowrap;
+
+    /* Propiedades para animar */
+    opacity: 0;                /* Invisible */
+    max-height: 0;             /* Altura colapsada */
+    transform: translateY(-15px); /* Un poco hacia arriba */
+    pointer-events: none;      /* No se puede clickear si no se ve */
+
+    /* TRANSICIÓN DE SALIDA (Cuando vuelves a 'All') */
+    /* Se va rápido (0.3s) y SIN delay (0s) para no estorbar la subida */
+    transition: all 0.3s ease-out 0s; 
+}
+
+/* ESTADO VISIBLE (Cuando seleccionas una sección) */
+.subcategories.show {
+    opacity: 1;
+    max-height: 60px;          /* Altura suficiente para los botones */
+    transform: translateY(0);  /* Baja a su posición normal */
+    pointer-events: auto;      /* Reactiva los clicks */
+
+    /* TRANSICIÓN DE ENTRADA (La magia) */
+    /* Dura 0.6s | Curva Suave | ESPERA 0.4s ANTES DE EMPEZAR */
+    transition: all 0.6s cubic-bezier(0.25, 1, 0.5, 1) 0.4s;
+}
+
+/* ============================================================
+   FIX: ELIMINAR SCROLL HORIZONTAL
+   ============================================================ */
+html, body {
+    overflow-x: hidden; /* Previene scroll en todo el sitio */
+    max-width: 100%;
+}
+
+.projects-section {
+    width: 100%;
+    max-width: 100vw;
+    overflow-x: hidden; /* Corta el sobrante específico de esta sección */
+}
+
+/* Asegura que el contenedor de imágenes no se salga */
+.projects-scrollable-content {
+    width: 100%;
+    overflow-x: hidden;
+}
+/* ============================================================
+   BOTÓN "ABRIR EN NUEVA PESTAÑA"
+   ============================================================ */
+
+/* 1. Asegurar que el wrapper sea la referencia de posición */
+.image-wrapper {
+    position: relative; /* Esto ya debería estar, pero confirmamos */
+}
+
+/* 2. Estilo del botón */
+.open-new-tab-btn {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    
+    /* Diseño circular y sutil */
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: none;
+    
+    backdrop-filter: blur(2px); /* Efecto vidrio (opcional) */
+    
+    /* Centrado del ícono */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+    /* Comportamiento */
+    cursor: pointer;
+    z-index: 5; /* Por encima de la imagen y etiqueta */
+    color: #333;
+    transition: all 0.2s ease;
+    padding: 0;
+}
+
+/* 3. Efecto Hover */
+.open-new-tab-btn:hover {
+    
+    transform: scale(1.1);     /* Crece un poquito */
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    color: #000;
+}
+
+/* 4. Ajuste para móvil (opcional: hacerlo un poco más grande para el dedo) */
+@media (max-width: 768px) {
+    .open-new-tab-btn {
+        width: 32px;
+        height: 32px;
+      
+    }
+}
