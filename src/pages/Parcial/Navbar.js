@@ -21,7 +21,7 @@ const Navbar = ({ isSliding, menuOpen, setMenuOpen, showInput, setShowInput, pag
 
     const [hideOnScroll, setHideOnScroll] = useState(false);
     const lastScrollY = useRef(0);
-    
+
     // Referencias para el menú y el buscador
     const menuRef = useRef(null);
     const searchRef = useRef(null);
@@ -60,7 +60,7 @@ const Navbar = ({ isSliding, menuOpen, setMenuOpen, showInput, setShowInput, pag
         const handleScroll = () => {
             const y = window.scrollY;
             const prevY = lastScrollY.current;
-if (page == 'ProjectsSection') {
+            if (page == 'ProjectsSection') {
                 setHideOnScroll(false);
                 return; // Detiene la ejecución aquí, ignorando el scroll
             }
@@ -145,9 +145,21 @@ if (page == 'ProjectsSection') {
                     {/* Menú horizontal para desktop */}
                     <div className="desktop-menu">
                         <nav className="menu-items" >
-                            <Link to="/projectsHome" className="menu-link-desktop projects" style={{ color: iconColor }}>
+                            <Link
+                                to="/projectsHome"
+                                state={{ resetProjects: true }}
+                                className="menu-link-desktop projects"
+                                style={{ color: iconColor }}
+                                onClick={() => {
+                                    // opcional: cerrar menú / buscador si aplica
+                                    setMenuOpen(false);
+                                    setShowInput(false);
+                                    setSearchTerm('');
+                                }}
+                            >
                                 {lang === 'ES' ? 'Proyectos' : 'Projects'}
                             </Link>
+
                             <Link to="/awardsandpress" className="menu-link-desktop press-awards" style={{ color: iconColor }}>
                                 {lang === 'ES' ? 'Prensa y Premios' : 'Press & Awards'}
                             </Link>
@@ -192,9 +204,21 @@ if (page == 'ProjectsSection') {
                         <span className="menu-close-icon" onClick={toggleMenu}>✖</span>
                     </div>
                     <nav className="menu-items">
-                        <Link to="/projectsHome" className="menu-link projects">
+                        <Link
+                            to="/projectsHome"
+                            state={{ resetProjects: true }}
+                            className="menu-link projects"
+                            onClick={() => {
+                                setMenuOpen(false);
+                                setShowInput(false);
+                                setSearchTerm('');
+                                
+                            }}
+                            
+                        >
                             {lang === 'ES' ? 'Proyectos' : 'Projects'}
                         </Link>
+
                         <Link to="/awardsandpress" className="menu-link press-awards">
                             {lang === 'ES' ? 'Prensa y Premios' : 'Press & Awards'}
                         </Link>

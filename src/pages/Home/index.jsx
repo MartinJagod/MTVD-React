@@ -1134,7 +1134,7 @@ useEffect(() => {
                         ref={slideStudioBoxRef} onClick={goToStudio}
                     >
                     {/*     <img src={groupImage} alt="Group Icon" className="icon-image" onClick={goToStudio} /> */}
-                     <span className="text-Awards" style={{color:"#ffffff"}}>{lang === 'ES' ? <> Nuestro<br /> equipo</> : 'Our team'}</span>
+                     <span className="text-Awards" style={{color:"#ffffff"}}>{lang === 'ES' ? <> Nuestro<br /> Equipo</> : 'Our Team'}</span>
 
                     </div>
                     <div onClick={goToStudio}
@@ -1369,7 +1369,7 @@ useEffect(() => {
                             className={`custom-orange-box-desktop ${slideStudioBoxDesktop ? 'custom-slide-orange-desktop' : ''}`}
                             onClick={goToStudio}
                         >
-                             <span className="text-Awards-desktop" style={{textAlign:"left", color:"#ffffff"}}>{lang === 'ES' ? <>Nuestro<br />equipo</> : 'Our team'}</span>
+                             <span className="text-Awards-desktop" style={{textAlign:"left", color:"#ffffff"}}>{lang === 'ES' ? <>Nuestro<br />Equipo</> : 'Our Team'}</span>
                             {/* <img src={groupImage} alt="Group Icon" className="star-image-star-desktop" onClick={goToStudio} />
  */}
                         </div>

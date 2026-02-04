@@ -1,9 +1,11 @@
 import React, { useEffect, useState, useRef, useMemo, useContext } from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useNavigate, useSearchParams, useLocation } from 'react-router-dom';
 import { subcategoriaProyectosData, subcategoriaProyectosDataES } from './subcategoriasProyectosData';
 import './projectsHome.css';
 import './ProjectsSection.css';
-import { FaExternalLinkAlt } from 'react-icons/fa';
+// Eliminamos react-icons para evitar el error de build
+// import { FaExternalLinkAlt } from 'react-icons/fa';
+
 // Componentes Parciales
 import Navbar from '../Parcial/Navbar';
 import ContactFooter from '../Parcial/ContactFooter';
@@ -14,16 +16,16 @@ import projectsData from './projectsData';
 import API_BASE from '../../apiBase';
 import { LanguageContext } from '../../context/LanguageContext';
 
-// Helper para formatear nombres (camelCase a Texto)
+// Helper para formatear nombres
 const formatName = (str) =>
   str
-    .replace(/([A-Z])/g, ' $1')   // Espacio antes de mayúsculas
-    .replace(/([0-9]+)/g, ' $1')  // NUEVO: Espacio antes de números
+    .replace(/([A-Z])/g, ' $1')
+    .replace(/([0-9]+)/g, ' $1')
     .trim();
 
 function ProjectsSection() {
   const { lang } = useContext(LanguageContext); // EN | ES
-
+const location = useLocation();
   // Mapa de Títulos
   const TITLE_MAP = {
     Design:       { EN: 'Design',       ES: 'Diseño' },
@@ -31,17 +33,17 @@ function ProjectsSection() {
     Branding:     { EN: 'Brands',       ES: 'Marcas' },
   };
 
-  // Configuración de colores para los botones activos
+  // Configuración de colores
   const SECTION_STYLES = {
-    Design:       { bg: '#FEC93A', color: '#333' }, // Amarillo
-    Architecture: { bg: '#3B76F3', color: '#FFF' }, // Azul
-    Branding:     { bg: '#44B87E', color: '#FFF' }, // Verde
+    Design:       { bg: '#FEC93A', color: '#333' },
+    Architecture: { bg: '#3B76F3', color: '#333' },
+    Branding:     { bg: '#44B87E', color: '#333' },
   };
 
-  const [searchParams, setSearchParams] = useSearchParams(); // Agregamos setSearchParams
+  const [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
 
-  // Estado inicial: 'All' para que empiece mostrando todo y sin subcategorías
+  // Estado inicial
   const [section, setSection] = useState(() => {
     const sec = searchParams.get('section');
     return ['Design', 'Architecture', 'Branding'].includes(sec) ? sec : 'All';
@@ -59,11 +61,59 @@ function ProjectsSection() {
   const [showInput, setShowInput] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   
-  // Refs
-  const isSliding = useRef(false);
+  // ---------------------------------------------------------
+  // 🟢 LÓGICA DE LONG PRESS (MANTENER PRESIONADO)
+  // ---------------------------------------------------------
+  const longPressTimer = useRef(null);
+  const isLongPressTriggered = useRef(false);
+
+  const handlePressStart = (item) => {
+    // Solo activamos esta lógica si la pantalla es menor a 1440px (Móvil/Tablet)
+    if (window.innerWidth >= 1440) return;
+
+    isLongPressTriggered.current = false;
+    
+    // Iniciamos temporizador de 500ms
+    longPressTimer.current = setTimeout(() => {
+      isLongPressTriggered.current = true;
+      
+      // Acción: Abrir en nueva pestaña
+      const prefix = window.location.hash ? '/#' : ''; 
+      window.open(`${window.location.origin}${prefix}/project/${item.category}/${item.name}`, '_blank');
+      
+      // Feedback táctil (vibración) si el dispositivo lo soporta
+      if (navigator.vibrate) navigator.vibrate(50);
+
+    }, 500); 
+  };
+
+  const handlePressEnd = () => {
+    // Si el usuario suelta el dedo antes de los 500ms, cancelamos el long press
+    if (longPressTimer.current) {
+      clearTimeout(longPressTimer.current);
+      longPressTimer.current = null;
+    }
+  };
+
+  const handleProjectClick = (item) => {
+    // Si se disparó el long press (es true), NO navegamos en la misma pestaña
+    if (isLongPressTriggered.current) {
+      isLongPressTriggered.current = false; // Resetear para la próxima
+      return;
+    }
+    // Si fue un click rápido normal, navegamos
+    navigate(`/project/${item.category}/${item.name}`);
+  };
+
+  // Evitar menú contextual nativo (guardar imagen, etc) en móviles para que no moleste
+  const handleContextMenu = (e) => {
+    if (window.innerWidth < 1440) {
+       // e.preventDefault(); // Descomentar si quieres bloquear el menú nativo del navegador
+    }
+  };
+  // ---------------------------------------------------------
 
   // --- HELPERS ---
-
   const getCategoryById = (id) => {
     if (id <= 5000) return 'design';
     if (id <= 8000) return 'architecture';
@@ -80,7 +130,6 @@ function ProjectsSection() {
       .replace(/[^a-z0-9]/g, '');      
 
   // --- MEMOS ---
-
   const searchIndex = useMemo(() => {
     return Object.entries(projectsData).flatMap(([idStr, p]) => {
       const id = Number(idStr);
@@ -112,13 +161,10 @@ function ProjectsSection() {
       }];
     });
   }, [section]);
-const tituloOpen = lang === "ES"
-    ? "Abrir en nueva pestaña"
-    : "Open in new tab";
 
-  const proyectosDataLocal = lang === "ES"
-    ? subcategoriaProyectosDataES
-    : subcategoriaProyectosData;
+  const tituloOpen = lang === "ES" ? "Abrir en nueva pestaña" : "Open in new tab";
+
+  const proyectosDataLocal = lang === "ES" ? subcategoriaProyectosDataES : subcategoriaProyectosData;
 
   const nameLookup = useMemo(() => {
     const map = {};
@@ -136,8 +182,6 @@ const tituloOpen = lang === "ES"
   };
 
   // --- EFECTOS ---
-
-  /* 1. Carga de proyectos */
   useEffect(() => {
     fetch(`${API_BASE}/projects-home`)
       .then(r => r.json())
@@ -161,14 +205,9 @@ const tituloOpen = lang === "ES"
         }
 
         const enriched = hits.flatMap(url => {
-        // 1. Obtenemos el nombre sin extensión, pero DEJAMOS los números
-  const raw = decodeURIComponent(url.split('/').pop())
-    .replace(/\.[^/.]+$/, ''); 
-  
-  // 2. Para buscar en tu 'lookup', usamos normalize (que ya se encarga de limpiar internamente)
-  const key = normalize(raw);
-  const metas = nameLookup[key] || [];
-          
+          const raw = decodeURIComponent(url.split('/').pop()).replace(/\.[^/.]+$/, ''); 
+          const key = normalize(raw);
+          const metas = nameLookup[key] || [];
           const meta = metas.find(m => m.id >= minId && m.id <= maxId);
 
           if (!meta) return [];
@@ -190,28 +229,22 @@ const tituloOpen = lang === "ES"
       });
   }, [section, nameLookup]);
 
-  /* 2. Fetch secundario */
   useEffect(() => {
     if (section === 'All') return; 
-
     fetch(`${API_BASE}/projects-home`)
       .then(response => response.json())
       .then(data => {
         const shuffle = (arr) => [...arr].sort(() => Math.random() - 0.5);
         const categoryData = data[section.toLowerCase()];
-
         if (categoryData && categoryData.hits) {
           setFilteredImages(shuffle(categoryData.hits));
         } else {
           setFilteredImages([]);
         }
       })
-      .catch(error => {
-        setFilteredImages([]);
-      });
+      .catch(error => { setFilteredImages([]); });
   }, [section]);
 
-  /* 3. Helper Filenames */
   const getFileName = (imageUrl) => {
     if (!imageUrl) return "";
     let fileName = imageUrl.substring(imageUrl.lastIndexOf("/") + 1);
@@ -227,12 +260,6 @@ const tituloOpen = lang === "ES"
     }
   }, [filteredImages]);
 
-  /* 4. Limpiar filtro al cambiar sección */
- /*  useEffect(() => {
-    setSubcatFilter('');
-  }, [section]); */
-
-  /* 5. Animación Menú */
   useEffect(() => {
     if (menuOpen) {
       const links = document.querySelectorAll('.menu-link');
@@ -255,65 +282,55 @@ const tituloOpen = lang === "ES"
     }
   }, [menuOpen]);
 
-  /* 6. Leer URL */
-  /* useEffect(() => {
-    const sectionsList = ['Design', 'Architecture', 'Branding'];
-    const sectionFromUrl = searchParams.get('section');
-    if (sectionFromUrl && sectionsList.includes(sectionFromUrl)) {
-      setSection(sectionFromUrl);
-    }
-  }, [searchParams]); */
-/* NUEVO: Sincronizar URL con el estado actual */
   useEffect(() => {
     const params = {};
     if (section !== 'All') params.section = section;
     if (subcatFilter) params.sub = subcatFilter;
-    
-    // replace: true evita crear historial infinito si cambias filtros rápido,
-    // pero permite que el botón "Atrás" del navegador funcione para salir de la página.
     setSearchParams(params, { replace: true });
   }, [section, subcatFilter, setSearchParams]);
-  // --- HANDLERS ---
 
   const handleSelectProject = (item) => {
     const slug = encodeURIComponent(item.projectName.replace(/\s+/g, ''));
     navigate(`/project/${item.category}/${slug}`);
     setShowInput(false);
   };
+useEffect(() => {
+  if (location.state?.resetProjects) {
+    // Reset “solo cuando se clickea Proyectos en el navbar”
+    setSection('All');
+    setSubcatFilter('');
+    setShowInput(false);
+    setMenuOpen(false);
 
- const toggleSection = (sec) => {
+    // Consumir la bandera para que el BACK mantenga selecciones
+    navigate(location.pathname, { replace: true, state: {} });
+  }
+}, [location.state, location.pathname, navigate]);
+
+  const toggleSection = (sec) => {
     if (section === sec) {
       setSection('All');
-      setSubcatFilter(''); // Limpiar subcategoría
+      setSubcatFilter(''); 
     } else {
       setSection(sec);
-      setSubcatFilter(''); // Limpiar subcategoría al cambiar de sección mayor
+      setSubcatFilter(''); 
     }
   };
 
- // --- RENDER HELPERS ---
-
-  // 1. Filtrar 'images' por la sección actual INMEDIATAMENTE.
-  // Esto asegura que si venimos de 'All', usemos los datos que ya tenemos en memoria
-  // para filtrar al instante, sin esperar al fetch del useEffect.
   const projectsForCurrentSection = useMemo(() => {
     if (section === 'All') return images;
     return images.filter(img => img.category === section.toLowerCase());
   }, [images, section]);
 
-  // 2. Usar esa lista filtrada para calcular 'visible' (Grid de imágenes)
   const visible = projectsForCurrentSection.filter(
     (img) => !subcatFilter || img.subCategoria === subcatFilter
   );
   
-  // 3. Usar la misma lista filtrada para las subcategorías
-  // Ahora solo saldrán las subcategorías de los proyectos que coinciden con la sección
   const subcatsInSection = [...new Set(projectsForCurrentSection.map(i => i.subCategoria))].sort();
+
   return (
     <div className="projects-section">
       <div className="projects-fixed-top">
-
-        {/* Header - Sin posición fija inline */}
         <header className="projects-header">
           <Navbar
             menuOpen={menuOpen}
@@ -326,20 +343,16 @@ const tituloOpen = lang === "ES"
           />
         </header>
 
-        {/* Selector de Sección */}
         <div className="section-selector-projects">
           <div className="desktop-menu-projetcs">
             <nav className="menu-items-split-desktop">
               <div className="menu-left-projects">
                 {['Design', 'Architecture', 'Branding'].map((sec) => {
                   const isActive = section === sec;
-                  
-                  // Estilos dinámicos
                   const style = isActive ? {
                     backgroundColor: SECTION_STYLES[sec].bg,
                     color: SECTION_STYLES[sec].color,
-                   /*  borderColor: SECTION_STYLES[sec].bg,  */
-                    fontWeight: '800'
+                    
                   } : {};
 
                   return (
@@ -358,7 +371,6 @@ const tituloOpen = lang === "ES"
           </div>
         </div>
 
-        {/* Subcategorías - SOLO SE MUESTRAN SI HAY SECCIÓN SELECCIONADA */}
         {section !== 'All' && (
         <div className={`subcategories ${section !== 'All' ? 'show' : ''}`}>
           {subcatsInSection.map(sub => (
@@ -372,13 +384,12 @@ const tituloOpen = lang === "ES"
           ))}
         </div>
         )}
-
       </div>
 
-      {/* Contenido Scrollable */}
       <div className="projects-section">
         <div className={`projects-scrollable-content ${section === 'All' ? 'no-selection' : ''}`}>
 
+          {/* GRID MÓVIL / TABLET (Donde aplicamos Long Press) */}
           <div className="desktop-hide image-grid masonry">
             <div className="column-project">
               {visible.filter((_, i) => i % 2 === 0).map((item, i) => (
@@ -387,21 +398,31 @@ const tituloOpen = lang === "ES"
                     src={item.url}
                     alt={item.name}
                     className="project-image"
-                    onClick={() => navigate(`/project/${item.category}/${item.name}`)}
+                    /* Eventos para Click vs Long Press */
+                    onTouchStart={() => handlePressStart(item)}
+                    onTouchEnd={handlePressEnd}
+                    onMouseDown={() => handlePressStart(item)}
+                    onMouseUp={handlePressEnd}
+                    onMouseLeave={handlePressEnd}
+                    onClick={() => handleProjectClick(item)}
+                    onContextMenu={handleContextMenu} 
                   />
                   <div className="image-label-section">{formatName(item.name)}</div>
+                  {/* Botón Icono (Oculto por CSS en < 1440px) */}
                   <button 
-    className="open-new-tab-btn"
-    title="Abrir en nueva pestaña"
-    onClick={(e) => {
-      e.stopPropagation(); // Evita que se dispare el click de la imagen
-      // Detecta si tu app usa HashRouter (#) o rutas limpias
-      const prefix = window.location.hash ? '/#' : ''; 
-      window.open(`${window.location.origin}${prefix}/project/${item.category}/${item.name}`, '_blank');
-    }}
-  >
-    <FaExternalLinkAlt size={12} />
-  </button>
+                    className="open-new-tab-btn"
+                    title="Abrir en nueva pestaña"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      const prefix = window.location.hash ? '/#' : ''; 
+                      window.open(`${window.location.origin}${prefix}/project/${item.category}/${item.name}`, '_blank');
+                    }}
+                  >
+                    {/* SVG simple para evitar dependencia react-icons */}
+                    <svg stroke="currentColor" fill="currentColor" strokeWidth="0" viewBox="0 0 512 512" height="12" width="12" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M432,320H400a16,16,0,0,0-16,16V448H64V128H208a16,16,0,0,0,16-16V80a16,16,0,0,0-16-16H48A48,48,0,0,0,0,112V464a48,48,0,0,0,48,48H400a48,48,0,0,0,48-48V336A16,16,0,0,0,432,320ZM488,0h-128c-21.37,0-32.05,25.91-17,41l35.73,35.73L135,320.37a24,24,0,0,0,0,34L157.67,377a24,24,0,0,0,34,0L435.28,133.32,471,169c15,15,41,4.5,41-17V24A24,24,0,0,0,488,0Z"></path>
+                    </svg>
+                  </button>
                 </div>
               ))}
             </div>
@@ -413,26 +434,35 @@ const tituloOpen = lang === "ES"
                     src={item.url}
                     alt={item.name}
                     className="project-image"
-                    onClick={() => navigate(`/project/${item.category}/${item.name}`)}
+                    onTouchStart={() => handlePressStart(item)}
+                    onTouchEnd={handlePressEnd}
+                    onMouseDown={() => handlePressStart(item)}
+                    onMouseUp={handlePressEnd}
+                    onMouseLeave={handlePressEnd}
+                    onClick={() => handleProjectClick(item)}
+                    onContextMenu={handleContextMenu}
                   />
                   <div className="image-label-section">{formatName(item.name)}</div>
                    <button 
-    className="open-new-tab-btn"
-    title="Abrir en nueva pestaña"
-    onClick={(e) => {
-      e.stopPropagation(); // Evita que se dispare el click de la imagen
-      // Detecta si tu app usa HashRouter (#) o rutas limpias
-      const prefix = window.location.hash ? '/#' : ''; 
-      window.open(`${window.location.origin}${prefix}/project/${item.category}/${item.name}`, '_blank');
-    }}
-  >
-    <FaExternalLinkAlt size={12} />
-  </button>
+                    className="open-new-tab-btn"
+                    title="Abrir en nueva pestaña"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      const prefix = window.location.hash ? '/#' : ''; 
+                      window.open(`${window.location.origin}${prefix}/project/${item.category}/${item.name}`, '_blank');
+                    }}
+                  >
+                    {/* SVG simple para evitar dependencia react-icons */}
+                    <svg stroke="currentColor" fill="currentColor" strokeWidth="0" viewBox="0 0 512 512" height="12" width="12" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M432,320H400a16,16,0,0,0-16,16V448H64V128H208a16,16,0,0,0,16-16V80a16,16,0,0,0-16-16H48A48,48,0,0,0,0,112V464a48,48,0,0,0,48,48H400a48,48,0,0,0,48-48V336A16,16,0,0,0,432,320ZM488,0h-128c-21.37,0-32.05,25.91-17,41l35.73,35.73L135,320.37a24,24,0,0,0,0,34L157.67,377a24,24,0,0,0,34,0L435.28,133.32,471,169c15,15,41,4.5,41-17V24A24,24,0,0,0,488,0Z"></path>
+                    </svg>
+                  </button>
                 </div>
               ))}
             </div>
           </div>
 
+          {/* GRID DESKTOP (Mantiene comportamiento normal) */}
           <div className="mobile-hide image-list-desktop masonry">
             {visible.map((item, i) => (
               <div className="image-wrapper" key={i}>
@@ -440,28 +470,36 @@ const tituloOpen = lang === "ES"
                   src={item.url}
                   alt={item.name}
                   className="project-image"
-                  onClick={() => navigate(`/project/${item.category}/${item.name}`)}
+                  /* Aquí también aplicamos Long Press por si acaso cae entre 768px y 1440px */
+                  onTouchStart={() => handlePressStart(item)}
+                  onTouchEnd={handlePressEnd}
+                  onMouseDown={() => handlePressStart(item)}
+                  onMouseUp={handlePressEnd}
+                  onMouseLeave={handlePressEnd}
+                  onClick={() => handleProjectClick(item)}
+                  onContextMenu={handleContextMenu}
                 />
                 <div className="image-label-section">{formatName(item.name)}</div>
                  <button 
-    className="open-new-tab-btn"
-    title={tituloOpen}
-    onClick={(e) => {
-      e.stopPropagation(); // Evita que se dispare el click de la imagen
-      // Detecta si tu app usa HashRouter (#) o rutas limpias
-      const prefix = window.location.hash ? '/#' : ''; 
-      window.open(`${window.location.origin}${prefix}/project/${item.category}/${item.name}`, '_blank');
-    }}
-  >
-    <FaExternalLinkAlt size={12} />
-  </button>
+                    className="open-new-tab-btn"
+                    title={tituloOpen}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      const prefix = window.location.hash ? '/#' : ''; 
+                      window.open(`${window.location.origin}${prefix}/project/${item.category}/${item.name}`, '_blank');
+                    }}
+                  >
+                    {/* SVG simple para evitar dependencia react-icons */}
+                    <svg stroke="currentColor" fill="currentColor" strokeWidth="0" viewBox="0 0 512 512" height="12" width="12" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M432,320H400a16,16,0,0,0-16,16V448H64V128H208a16,16,0,0,0,16-16V80a16,16,0,0,0-16-16H48A48,48,0,0,0,0,112V464a48,48,0,0,0,48,48H400a48,48,0,0,0,48-48V336A16,16,0,0,0,432,320ZM488,0h-128c-21.37,0-32.05,25.91-17,41l35.73,35.73L135,320.37a24,24,0,0,0,0,34L157.67,377a24,24,0,0,0,34,0L435.28,133.32,471,169c15,15,41,4.5,41-17V24A24,24,0,0,0,488,0Z"></path>
+                    </svg>
+                  </button>
               </div>
             ))}
           </div>
 
         </div>
 
-        {/* Footer */}
         <div>
           <footer className="studio-footer mobile-hide">
             <ContactFooterDesktop />

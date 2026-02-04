@@ -1,3 +1,12 @@
+## 🧵 Branches y flujo de trabajo con Git
+
+- Branch principal del proyecto: `main`
+- Branch de trabajo actual: `nueva-rama-final`
+
+### Comandos básicos de trabajo
+
+Ver el estado del repositorio:
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).

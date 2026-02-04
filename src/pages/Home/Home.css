@@ -1819,7 +1819,7 @@ margin-top: -2%;
 .custom-orange-box-desktop {
   background-color: #FD7E40;
   position: absolute;
-  left: 0;
+  left: 1px;
   width: 32.8vw;
   height: 33vw;
   z-index: 1;
@@ -1968,7 +1968,7 @@ margin-top: -2%;
 .custom-orange-box-desktop {
   background-color: #FD7E40;
   position: absolute;
-  left: 0;
+  left: 1px;
   width: 33.12vw;
   height: 33vw;
   z-index: 1;
