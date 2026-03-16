@@ -1,330 +1,419 @@
-import React, { useEffect, useState, useRef, useCallback, useContext, useMemo } from 'react';
-import { useNavigate } from "react-router-dom";
-import projectsData from '../Projects/projectsData';
-import projectsDataES from '../Projects/projectsDataES';
-import { LanguageContext } from '../../context/LanguageContext';
-import Navbar from '../Parcial/Navbar';
-import ContactFooter from '../Parcial/ContactFooter';
-import './studio.css';
-import equipo from '../../assets/images/equipo.jpg';
-import socios from '../../assets/images/socios.jpg';
-import interiorismo from '../../assets/images/interiorismo.jpg';
-import arquitectura from '../../assets/images/arquitectura.jpg';
-import support from '../../assets/images/support.jpg';
-import pms from '../../assets/images/pms.jpg';
-import CarouselLogos from "../Parcial/CarouselLogos";
-import ContactFooterDesktop from '../Parcial/ContactFooterDesktop'; // Ajusta la ruta según tu estructura de carpetas
-
-/* rango → categoría */
-const getCategoryById = id =>
-    id <= 5000 ? 'design'
-        : id <= 8000 ? 'architecture'
-            : 'branding';
-
-
-const Studio = () => {
-
-    // Inicio animación de menú 
-    const { lang, toggleLang } = useContext(LanguageContext);
-    const [showInput, setShowInput] = useState(false);
-    const [menuOpen, setMenuOpen] = useState(false);
-    const [searchTerm, setSearchTerm] = useState('');
-    const navigate = useNavigate();
-    const [isSliding, setIsSliding] = useState(false); // Controla el deslizamiento del Navbar
-    const options = [];
-
-
-
-
-
-    // 🔹 Dataset por idioma
-    const dataset = lang === 'ES' ? projectsDataES : projectsData;
-
-    useEffect(() => {
-        if (menuOpen) {
-            const links = document.querySelectorAll('.menu-link');
-            const dash = document.querySelector('.menu-dash');
-
-            // Espera 3 segundos antes de iniciar las animaciones
-            const timeout = setTimeout(() => {
-                links.forEach((link, index) => {
-                    setTimeout(() => {
-                        link.classList.add('animate-color');
-                        dash.className = `menu-dash ${link.classList[1]}`; // Sincroniza el color del guion
-
-                        setTimeout(() => {
-                            link.classList.remove('animate-color');
-                            if (index === links.length - 1) {
-                                dash.className = 'menu-dash'; // Resetea el guion al final
-                            }
-                        }, 200); // Duración para volver al estado inicial
-                    }, index * 200); // Espaciado entre animaciones
-                });
-            }, 500); // Espera 0.5 segundos para que el menú se abra completamente y haga color al guion
-
-            // Limpia el timeout al desmontar el componente o si `menuOpen` cambia
-            return () => clearTimeout(timeout);
+import React, { useState, useEffect, useRef, useContext } from "react";
+import { LanguageContext } from "../../context/LanguageContext";
+import Navbar from "../Parcial/Navbar";
+import ContactFooter from "../Parcial/ContactFooter";
+import ContactFooterDesktop from "../Parcial/ContactFooterDesktop";
+import WorksMap from "./WorksMap";
+ 
+import studioVideo from "../../assets/images/Horizontal.mp4";
+import teamDesign from "../../assets/images/team2.jpeg";
+import teamArch from "../../assets/images/team.jpeg";
+import Gabriela from "../../assets/images/Gabriela.jpg";
+import Marco from "../../assets/images/Marco.jpg";
+import Ramiro from "../../assets/images/Ramiro.jpg";
+import "./StudioNew.css";
+import { projectsForMap, studioPoints, COUNTRY_POINTS } from "./projectsForMap";
+ 
+const TeamIcon = () => (
+  <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="28" cy="22" r="13" fill="rgba(255,255,255,0.5)" />
+    <circle cx="52" cy="22" r="13" fill="rgba(255,255,255,0.35)" />
+    <path d="M4 62c0-14 11-22 24-22s24 8 24 22H4z" fill="rgba(255,255,255,0.5)" />
+    <path d="M36 62c0-14 8-22 16-22s16 8 16 22H36z" fill="rgba(255,255,255,0.35)" />
+  </svg>
+);
+ 
+const totalCountries = COUNTRY_POINTS.length;
+const useInView = (options = {}) => {
+  const ref = useRef(null);
+  const [isVisible, setIsVisible] = useState(false);
+ 
+  useEffect(() => {
+    const node = ref.current;
+    if (!node) return;
+ 
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting !== undefined) {
+          setIsVisible(entry.isIntersecting);
         }
-    }, [menuOpen]);
-    // Fin animación de menú
-    // Inicio animación de búsqueda
-    const handleSearchClick = () => {
-        setShowInput(!showInput);
-        setSearchTerm('');
-    };
-
-    const handleInputChange = (e) => {
-        setSearchTerm(e.target.value);
-    };
-
-    /* helpers */
-    const buildIndex = (data) =>
-        Object.entries(data).map(([idStr, p]) => {
-            const id = Number(idStr);
-            const category = getCategoryById(id);
-
-            const fullText = [
-                p.nombreproyecto,
-                p.frase1, p.frase2, p.frase3,
-                p.location,
-                p.encabezado,
-                p.parrafo1, p.parrafo2,
-                p.nombre1, p.nombre2,
-                p.contador1?.toString(),
-                p.contador2?.toString()
-            ]
-                .filter(Boolean)
-                .join(' | ')
-                .normalize('NFD').replace(/\p{Diacritic}/gu, '')
-                .toLowerCase();
-
-            return { label: p.nombreproyecto, projectName: p.nombreproyecto, category, fullText };
-        });
-
-    const handleSelectProject = (item) => {
-        const slug = encodeURIComponent(item.projectName.replace(/\s+/g, ''));
-        navigate(`/project/${item.category}/${slug}`);
-        setShowInput(false);
-    };
-
-    const filteredOptions = options.filter(option =>
-        option.toLowerCase().includes(searchTerm.toLowerCase())
+      },
+      {
+        threshold: 0.35,
+        ...options,
+      }
     );
-
-
-    /* ── índices globales, se calculan 1 vez ── */
-    const searchIndexes = useMemo(() => ({
-        EN: buildIndex(projectsData),
-        ES: buildIndex(projectsDataES),
-    }), []);
-
-    /* índice que realmente vas a usar */
-    const searchIndex = searchIndexes[lang === 'ES' ? 'ES' : 'EN'];
-    // Fin animación de búsqueda
-    const I18N_ALT = {
-        ES: {
-            equipo: 'Equipo',
-            socios: 'Socios',
-            pms: 'PMs',
-            interiorismo: 'Interiorismo',
-            arquitectura: 'Arquitectura',
-            support: 'Soporte',
-        },
-        EN: {
-            equipo: 'Team',
-            socios: 'Founders',
-            pms: 'PMs',
-            interiorismo: 'Design',
-            arquitectura: 'Architecture',
-            support: 'Support',
-        },
-    };
-
-    const images = [
-        { id: 'equipo', src: equipo, alt: I18N_ALT[lang].equipo },
-        { id: 'socios', src: socios, alt: I18N_ALT[lang].socios },
-        { id: 'pms', src: pms, alt: I18N_ALT[lang].pms },
-        { id: 'interiorismo', src: interiorismo, alt: I18N_ALT[lang].interiorismo },
-        { id: 'arquitectura', src: arquitectura, alt: I18N_ALT[lang].arquitectura },
-        { id: 'support', src: support, alt: I18N_ALT[lang].support },
-    ];
-
-
-    const [selectedImage, setSelectedImage] = useState('equipo');
-    const [lastInteraction, setLastInteraction] = useState(Date.now());
-
-    useEffect(() => {
-        const interval = setInterval(() => {
-            if (Date.now() - lastInteraction > 6000) {
-                setSelectedImage(prev => {
-                    const currentIndex = images.findIndex(img => img.id === prev);
-                    const nextIndex = (currentIndex + 1) % images.length;
-                    return images[nextIndex].id;
-                });
-            }
-        }, 2000);
-
-        return () => clearInterval(interval);
-    }, [lastInteraction, images]);
-
-    const handleImageClick = (id) => {
-        setSelectedImage(id);
-        setLastInteraction(Date.now());
-    };
-
-    return (
-        <div className="studio-section">
-            <header className="studio-header">
-                <Navbar isSliding={isSliding}
-                    menuOpen={menuOpen}
-                    setMenuOpen={setMenuOpen}
-                    showInput={showInput}
-                    searchData={searchIndex}
-                    onSelect={handleSelectProject}
-                    setShowInput={setShowInput} />
-            </header>
-
-
-            {/* Galería con paneo */}
-            <div className="studio-images studio-mobile-column">
-                {images.map(img => (
-                    <div
-                        key={img.id}
-                        className={`studio-image ${selectedImage === img.id ? 'selected' : ''}`}
-                        style={{ backgroundImage: `url(${img.src})` }}
-                        onClick={() => handleImageClick(img.id)}
-                    >
-                        <span className="image-label">{img.alt}</span>
-                    </div>
-                ))}
-            </div>
-            {/* Texto después de las imágenes */}
-            <div className="studio-text">
-                <span className="studio-title desktop-hide" >{lang === 'ES' ? 'Somos una plataforma de diseño y arquitectura inspiradora en el mundo.' : 'We are a design studio'}</span>
-                <span className="studio-title mobile-hide">{lang === 'ES' ? 'Somos una plataforma de diseño y arquitectura inspiradora en el mundo.' : 'We are a design studio'}</span>
-                <br />
-
-                <p className="studio-paragraph">
-                    {lang === 'ES' ?
-                        "Somos un equipo inquieto y curioso que diseñamos espacios únicos y memorables. Entendemos el diseño como un servicio comprendiendo las necesidades de nuestros clientes y usuarios, para crear proyectos disruptivos y cargados de significado e identidad, trascendiendo lo funcional."
-                        : "We are a passionate team dedicated to interior design with a distinct commercial focus. We provide personalized solutions with strong personalities that cater to the unique needs and preferences of each project. With over 10 years of experience, we've designed 350+ projects in 25+ cities around the world. Our pursuit of creating authentic and original spaces has earned us notable recognition and awards in architecture, interior design, and branding. We are here to inspire people to create exciting places."}
-
-                </p>
-                <div className="column"  >
-                    <blockquote className={`styled-quote ${lang !== 'ES' ? 'styled-quote--alt' : ''}`}>
-                        {lang === 'ES' ? "Diseñamos espacios que cuentan historias y potencian marcas." : <>Inspiring people <br/> to create exciting places</>}
-
-                    </blockquote>
-                </div>
-                <p className="studio-paragraph">
-                    {lang === 'ES' ?
-                        "Nuestro enfoque cercano y amigable se basa en el compromiso y experiencia, nos permiten materializar sueños y propósitos, potenciar al cliente y transformar ideas en historias que inspiran y conectan."
-                        : "We believe in forging emotional connections with both our clients and among the spaces we design and their future users. We align our approach with the business objectives of each brand, fostering strategic collaboration, partnerships, and crowdsourcing to deliver comprehensive solutions based on collective wisdom."
-                    }
-                </p>
-            </div>
-
-            {/* Datos del equipo */}
-            <div className="studio-team">
-                <h2>{lang === 'ES' ? "Equipo" : "Team"}</h2>
-
-                {/* Founders Section */}
-                <div className="team-section">
-                    <h4>{lang === 'ES' ? "Fundadores" : "Founders"}</h4>
-                    <ul>
-                        <li>Marco Ferrari / Arch. Co-founder</li>
-                        <li>Gabriela Jagodnik / Arch. Co-founder</li>
-                        <li>Ramiro Veiga / Arch. Co-founder</li>
-                    </ul>
-                </div>
-
-                {/* PMs Section */}
-                <div className="team-section">
-                    <h4>PMs</h4>
-                    <ul>
-                        <li>Arch. Julieta Astorica</li>
-                        <li>Arch. Violeta Bonicatto</li>
-                        <li>Arch. Marco Ferrari /  Co-founder</li>
-                        <li>Arch. Gustavo Macagno</li>
-                        <li>Arch. Ramiro Veiga /  Co-founder</li>
-                    </ul>
-                </div>
-
-                {/* Teams in Columns */}
-                <div className="team-columns">
-                    {/* Design Team */}
-                    <div className="team-column">
-                        <h4>{lang === 'ES' ? <>Equipo de<br />Diseño</> : <> Design <br /> Team</>}</h4>
-                        <ul>
-                            <li>Arch. Francisco Brandan</li>
-                            <li>Arch. Valentina Cabrera</li>
-                            <li>Arch. Lucía Ceballos</li>
-                            <li>Arch. Christopher Crespi</li>
-                            <li>Arch. Simón Fassi</li>
-                            <li>Arch. Daniela Francisco</li>
-                            <li>Arch. María Agustina Lopez</li>
-                            <li>Arch. Pilar Perez</li>
-                            <li>Arch. Camila Ripoll</li>
-                            <li>Arch. Ignacio Sottini</li>
-
-                        </ul>
-                    </div>
-
-                    {/* Architecture Team */}
-                    <div className="team-column">
-                        <h4>{lang === 'ES' ? <>Equipo de<br />Arquitectura</> : <>Architecture <br /> Team</>}</h4>
-                        <ul>
-                            <li>Arch. Abril Accotto</li>
-                            <li>Arch. Franco Alvite</li>
-                            <li>Arch. David Andres</li>
-                            <li>Arch. Lucas Benitez</li>
-                            <li>Arch. Bautista Dalmasso</li>
-                            <li>Arch. Rosario Depalo</li>
-                            <li>Arch. Franco Ferrari</li>
-                            <li>Arch. Agostina Giacosa</li>
-                            <li>Arch. Julieta Luccaroni</li>
-                            <li>Arch. Víctor Ocaranza</li>
-                            <li>Arch. Federico Ponce</li>
-                            <li>Arch. Amparo Rodriguez</li>
-                            <li>Arch. Triana Scarpinello</li>
-
-                        </ul>
-                    </div>
-                </div>
-                {/* PMs Section */}
-                <div className="team-section">
-                    <h4>{lang === 'ES' ? "Soporte" : "Support"}</h4>
-                    <ul>
-                        <li>Sofía Agnolon</li>
-                        <li>Cristina Alemandi</li>
-                        <li>Mariana Fedriani</li>
-                        <li>Sofía Jagodnik</li>
-                        <li>Soledad Pereyra</li>
-                        <li>Mateo Sanchez</li>
-
-
-                    </ul>
-                </div>
-
-                {/* PMs Section */}
-                <div className="team-section">
-                    {/* <h4>Clients</h4> */}
-                    <br />
-                    <br />
-
-
-
-                </div>
-            </div>
-            <footer className="studio-footer mobile-hide">
-                <ContactFooterDesktop />
-            </footer>
-            {/* Pie de página */}
-            <footer className="studio-footer desktop-hide">
-                <ContactFooter />
-            </footer>
-        </div>
-    );
+ 
+    observer.observe(node);
+ 
+    return () => observer.disconnect();
+  }, [options]);
+ 
+  return [ref, isVisible];
 };
-
-export default Studio;
+ 
+const StudioNew = () => {
+  const { lang } = useContext(LanguageContext);
+ 
+  const [showInput, setShowInput] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
+ 
+  const videoRef = useRef(null);
+  const [isMuted, setIsMuted] = useState(true);
+ 
+  const [aboutRef, aboutVisible] = useInView();
+  const [designRef, designVisible] = useInView();
+  const [archRef, archVisible] = useInView();
+  const [mapRef, mapVisible] = useInView();
+ 
+  const [activeMapLayer, setActiveMapLayer] = useState("cities");
+ 
+  const toggleMute = () => {
+    const v = videoRef.current;
+    if (!v) return;
+    v.muted = !isMuted;
+    setIsMuted(!isMuted);
+  };
+ 
+  const enterFullScreen = async () => {
+    const v = videoRef.current;
+    if (!v) return;
+    if (v.requestFullscreen) await v.requestFullscreen();
+    else if (v.webkitEnterFullScreen) v.webkitEnterFullScreen();
+  };
+ 
+  useEffect(() => {
+    const v = videoRef.current;
+    if (!v) return;
+    v.muted = true;
+    const onLoaded = () => {
+      v.play().catch(() => { });
+    };
+    v.addEventListener("loadedmetadata", onLoaded);
+    return () => v.removeEventListener("loadedmetadata", onLoaded);
+  }, []);
+ 
+  const t = {
+    heroClaim:
+      lang === "ES"
+        ? "Creamos espacios que cuentan historias."
+        : "We create spaces that tell stories.",
+    aboutTitle:
+      lang === "ES"
+        ? "En MTVD entendemos el diseño como una forma de crear identidad y conexión con las personas."
+        : "At MTVD, we understand design as a way to create identity and connect with people.",
+    aboutBody1:
+      lang === "ES"
+        ? "Somos un equipo multidisciplinario que trabaja con intención, combinando técnica, emoción y artesanía para transformar ideas en experiencias reales."
+        : "We are a multidisciplinary team that works with intention, combining technique, emotion, and craftsmanship to transform ideas into real experiences.",
+    aboutBody2:
+      lang === "ES"
+        ? "Cada proyecto es un recorrido donde exploramos el contexto, interpretamos las necesidades y construimos espacios que expresan autenticidad."
+        : "Each project is a journey where we explore the context, interpret needs, and build spaces that express authenticity.",
+    aboutBody3:
+      lang === "ES"
+        ? "Creemos en el valor del detalle, en la colaboración con el cliente y en el movimiento constante como parte de nuestra evolución."
+        : "We believe in the value of detail, in collaboration with the client, and in constant movement as part of our evolution.",
+    aboutPill: lang === "ES" ? "Diseño\nArquitectura\nBranding" : "Design\nArchitecture\nBranding",
+    designTeam: lang === "ES" ? "Equipo de\nDiseño" : "Design\nTeam",
+    archTeam: lang === "ES" ? "Equipo de\nArquitectura" : "Architecture\nTeam",
+    statsCities: lang === "ES" ? "ciudades" : "cities",
+    statsCountries: lang === "ES" ? "países" : "countries",
+    statsStudios: lang === "ES" ? "estudios" : "studios",
+    ctaTop: lang === "ES" ? "mirá nuestros" : "check our",
+    ctaPill: lang === "ES" ? "proyectos" : "projects",
+  };
+ 
+  const mapData = [...studioPoints, ...projectsForMap];
+ 
+  return (
+    <div className="studioNewPage">
+      {/* 1) HERO */}
+      <section className="hero">
+        <div className="heroMedia">
+          <video
+            ref={videoRef}
+            src={studioVideo}
+            className="heroVideo"
+            autoPlay
+            muted
+            loop
+            playsInline
+            onDoubleClick={enterFullScreen}
+          />
+          {/* 
+          <Navbar
+            menuOpen={menuOpen}
+            setMenuOpen={setMenuOpen}
+            showInput={showInput}
+            setShowInput={setShowInput}
+            page="StudioNew"
+          />
+          */}
+          <button className="heroBtn heroBtnMute" onClick={toggleMute}>
+            {isMuted ? "🔇" : "🔊"}
+          </button>
+          <button className="heroBtn heroBtnFull" onClick={enterFullScreen}>
+            ⛶
+          </button>
+        </div>
+ 
+        <div className="heroFooter">
+          <h1>{t.heroClaim}</h1>
+        </div>
+      </section>
+ 
+      {/* 2) ABOUT */}
+<section
+  ref={aboutRef}
+  className={`about motionSection ${aboutVisible ? "is-visible" : ""}`}
+>
+  <div className="aboutTop">
+    <div className="aboutText motionUp">
+      <p className="aboutLead">{t.aboutTitle}</p>
+      <p>{t.aboutBody1}</p>
+      <p>{t.aboutBody2}</p>
+      <p>{t.aboutBody3}</p>
+    </div>
+ 
+    <div className="aboutPillBlock motionSlideRight">
+      <div className="aboutPill">
+        {t.aboutPill.split("\n").map((line, i) => (
+          <span key={i} style={{ display: "block" }}>
+            {line}
+          </span>
+        ))}
+      </div>
+    </div>
+  </div>
+ 
+  <div className="foundersRow">
+    <div className="founderCard motionCard">
+      <div className="founderPhoto">
+        <img src={Marco} alt="Marco Ferrari" />
+      </div>
+      <div className="founderOverlay" />
+      <div className="founderMeta">
+        <div className="founderName">Marco Ferrari</div>
+        <div className="founderRole">Co-Founder · Director</div>
+        <div className="founderLinks">
+          <span>LinkedIn</span>
+          <span>Email</span>
+        </div>
+      </div>
+    </div>
+ 
+    <div className="founderCard motionCard">
+      <div className="founderPhoto">
+        <img src={Gabriela} alt="Gabriela Jagodnik" />
+      </div>
+      <div className="founderOverlay" />
+      <div className="founderMeta">
+        <div className="founderName">Gabriela Jagodnik</div>
+        <div className="founderRole">Co-Founder · Director</div>
+        <div className="founderLinks">
+          <span>LinkedIn</span>
+          <span>Email</span>
+        </div>
+      </div>
+    </div>
+ 
+    <div className="founderCard motionCard">
+      <div className="founderPhoto">
+        <img src={Ramiro} alt="Ramiro Veiga" />
+      </div>
+      <div className="founderOverlay" />
+      <div className="founderMeta">
+        <div className="founderName">Ramiro Veiga</div>
+        <div className="founderRole">Co-Founder · Director</div>
+        <div className="founderLinks">
+          <span>LinkedIn</span>
+          <span>Email</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+ 
+      {/* 3) DESIGN TEAM */}
+      <section
+        ref={designRef}
+        className={`team teamDesign motionSection ${designVisible ? "is-visible" : ""}`}
+      >
+        <aside className="teamSide teamSideBlue">
+          <div className="teamSideInner">
+            <div className="teamFlap">
+              <div className="teamFlapFront">
+                <h2 className="teamTitle">
+                  {t.designTeam.split("\n").map((l, i) => (
+                    <span key={i} style={{ display: "block" }}>{l}</span>
+                  ))}
+                </h2>
+              </div>
+              <div className="teamFlapBack">
+                <div className="teamIcon"><TeamIcon /></div>
+              </div>
+            </div>
+            <div className="teamBack" />
+          </div>
+        </aside>
+ 
+        <div className="teamPhoto motionRevealPhoto" style={{ backgroundImage: `url(${teamDesign})` }} />
+ 
+        <div className="teamLists motionRevealText">
+          <div className="teamCol">
+            <h3>Project Managers</h3>
+            <ul>
+              <li>Arch. Julieta Astorica</li>
+              <li>Arch. Violeta Bonicatto</li>
+            </ul>
+            <h3>Art Director</h3>
+            <ul>
+              <li>Arch. Camila Ripoll</li>
+            </ul>
+            <h3>Coordinator</h3>
+            <ul>
+              <li>Arch. Pilar Perez</li>
+              <li>Arch. Christopher Crespi</li>
+            </ul>
+          </div>
+ 
+          <div className="teamCol">
+            <h3>Project Leaders</h3>
+            <ul>
+              <li>Arch. Lucía Ceballos</li>
+              <li>Arch. María Agustina Lopez</li>
+              <li>Arch. Simón Fassi</li>
+              <li>Arch. Sofía Samuni</li>
+              <li>Arch. Francisco Brandan</li>
+              <li>Arch. Ignacio Sottini</li>
+              <li>Arch. Valentina Daniele</li>
+              <li>Arch. Valentina Cabrera</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+ 
+      {/* 4) ARCH TEAM */}
+      <section
+        ref={archRef}
+        className={`team teamArch motionSection ${archVisible ? "is-visible" : ""}`}
+      >
+        <div className="teamPhoto motionRevealPhoto" style={{ backgroundImage: `url(${teamArch})` }} />
+ 
+        <div className="teamLists motionRevealText">
+          <div className="teamCol">
+            <h3>Project Managers</h3>
+            <ul>
+              <li>Arch. Gustavo Macagno</li>
+            </ul>
+            <h3>Coordinator</h3>
+            <ul>
+              <li>Arch. Agostina Giacosa</li>
+            </ul>
+            <h3>Project Leaders</h3>
+            <ul>
+              <li>Arch. Guadalupe Saavedra</li>
+              <li>Arch. Amparo Rodriguez</li>
+            </ul>
+          </div>
+ 
+          <div className="teamCol">
+            <h3>Project Leaders</h3>
+            <ul>
+              <li>Arch. Franco Ferrari</li>
+              <li>Arch. Triana Scarpinello</li>
+              <li>Arch. Federico Ponce</li>
+              <li>Arch. Abril Accotto</li>
+              <li>Arch. Víctor Ocaranza</li>
+              <li>Arch. Rosario Depalo</li>
+              <li>Arch. Lucas Benitez</li>
+              <li>Arch. Franco Alvite</li>
+              <li>Arch. Agustín Acevedo</li>
+            </ul>
+          </div>
+        </div>
+ 
+        <aside className="teamSide teamSideGreen">
+          <div className="teamSideInner">
+            <div className="teamFlap">
+              <div className="teamFlapFront">
+                <h2 className="teamTitle">
+                  {t.archTeam.split("\n").map((l, i) => (
+                    <span key={i} style={{ display: "block" }}>{l}</span>
+                  ))}
+                </h2>
+              </div>
+              <div className="teamFlapBack">
+                <div className="teamIcon"><TeamIcon /></div>
+              </div>
+            </div>
+            <div className="teamBack" />
+          </div>
+        </aside>
+      </section>
+ 
+      {/* 5) MAP */}
+      <section
+        ref={mapRef}
+        className={`map motionSection ${mapVisible ? "is-visible" : ""}`}
+      >
+        <div className="mapStats">
+          <div
+            className={`stat ${activeMapLayer === "cities" ? "is-active" : ""}`}
+            onMouseEnter={() => setActiveMapLayer("cities")}
+          >
+            <div className="statValue">+25</div>
+            <div className="statLabel">{t.statsCities}</div>
+          </div>
+ 
+          <div
+            className={`stat ${activeMapLayer === "countries" ? "is-active" : ""}`}
+            onMouseEnter={() => setActiveMapLayer("countries")}
+          >
+            <div className="statValue">+15</div>
+            <div className="statLabel">{t.statsCountries}</div>
+          </div>
+ 
+          <div
+            className={`stat ${activeMapLayer === "studios" ? "is-active" : ""}`}
+            onMouseEnter={() => setActiveMapLayer("studios")}
+          >
+            <div className="statValue">4</div>
+            <div className="statLabel">{t.statsStudios}</div>
+          </div>
+        </div>
+ 
+        <div className="mapCanvas">
+          <WorksMap
+            projects={mapData}
+            countryPoints={COUNTRY_POINTS}
+            activeLayer={activeMapLayer}
+          />
+        </div>
+      </section>
+ 
+      {/* 6) CONTACT */}
+      <section className="contact">
+        <div className="contactTop">
+          <div className="contactCta">
+            <span>{t.ctaTop}</span>
+            <span className="contactPill">{t.ctaPill}</span>
+          </div>
+          <div className="contactRule" />
+        </div>
+ 
+        <div className="contactBottom">
+          <div className="desktop-hide">
+            <ContactFooterDesktop />
+          </div>
+          <div className="mobile-hide">
+            <ContactFooter />
+          </div>
+        </div>
+      </section>
+    </div>
+  );
+};
+ 
+export default StudioNew;

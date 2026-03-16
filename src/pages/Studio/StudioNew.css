@@ -1,595 +1,985 @@
-:root {
-  --yellow: #ffd100;   /* ya existe */
-  --orange: #ff7a00;   /* ajustá a tu naranja institucional */
-  --green:  #00b050;   /* ya lo usás en el bloque verde */
-  --blue:   #0077c8;   /* ajustá a tu azul institucional */
-
-  --dark: #0d0d0d;
-  --gray: #666;
-  --font-main:  'Montserrat', sans-serif;
-}
-
-/* Reset mínimo  */
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-  font-family: "Montserrat", sans-serif;
-  color: #333;
-}
-
-body {
-  font-family: var(--font-main);
-  color: var(--dark);
-  background: #fafafa;
-}
-
-/* ╭─────────────────────────╮
-   │  HERO VIDEO + NAVBAR    │
-   ╰─────────────────────────╯ */
-.studio-header-new {
-  position: relative;
-  width: 100%;
+/* ══════════════════════════════════════════════════════
+   StudioNew.css — sistema modular de cuadrados
+   1 unidad = 33.33vw × 33.33vw
+   Todo el CSS bajo .studioNewPage (sin globals)
+   ══════════════════════════════════════════════════════ */
+ 
+.studioNewPage {
+  --sn-yellow: #ffd100;
+  --sn-green:  #00b050;
+  --sn-blue:   #2f6df6;
+  --sn-text:   #111;
+  --sn-muted:  #444;
+  --u: 33.333vw;
+  font-family: 'Montserrat', sans-serif;
+  color: var(--sn-text);
   height: 100vh;
-  overflow: hidden;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
-
-.studio-hero-video {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+ 
+.studioNewPage *,
+.studioNewPage *::before,
+.studioNewPage *::after {
+  box-sizing: border-box;
+}
+ 
+/* ═══════════════════════════════════════
+   1) HERO  —  100vh total
+   video toma lo que sobra, título abajo
+   no es múltiplo de --u, es la pantalla
+   ═══════════════════════════════════════ */
+.studioNewPage .hero {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  background: #000;
+}
+ 
+.studioNewPage .heroMedia {
+  position: relative;
+  flex: 1 1 auto;
+}
+ 
+.studioNewPage .heroVideo {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
   object-fit: cover;
-  z-index: 1;
 }
-
-/* Controles sobre el vídeo */
-.mute-button,
-.full-button {
+ 
+.studioNewPage .heroBtn {
   position: absolute;
-  top: 95vh;
-  right: 1rem;
-  width: 40px;
-  height: 40px;
-  border: none;
-  border-radius: 50%;
-  background: rgba(0, 0, 0, 0.45);
+  right: 16px;
+  width: 42px; height: 42px;
+  border: none; border-radius: 999px;
+  background: rgba(0,0,0,.45);
   color: #fff;
-  font-size: 18px;
   cursor: pointer;
   z-index: 5;
-  transition: background 0.2s;
 }
-
-.full-button {
-  right: 4.25rem;
-}
-
-.mute-button:hover,
-.full-button:hover {
-  background: rgba(0, 0, 0, 0.8);
-}
-
-/* Slogan centrado */
-.studio-slogan {
-  position: absolute;
-  bottom: 10vh;
-  left: 50%;
-  transform: translateX(-50%);
-  text-align: center;
-  z-index: 3;
-  padding: 0 1rem;
-}
-
-.studio-slogan h1 {
-  color: #fff;
-  font-size: clamp(1.75rem, 4vw, 3rem);
-  font-weight: 600;
-  text-shadow: 0 3px 14px rgba(0, 0, 0, 0.6);
-}
-
-/* ╭─────────────────────────╮
-   │  INTRO                 │
-   ╰─────────────────────────╯ */
-.studio-intro {
-    font-family: "Montserrat";
-  max-width: 100vw;
-  margin: 4rem auto;
-  text-align: center;
-  padding: 0 1rem;
-}
-
-.studio-intro h2 {
-
-  font-size: clamp(3rem, 5vw, 5vw);
-  font-weight: 750;
-  margin-bottom: 1.4rem;
-}
-@media (max-width: 768px) {
-  .studio-intro h2 {
-    font-size: 3rem;
-    font-weight: 850;
-    margin-bottom: 1rem;
-     line-height: 1.1;
-  }
-  
-
-}
-.studio-title {
-    font-size: 3rem;
-    font-weight: 850;
-    margin-bottom: 1rem;
-}
-
-.studio-intro p {
-          color: #000;
-        font-family: Montserrat;
-        font-size: 2.3vw;
-        font-weight: 600;
-  line-height: 1.65;
-  text-align: left;
-    padding: 0 1%
-}
-.studio-intro {
-          color: #000;
-        font-family: Montserrat;
-        font-size: 2.3vw;
-        font-weight: 600;
-  line-height: 1.65;
-  text-align: left;
-    padding: 0 4%
-}
-
-/* ╭─────────────────────────╮
-   │  PARALLAX BLOQUES      │
-   ╰─────────────────────────╯ */
-.studio-parallax-block {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin: 0;
-}
-
-/* contenedor que oculta excedente de las fotos parallax */
-.studio-parallax-block .image-wrapper,
-.studio-team-block .image-wrapper {
-  width: 100%;
-  overflow: hidden; /* 🔑 ocultar excedente */
-  position: relative;
-}
-
-.image-wrapper img {
-  display: block;
-  width: 100%;
-  height: auto;
-  will-change: transform;
-  transition: transform 0.3s ease-out;
-  pointer-events: none;
-}
-
-.text-block {
-  padding: 2rem 1rem;
-  text-align: center;
-}
-
-/* ╭─────────────────────────╮
-   │  TEAM BLOQUES          │
-   ╰─────────────────────────╯ */
-.studio-team-block {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 2rem;
-  padding: 4rem 1rem;
-  height: 37vw;
-}
-
-.studio-team-block.design .text-side {
-  order: 1;
-}
-
-.studio-team-block.arch .text-side {
-  order: 2;
-}
-
-.text-side {
-  flex: 1 1 320px;
-  text-align: left;
-}
-
-.text-side h3 {
-  font-size: 2rem;
-  margin-bottom: 1rem;
-}
-
-.arrow-animate {
-  width: 48px;
-  margin-top: 1rem;
-  opacity: 0;
-  transform: translateY(-6px);
-  transition: opacity 0.3s ease-out;
-}
-
-.arrow-animate.animate {
-  opacity: 1;
-  animation: arrow-bounce 1s infinite;
-}
-
-@keyframes arrow-bounce {
-  0%,
-  100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(6px);
-  }
-}
-
-/* ╭─────────────────────────╮
-   │  MAPA                  │
-   ╰─────────────────────────╯ */
-.studio-map-block {
-  position: relative;
-  margin: 0;
-}
-
-.map-image {
-  width: 100%;
-  height: auto;
-  display: block;
-}
-
-.legend {
-  position: absolute;
-  bottom: 1rem;
-  right: 1rem;
-  background: rgba(0, 0, 0, 0.45);
-  color: #fff;
-  padding: 0.5rem 1rem;
-  border-radius: 4px;
-  font-size: 0.9rem;
-  display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
-  z-index: 2;
-}
-
-/* ╭─────────────────────────╮
-   │  ROLES / COLUMNS       │
-   ╰─────────────────────────╯ */
-.studio-columns {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 2rem;
-  padding: 4rem 1rem;
-  background: #fff;
-}
-
-.column h4 {
-  font-size: 1.25rem;
-  margin-bottom: 0.75rem;
-  font-weight: 600;
-}
-
-.column ul {
-  list-style: none;
-}
-
-.column li {
-  line-height: 1.5;
-  color: var(--gray);
-  font-size: 0.95rem;
-}
-
-/* ╭─────────────────────────╮
-   │  CLIENTS + FOOTER      │
-   ╰─────────────────────────╯ */
-.studio-end-section {
-  padding: 4rem 0 0;
-  background: #fff;
-}
-
-/* Helpers responsive */
-.desktop-hide {
-  display: none;
-}
-
-.mobile-hide {
-  display: block;
-}
-
-@media (min-width: 768px) {
-  .desktop-hide {
-    display: block;
-  }
-  .mobile-hide {
-    display: none;
-  }
-}
-.image-wrapper {
-    position: relative;
-    border-radius: 0px; 
-    overflow: hidden;
-}
-.yellow-reveal {
-    position: absolute;
-    left: 0;
-    top: 0%;
-    height: 30vw;
-    width: 50vw;
-    background: #ffd100;
-    display: flex
-;
-    align-items: center;
-    justify-content: center;
-    transition: transform .8s 
-cubic-bezier(.22, 1, .36, 1);
-    z-index: 3;
-}
- .design-title {
-    
-    font-size: 4rem;
-  
-}
-@media (max-width: 700px) {
-  .studio-intro p {
-   font-size: .8rem;
-    line-height: 1.5;
-    margin-bottom: 1rem;
-    text-align: justify;
-  }
-  .design-title {
-    
-    font-size: 1rem;
-  
-}
-}
-/* ───────────────────────────────────────────────
-   BLOQUE VERDE — movimiento de derecha a izquierda
-─────────────────────────────────────────────── */
-.team-arch-reveal {
-  position: relative;
-  height: 30vw;
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  overflow: hidden;
-  margin-top: -2px;
-}
-
-.green-reveal {
-  position: absolute;
-  right: 0;
-  top: 0;
-  height: 30vw;
-  width: 50vw;
-  background: #00b050; /* verde */
+.studioNewPage .heroBtn:hover { background: rgba(0,0,0,.75); }
+.studioNewPage .heroBtnMute   { bottom: 16px; }
+.studioNewPage .heroBtnFull   { bottom: 16px; right: 68px; }
+ 
+.studioNewPage .heroFooter {
+  flex: 0 0 auto;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: transform 0.8s cubic-bezier(.22, 1, .36, 1);
-  transform: translateX(0); /* parte desde la derecha */
-  z-index: 3;
-}
-
-.green-reveal.slide-left {
-  transform: translateX(-100%); /* entra hacia la izquierda */
-}
-
-.design-title.right {
-  position: relative;
-  z-index: 4;
-  font-size: 4rem;
-  font-weight: 700;
-  color: #000;
-  text-align: right;
-  padding-right: 2%;
-  z-index: -1;
-}
-
-/* mobile */
-@media (max-width: 700px) {
-  .team-arch-reveal {
-    height: 30vw;
-  }
-  .green-reveal {
-    width: 50%;
-    height: 30vw;
-  }
-  .design-title.right {
-    font-size: 1rem;
-    text-align: center;
-    padding-right: 5%;
-    z-index: -1;
-  }
-}
-.parallax-image {
-    position: absolute;
-    left: 0;
-    top: -30px;
-    left:-11%;
-    width: 120%;
-    height: 120%;
-    object-fit: cover;
-    will-change: transform;
-    transition: transform .22s 
-cubic-bezier(.22, 1, .36, 1);
-}
-.parallax-image2 {
-    position: absolute;
-    left: 0;
-    top: -30px;
-    left:-11%;
-    width: 120%;
-    height: 120%;
-    object-fit: cover;
-    will-change: transform;
-    transition: transform .22s 
-cubic-bezier(.22, 1, .36, 1);
-}
-.design-title {
-   
-    margin-left: 5%;
-}
-.team-column {
-    flex: 1 1;
-    text-align: left;
-    margin-left: 10%;
-}
-.team-column-Archi{
-    margin-right: 15%;
-
-}
-.team-columns-wrapper {
-  padding: 4rem 5%;
+  padding: clamp(20px, 3vh, 40px) 24px;
   background: #fff;
-  text-align: left;
 }
-
-.team-columns {
+ 
+.studioNewPage .heroFooter h1 {
+  font-size: clamp(24px, 3.5vw, 52px);
+  font-weight: 800;
+  text-align: center;
+  margin: 0;
+  line-height: 1.15;
+}
+ 
+/* ═══════════════════════════════════════
+   2) ABOUT  —  grid 3×2
+   [texto 2×1] [pill 1×1]
+   [founder1]  [founder2]  [founder3]
+   ═══════════════════════════════════════ */
+.studioNewPage .about {
+  display: grid;
+  grid-template-columns: repeat(3, var(--u));
+  grid-template-rows: var(--u) var(--u);
+  width: 100%;
+}
+ 
+.studioNewPage .aboutTop {
+  display: contents; /* sus hijos van directo al grid */
+}
+ 
+.studioNewPage .aboutText {
+  grid-column: 1 / 3;
+  grid-row: 1 / 2;
+  padding: clamp(20px, 3vw, 56px) clamp(18px, 3vw, 56px);
   display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  gap: 3rem;
-  margin-top: 2rem;
+  flex-direction: column;
+  justify-content: center;
+  gap: 12px;
+  overflow: hidden;
 }
-
-.team-column {
-  flex: 1 1 30%;
-  min-width: 250px;
+ 
+.studioNewPage .aboutLead {
+  font-weight: 800;
+  font-size: clamp(13px, 1.4vw, 18px);
+  margin: 0;
 }
-
-.team-column h4 {
-  font-size: 1.4rem;
-  margin-bottom: 0.75rem;
-  font-weight: 700;
+ 
+.studioNewPage .aboutText p {
+  font-size: clamp(11px, 1.1vw, 14px);
+  line-height: 1.55;
+  color: var(--sn-text);
+  margin: 0;
 }
-
-.team-column ul {
-  list-style: none;
+ 
+.studioNewPage .aboutPillBlock {
+  grid-column: 3 / 4;
+  grid-row: 1 / 2;
+  background: var(--sn-yellow);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+ 
+.studioNewPage .aboutPill {
+  font-size: clamp(20px, 2.2vw, 38px);
+  font-weight: 800;
+  text-align: left;
+  line-height: 1.15;
+}
+ 
+/* founders — 3 cuadrados 1×1 */
+.studioNewPage .foundersRow {
+  display: contents;
+}
+ 
+.studioNewPage .founderCard {
+  grid-row: 2 / 3;
+  position: relative;
+  overflow: hidden;
+  background: #c8c8c8;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 16px;
+  min-height: var(--u);
+}
+.studioNewPage .founderPhoto {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  background: #d8d8d8;
+}
+ 
+.studioNewPage .founderPhoto img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
+  display: block;
+}
+.studioNewPage .founderOverlay {
+  z-index: 1;
+}
+ 
+.studioNewPage .founderMeta {
+  z-index: 2;
+}
+.studioNewPage .founderName {
+  position: relative;
+  font-weight: 800;
+  font-size: clamp(14px, 1.3vw, 18px);
+  color: #fff;
+  text-shadow: 0 2px 12px rgba(0,0,0,.45);
+  margin: 0;
+}
+ 
+.studioNewPage .founderRole {
+  position: relative;
+  font-size: clamp(10px, 0.9vw, 13px);
+  color: #fff;
+  opacity: .95;
+  text-shadow: 0 2px 12px rgba(0,0,0,.45);
+  margin: 0;
+}
+ 
+/* ═══════════════════════════════════════
+   3) DESIGN TEAM  —  grid 3×2
+   [azul 1×2] [foto  2×1]
+              [listas 2×1]
+   ═══════════════════════════════════════ */
+.studioNewPage .team {
+  display: grid;
+  grid-template-columns: repeat(3, var(--u));
+  grid-template-rows: var(--u) var(--u);
+  width: 100%;
+}
+ 
+/* DESIGN */
+.studioNewPage .teamDesign .teamSide {
+  grid-column: 1 / 2;
+  grid-row: 1 / 3;
+}
+.studioNewPage .teamDesign .teamPhoto {
+  grid-column: 2 / 4;
+  grid-row: 1 / 2;
+}
+.studioNewPage .teamDesign .teamLists {
+  grid-column: 2 / 4;
+  grid-row: 2 / 3;
+}
+ 
+/* ARCH */
+.studioNewPage .teamArch .teamPhoto {
+  grid-column: 1 / 3;
+  grid-row: 1 / 2;
+}
+.studioNewPage .teamArch .teamLists {
+  grid-column: 1 / 3;
+  grid-row: 2 / 3;
+}
+.studioNewPage .teamArch .teamSide {
+  grid-column: 3 / 4;
+  grid-row: 1 / 3;
+}
+ 
+/* Panel de color — contenedor bisagra */
+.studioNewPage .teamSide {
+  position: relative;
+  overflow: hidden;
   padding: 0;
+  color: #fff;
+  perspective: 800px;
 }
-
-.team-column li {
+ 
+.studioNewPage .teamSideBlue  { background: white; }
+.studioNewPage .teamSideGreen { background: white; }
+ 
+/* Foto — 2×1 */
+.studioNewPage .teamPhoto {
+  background-size: cover;
+  background-position: center top;
+}
+ 
+/* Listas — 2×1 */
+.studioNewPage .teamLists {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  padding: 20px clamp(14px, 2vw, 40px);
+  background: #fff;
+  overflow-y: auto;
+  align-content: start;
+}
+ 
+.studioNewPage .teamCol h3 {
+  font-size: clamp(10px, 0.85vw, 13px);
+  font-weight: 900;
+  margin: 12px 0 6px;
+  text-transform: uppercase;
+  letter-spacing: .04em;
+}
+.studioNewPage .teamCol h3:first-child { margin-top: 0; }
+ 
+.studioNewPage .teamCol ul { list-style: none; padding: 0; margin: 0; }
+.studioNewPage .teamCol li {
+  font-size: clamp(10px, 0.8vw, 12px);
   line-height: 1.6;
-  font-size: 1rem;
-  color: #333;
+  color: var(--sn-muted);
 }
-
-/* Mobile */
-@media (max-width: 768px) {
-  .team-columns {
+ 
+/* ═══════════════════════════════════════
+   5) MAP  —  grid 3×2u total
+   [stats 1×2u] [mapa 2×2u]
+   ═══════════════════════════════════════ */
+.studioNewPage .map {
+  display: grid;
+  grid-template-columns: var(--u) calc(var(--u) * 2);
+  grid-template-rows: calc(var(--u) * 2);
+  width: 100%;
+  height: calc(var(--u) * 2);
+  overflow: hidden;
+}
+ 
+.studioNewPage .mapStats {
+  grid-column: 1 / 2;
+  grid-row: 1 / 2;
+  min-width: 0;
+  min-height: 0;
+  height: 100%;
+  padding: 40px 28px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 28px;
+  background: #fff;
+  text-align: center;
+}
+.studioNewPage .stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.studioNewPage .statValue {
+  font-size: clamp(36px, 4vw, 58px);
+  font-weight: 900;
+  line-height: 1;
+  margin: 0;
+}
+ 
+.studioNewPage .statLabel {
+  font-size: clamp(12px, 1.1vw, 16px);
+  font-weight: 700;
+  color: var(--sn-muted);
+  margin-top: 4px;
+}
+ 
+.studioNewPage .mapCanvas {
+  grid-column: 2 / 3;
+  grid-row: 1 / 2;
+  position: relative;
+  overflow: hidden;
+  min-width: 0;
+  min-height: 0;
+  width: 100%;
+  height: 100%;
+}
+ 
+.studioNewPage .mapCanvas .studio-map,
+.studioNewPage .mapCanvas .leaflet-container {
+  position: absolute;
+  inset: 0;
+  width: 100% !important;
+  height: 100% !important;
+  filter: grayscale(60%);
+}
+ 
+/* ═══════════════════════════════════════
+   6) CONTACT
+   ═══════════════════════════════════════ */
+.studioNewPage .contact {
+  min-height: var(--u);
+  display: flex;
+  flex-direction: column;
+  padding: 36px clamp(18px, 4vw, 80px);
+  background: #fff;
+}
+ 
+.studioNewPage .contactTop {
+  padding-top: 24px;
+  padding-bottom: 18px;
+}
+ 
+.studioNewPage .contactCta {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: clamp(22px, 2.2vw, 34px);
+  font-weight: 800;
+}
+ 
+.studioNewPage .contactPill {
+  background: #000;
+  color: #fff;
+  padding: 6px 14px;
+  border-radius: 999px;
+  font-weight: 900;
+}
+ 
+.studioNewPage .contactRule {
+  height: 2px;
+  background: #000;
+  margin-top: 18px;
+}
+ 
+.studioNewPage .contactBottom {
+  flex: 1 1 auto;
+  display: flex;
+  align-items: flex-end;
+}
+ 
+/* helpers */
+.studioNewPage .desktop-hide { display: none; }
+.studioNewPage .mobile-hide  { display: block; }
+@media (min-width: 768px) {
+  .studioNewPage .desktop-hide { display: block; }
+  .studioNewPage .mobile-hide  { display: none; }
+}
+ 
+/* ═══════════════════════════════════════
+   MOBILE  max-width: 900px
+   ═══════════════════════════════════════ */
+@media (max-width: 900px) {
+  .studioNewPage {
+    --u: 100vw;  /* en mobile 1 unidad = pantalla completa */
+  }
+ 
+  /* Hero */
+  .studioNewPage .hero {
+    height: auto;
+    min-height: 100svh;
+  }
+  .studioNewPage .heroMedia {
+    min-height: 70svh;
+  }
+  .studioNewPage .heroFooter {
+    flex: 0 0 auto;
+    min-height: 20svh;
+  }
+ 
+  /* About */
+  .studioNewPage .about {
+    display: flex;
     flex-direction: column;
   }
-  .yellow-reveal {
-    position: absolute;
-    left: 0;
-    top: 0%;
-    height: 50vw;
-    width: 50vw;
-    background: #ffd100;
-    display: flex
-;
+  .studioNewPage .aboutTop {
+    display: flex;
+    flex-direction: column;
+  }
+  .studioNewPage .aboutText {
+    padding: 32px 20px;
+  }
+  .studioNewPage .aboutPillBlock {
+    min-height: 180px;
+  }
+  .studioNewPage .foundersRow {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+  .studioNewPage .founderCard {
+    min-height: 260px;
+  }
+ 
+  /* Teams */
+  .studioNewPage .team {
+    display: flex;
+    flex-direction: column;
+  }
+  .studioNewPage .teamSide {
+    width: 100%;
+    min-height: 160px;
+    display: block;
+    padding: 0;
+  }
+  .studioNewPage .teamSideInner {
+    min-height: 160px;
+  }
+  .studioNewPage .teamFlap,
+  .studioNewPage .teamBack {
     align-items: center;
     justify-content: center;
-    transition: transform .8s 
-cubic-bezier(.22, 1, .36, 1);
-    z-index: 3;
-}
-.team-design-reveal {
-    position: relative;
-    width: 100vw;
-    height: 50vw;
-    display: flex
-;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
-}
-.team-column ul {
-    list-style: none;
-    padding: 0;
-    font-size: 0.5rem;
-}
-.team-column-Archi {
-    margin-right: 15%;
-    list-style: none;
-    padding: 0;
-    font-size: 0.5rem;
-}
-    .green-reveal {
-        width: 50%;
-        height: 50vw;
-    }
-    
-.team-arch-reveal {
-    position: relative;
-    height: 50vw;
-    display: flex
-;
-    align-items: center;
-    justify-content: flex-end;
-    overflow: hidden;
-    margin-top: -2px;
-}
-.parallax-image {
-    position: absolute;
-    left: 0;
-    top: -15px;
-    left: -13%;
-    width: 126%;
-    height: 126%;
-    object-fit: cover;
-    will-change: transform;
-    transition: transform .22s 
-cubic-bezier(.22, 1, .36, 1);
-}
-.parallax-image2 {
-    position: absolute;
-    left: 0;
-    top: -15px;
-    left: -13%;
-    width: 126%;
-    height: 126%;
-    object-fit: cover;
-    will-change: transform;
-    transition: transform .22s 
-cubic-bezier(.22, 1, .36, 1);
-}
-.text-block {
-    padding: 0px; 
     text-align: center;
-}
-.parallax-image2 {
-        position: absolute;
-        left: 0;
-        top: -32px;
-        left: -13%;
-        width: 126%;
-        height: 126%;
-        object-fit: cover;
-        will-change: transform;
-        transition: transform .22s 
-cubic-bezier(.22, 1, .36, 1);
-    }
-        .team-arch-reveal {
-        
-        margin-top: 0px;
-    }
-}
-.studio-map { height: 90vh; width: 100%; filter: grayscale(60%); }  /* o 74vh si te gusta más alto */
-
-@media (min-width: 768px) {
-  .team-column ul li {
-    margin-bottom: 5px;
-    font-size: 2em;
-    text-align: left;
+    padding: 20px 24px;
   }
-  
-  .team-column-Archi li {
-    margin-bottom: 5px;
-    font-size: 2em;
-    text-align: left;
+  .studioNewPage .teamPhoto {
+    width: 100%;
+    min-height: 260px;
+  }
+  .studioNewPage .teamLists {
+    grid-template-columns: 1fr;
+    padding: 24px 20px;
+  }
+ 
+  /* Map */
+  .studioNewPage .map {
+    display: flex;
+    flex-direction: column;
+  }
+  .studioNewPage .mapStats {
+    flex-direction: row;
+    justify-content: space-around;
+    padding: 24px 16px;
+  }
+  .studioNewPage .mapCanvas {
+    min-height: 50svh;
   }
 }
+ 
+/* ══════════════════════════════════════════════════════
+   MOTION LAYER PARA STUDIO NEW
+   Se agrega encima del sistema modular existente
+   ══════════════════════════════════════════════════════ */
+ 
+/* -------------------------------
+   0) Variables motion
+-------------------------------- */
+.studioNewPage {
+  --sn-ease: cubic-bezier(.22,.61,.36,1);
+  --sn-fast: .45s;
+  --sn-med: .8s;
+  --sn-slow: 1.1s;
+}
+ 
+/* -------------------------------
+   1) Base motion por sección
+-------------------------------- */
+.studioNewPage .motionSection .motionUp,
+.studioNewPage .motionSection .motionSlideRight,
+.studioNewPage .motionSection .motionCard,
+.studioNewPage .motionSection .motionRevealPhoto,
+.studioNewPage .motionSection .motionRevealText,
+.studioNewPage .motionSection .motionScaleIn {
+  opacity: 0;
+  transition:
+    opacity var(--sn-med) ease,
+    transform var(--sn-med) var(--sn-ease),
+    filter var(--sn-slow) ease;
+  will-change: transform, opacity, filter;
+}
+ 
+.studioNewPage .motionSection .motionUp {
+  transform: translateY(34px);
+}
+ 
+.studioNewPage .motionSection .motionSlideRight {
+  transform: translateX(34px);
+}
+ 
+.studioNewPage .motionSection .motionCard {
+  transform: translateY(28px);
+}
+ 
+.studioNewPage .motionSection .motionRevealPhoto {
+  transform: translateY(18px) scale(1.02);
+  filter: saturate(.88) contrast(.96);
+}
+ 
+.studioNewPage .motionSection .motionRevealText {
+  transform: translateY(26px);
+}
+ 
+.studioNewPage .motionSection .motionScaleIn {
+  transform: scale(.96);
+}
+ 
+.studioNewPage .motionSection.is-visible .motionUp,
+.studioNewPage .motionSection.is-visible .motionSlideRight,
+.studioNewPage .motionSection.is-visible .motionCard,
+.studioNewPage .motionSection.is-visible .motionRevealPhoto,
+.studioNewPage .motionSection.is-visible .motionRevealText,
+.studioNewPage .motionSection.is-visible .motionScaleIn {
+  opacity: 1;
+  transform: none;
+  filter: none;
+}
+ 
+.studioNewPage .motionSection.is-visible .motionCard:nth-child(1) { transition-delay: .06s; }
+.studioNewPage .motionSection.is-visible .motionCard:nth-child(2) { transition-delay: .14s; }
+.studioNewPage .motionSection.is-visible .motionCard:nth-child(3) { transition-delay: .22s; }
+ 
+.studioNewPage .motionSection.is-visible .motionRevealPhoto { transition-delay: .08s; }
+.studioNewPage .motionSection.is-visible .motionRevealText  { transition-delay: .18s; }
+ 
+/* -------------------------------
+   2) ABOUT: entrada suave
+-------------------------------- */
+.studioNewPage .aboutText {
+  position: relative;
+}
+ 
+.studioNewPage .aboutPillBlock {
+  overflow: hidden;
+}
+ 
+.studioNewPage .aboutPill span {
+  transition:
+    transform .55s var(--sn-ease),
+    opacity .55s ease;
+  transform: translateY(18px);
+  opacity: 0;
+}
+ 
+.studioNewPage .motionSection.is-visible .aboutPill span {
+  transform: translateY(0);
+  opacity: 1;
+}
+ 
+.studioNewPage .motionSection.is-visible .aboutPill span:nth-child(1) { transition-delay: .06s; }
+.studioNewPage .motionSection.is-visible .aboutPill span:nth-child(2) { transition-delay: .14s; }
+.studioNewPage .motionSection.is-visible .aboutPill span:nth-child(3) { transition-delay: .22s; }
+ 
+/* -------------------------------
+   3) FOUNDERS hover reveal
+-------------------------------- */
+.studioNewPage .founderCard {
+  cursor: pointer;
+  isolation: isolate;
+}
+ 
+.studioNewPage .founderOverlay {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: linear-gradient(
+    to top,
+    rgba(0,0,0,.72) 0%,
+    rgba(0,0,0,.28) 38%,
+    rgba(0,0,0,0) 70%
+  );
+  opacity: 0;
+  transition: opacity var(--sn-fast) ease;
+  pointer-events: none;
+}
+ 
+.studioNewPage .founderMeta {
+  position: relative;
+  z-index: 2;
+  transform: translateY(18px);
+  opacity: 0;
+  transition:
+    transform var(--sn-fast) ease,
+    opacity var(--sn-fast) ease;
+}
+ 
+.studioNewPage .founderPhoto {
+  transition:
+    transform .8s var(--sn-ease),
+    filter .8s ease;
+}
+ 
+.studioNewPage .founderCard:hover .founderPhoto {
+  transform: scale(1.045);
+  filter: brightness(.78);
+}
+ 
+.studioNewPage .founderCard:hover .founderOverlay {
+  opacity: 1;
+}
+ 
+.studioNewPage .founderCard:hover .founderMeta {
+  transform: translateY(0);
+  opacity: 1;
+}
+ 
+/* Links opcionales debajo del rol */
+.studioNewPage .founderLinks {
+  display: flex;
+  gap: 12px;
+  margin-top: 10px;
+  font-size: clamp(10px, 0.85vw, 12px);
+  color: #fff;
+  opacity: .95;
+}
+ 
+.studioNewPage .founderLinks span,
+.studioNewPage .founderLinks a {
+  border-bottom: 1px solid rgba(255,255,255,.68);
+  text-decoration: none;
+  color: inherit;
+  padding-bottom: 1px;
+}
+ 
+/* Si no querés que nombre/rol estén siempre visibles,
+   esta regla los pasa a reveal */
+.studioNewPage .founderCard .founderName,
+.studioNewPage .founderCard .founderRole {
+  position: static;
+}
+ 
+/* -------------------------------
+   4) TEAM panels
+   .teamSideInner  = layout fijo, dos mitades
+   .teamFlap       = mitad superior, GIRA 180deg en X desde borde inferior
+                     preserve-3d → tiene dos caras reales
+   .teamFlapFront  = cara visible al inicio (título)
+   .teamFlapBack   = cara trasera (ícono), aparece después de 90deg de giro
+   .teamBack       = mitad inferior fija, siempre visible
+-------------------------------- */
+ 
+/* Layout fijo — no gira */
+.studioNewPage .teamSideInner {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  /* perspective aquí para el hijo .teamFlap que rota */
+  perspective: 800px;
+  perspective-origin: center 25%;
+}
+ 
+/* La hoja que gira — mitad superior */
+.studioNewPage .teamFlap {
+  flex: 0 0 50%;
+  position: relative;
+  /* preserve-3d para que las dos caras vivan en el mismo espacio 3D */
+  transform-style: preserve-3d;
+  /* Bisagra en el borde inferior */
+  transform-origin: center bottom;
+  /* Estado inicial: plana, título visible */
+  transform: rotateX(0deg);
+  transition: transform 0.9s cubic-bezier(.25, .46, .45, .94);
+  will-change: transform;
+  z-index: 2;
+}
+ 
+/* Cara FRONTAL — título */
+.studioNewPage .teamFlapFront {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 16px 24px;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+ 
+/* Cara TRASERA — ícono, empieza en el dorso */
+.studioNewPage .teamFlapBack {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  /* Está en el dorso: rotada 180deg en X */
+  transform: rotateX(180deg);
+}
+ 
+/* Mitad inferior — siempre visible */
+.studioNewPage .teamBack {
+  flex: 0 0 50%;
+  z-index: 1;
+}
+ 
+/* Colores — siempre del color del panel */
+.studioNewPage .teamSideBlue .teamFlapFront,
+.studioNewPage .teamSideBlue .teamFlapBack,
+.studioNewPage .teamSideBlue .teamBack  { background: var(--sn-blue); }
+ 
+.studioNewPage .teamSideGreen .teamFlapFront,
+.studioNewPage .teamSideGreen .teamFlapBack,
+.studioNewPage .teamSideGreen .teamBack { background: var(--sn-green); }
+ 
+/* Título */
+.studioNewPage .teamFlapFront .teamTitle {
+  font-size: clamp(18px, 2vw, 32px);
+  font-weight: 800;
+  color: #fff;
+  line-height: 1.2;
+  margin: 0;
+  text-align: center;
+  opacity: 1 !important;
+  transform: none !important;
+  transition: none !important;
+}
+ 
+/* Ícono en el dorso */
+.studioNewPage .teamFlapBack .teamIcon { width: 72px; height: 72px; }
+.studioNewPage .teamFlapBack .teamIcon svg { width: 100%; height: 100%; opacity: .9; }
+ 
+/* TRIGGER — gira 180deg: título desaparece, ícono aparece al pasar 90deg */
+.studioNewPage .team.motionSection.is-visible .teamFlap {
+  transform: rotateX(180deg);
+}
+ 
+/* Reset al salir */
+.studioNewPage .team.motionSection:not(.is-visible) .teamFlap {
+  transform: rotateX(0deg);
+  transition: none;
+}
+ 
+ 
+/* -------------------------------
+   5) MAP stats interaction
+-------------------------------- */
+.studioNewPage .stat {
+  cursor: pointer;
+  opacity: .5;
+  transition:
+    opacity .25s ease,
+    transform .25s ease,
+    color .25s ease;
+}
+ 
+.studioNewPage .stat:hover {
+  opacity: 1;
+  transform: translateX(6px);
+}
+ 
+.studioNewPage .stat.is-active {
+  opacity: 1;
+}
+ 
+.studioNewPage .statValue {
+  transition:
+    transform .25s ease,
+    color .25s ease;
+}
+ 
+.studioNewPage .stat.is-active .statValue,
+.studioNewPage .stat:hover .statValue {
+  transform: translateX(4px);
+}
+ 
+/* entrada de la sección map */
+.studioNewPage .map.motionSection .mapStats,
+.studioNewPage .map.motionSection .mapCanvas {
+  opacity: 0;
+  transition:
+    opacity var(--sn-med) ease,
+    transform var(--sn-med) var(--sn-ease);
+}
+ 
+.studioNewPage .map.motionSection .mapStats {
+  transform: translateX(-24px);
+}
+ 
+.studioNewPage .map.motionSection .mapCanvas {
+  transform: translateY(18px);
+}
+ 
+.studioNewPage .map.motionSection.is-visible .mapStats,
+.studioNewPage .map.motionSection.is-visible .mapCanvas {
+  opacity: 1;
+  transform: none;
+}
+ 
+.studioNewPage .map.motionSection.is-visible .mapCanvas {
+  transition-delay: .1s;
+}
+ 
+/* -------------------------------
+   6) CTA final micro interacción
+-------------------------------- */
+.studioNewPage .contactPill {
+  transition:
+    transform .28s ease,
+    box-shadow .28s ease,
+    background-color .28s ease;
+}
+ 
+.studioNewPage .contactCta:hover .contactPill {
+  transform: translateY(-1px);
+  box-shadow: 0 10px 22px rgba(0,0,0,.12);
+}
+ 
+/* -------------------------------
+   7) Reduced motion
+-------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  .studioNewPage .motionSection .motionUp,
+  .studioNewPage .motionSection .motionSlideRight,
+  .studioNewPage .motionSection .motionCard,
+  .studioNewPage .motionSection .motionRevealPhoto,
+  .studioNewPage .motionSection .motionRevealText,
+  .studioNewPage .motionSection .motionScaleIn,
+  .studioNewPage .aboutPill span,
+  .studioNewPage .founderPhoto,
+  .studioNewPage .founderOverlay,
+  .studioNewPage .founderMeta,
+  .studioNewPage .teamFlap,
+  .studioNewPage .teamBack .teamIcon,
+  .studioNewPage .stat,
+  .studioNewPage .statValue,
+  .studioNewPage .mapStats,
+  .studioNewPage .mapCanvas,
+  .studioNewPage .contactPill {
+    transition: none !important;
+    transform: none !important;
+    opacity: 1 !important;
+    filter: none !important;
+  }
+}
+ 
+/* -------------------------------
+   8) Mobile ajustes
+-------------------------------- */
+@media (max-width: 900px) {
+  .studioNewPage .founderOverlay {
+    opacity: 1;
+  }
+ 
+  .studioNewPage .founderMeta {
+    opacity: 1;
+    transform: none;
+  }
+ 
+  .studioNewPage .teamBack .teamIcon {
+    opacity: 0.95;
+    transform: scale(1);
+    transition: none;
+  }
+ 
+  .studioNewPage .stat:hover,
+  .studioNewPage .stat.is-active {
+    transform: none;
+  }
+}
+/* ═══════════════════════════════════════
+   WorksMap visual tuning
+   ═══════════════════════════════════════ */
+ 
+.studioNewPage .mapCanvas .leaflet-container {
+  background: #dfe8f5 !important;
+  font-family: 'Montserrat', sans-serif;
+}
+ 
+.studioNewPage .mapCanvas .leaflet-tile {
+  filter: grayscale(100%) brightness(1.04) contrast(.96);
+  opacity: .92;
+}
+ 
+.studioNewPage .mapCanvas .leaflet-popup-content-wrapper {
+  border-radius: 14px;
+  box-shadow: 0 10px 30px rgba(0,0,0,.14);
+}
+ 
+.studioNewPage .mapCanvas .leaflet-popup-content {
+  margin: 14px 16px;
+  font-size: 13px;
+  line-height: 1.45;
+}
+ 
+.studioNewPage .mapCanvas .mtvd-pin,
+.studioNewPage .mapCanvas .mtvd-studio {
+  background: transparent;
+  border: none;
+}
+ 
+/* capa activa */
+.studioNewPage .mapCanvas .studio-map--cities .leaflet-marker-icon {
+  opacity: 1;
+}
+ 
+.studioNewPage .mapCanvas .studio-map--countries .leaflet-marker-icon {
+  opacity: .88;
+  transform: scale(1.04);
+}
+ 
+.studioNewPage .mapCanvas .studio-map--studios .leaflet-marker-icon {
+  opacity: 1;
+}
+ 
+/* transición general del mapa */
+.studioNewPage .mapCanvas .leaflet-marker-pane img,
+.studioNewPage .mapCanvas .leaflet-marker-pane .leaflet-marker-icon {
+  transition:
+    opacity .3s ease,
+    transform .3s ease,
+    filter .3s ease;
+}
+.studioNewPage .mapCanvas {
+  position: relative;
+  overflow: hidden;
+}
+ 
+.studioNewPage .mapCanvas .leaflet-container {
+  width: 100% !important;
+  height: 100% !important;
+  background: #dfe8f5 !important;
+}
+ 
+.studioNewPage .mapCanvas .leaflet-tile {
+  filter: grayscale(100%) brightness(1.04) contrast(.96);
+  opacity: .92;
+}
+ 
+.studioNewPage .mapCanvas .leaflet-control-container {
+  display: none;
+}
+ 
+.studioNewPage .mapCanvas .mtvd-pin,
+.studioNewPage .mapCanvas .mtvd-studio {
+  background: transparent;
+  border: none;
+}
+ 
+.studioNewPage .mapCanvas .leaflet-marker-icon {
+  transition:
+    opacity .3s ease,
+    transform .3s ease,
+    filter .3s ease;
+}
+ 
