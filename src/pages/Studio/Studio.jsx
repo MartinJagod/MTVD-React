@@ -67,6 +67,10 @@ const StudioNew = () => {
   const [mapRef, mapVisible] = useInView();
  
   const [activeMapLayer, setActiveMapLayer] = useState("cities");
+  const [isTabletLayout, setIsTabletLayout] = useState(() => {
+    if (typeof window === "undefined") return false;
+    return window.innerWidth >= 901 && window.innerWidth <= 1200;
+  });
  
   const toggleMute = () => {
     const v = videoRef.current;
@@ -91,6 +95,19 @@ const StudioNew = () => {
     };
     v.addEventListener("loadedmetadata", onLoaded);
     return () => v.removeEventListener("loadedmetadata", onLoaded);
+  }, []);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+
+    const updateLayout = () => {
+      setIsTabletLayout(window.innerWidth >= 901 && window.innerWidth <= 1200);
+    };
+
+    updateLayout();
+    window.addEventListener("resize", updateLayout);
+
+    return () => window.removeEventListener("resize", updateLayout);
   }, []);
  
   const t = {
@@ -127,7 +144,7 @@ const StudioNew = () => {
   const mapData = [...studioPoints, ...projectsForMap];
  
   return (
-    <div className="studioNewPage">
+    <div className={`studioNewPage ${isTabletLayout ? "studioLayout2Col" : ""}`}>
       {/* 1) HERO */}
       <section className="hero">
         <div className="heroMedia">
