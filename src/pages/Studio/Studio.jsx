@@ -13,14 +13,15 @@ import Marco from "../../assets/images/Marco.jpg";
 import Ramiro from "../../assets/images/Ramiro.jpg";
 import "./StudioNew.css";
 import { projectsForMap, studioPoints, COUNTRY_POINTS } from "./projectsForMap";
- 
-const TeamIcon = () => (
-  <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <circle cx="28" cy="22" r="13" fill="rgba(255,255,255,0.5)" />
-    <circle cx="52" cy="22" r="13" fill="rgba(255,255,255,0.35)" />
-    <path d="M4 62c0-14 11-22 24-22s24 8 24 22H4z" fill="rgba(255,255,255,0.5)" />
-    <path d="M36 62c0-14 8-22 16-22s16 8 16 22H36z" fill="rgba(255,255,255,0.35)" />
-  </svg>
+ import groupIcon from "../../assets/images/group.png";
+const TeamIcon = ({ size = 24 }) => (
+  <img
+    src={groupIcon}
+    alt="Team"
+    width="100%"
+    height="90%"
+    style={{ display: "block" }}
+  />
 );
  
 const totalCountries = COUNTRY_POINTS.length;
@@ -39,7 +40,7 @@ const useInView = (options = {}) => {
         }
       },
       {
-        threshold: 0.35,
+        threshold: 0.60,
         ...options,
       }
     );
@@ -407,9 +408,9 @@ const StudioNew = () => {
           <div className="desktop-hide">
             <ContactFooterDesktop />
           </div>
-          <div className="mobile-hide">
+          {/* <div className="mobile-hide">
             <ContactFooter />
-          </div>
+          </div> */}
         </div>
       </section>
     </div>

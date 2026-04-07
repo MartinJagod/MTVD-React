@@ -71,7 +71,7 @@
 }
  
 .studioNewPage .heroFooter h1 {
-  font-size: clamp(24px, 3.5vw, 52px);
+  font-size: clamp(24px, 4vw, 4vw);
   font-weight: 800;
   text-align: center;
   margin: 0;
@@ -112,7 +112,7 @@
 }
  
 .studioNewPage .aboutText p {
-  font-size: clamp(11px, 1.1vw, 14px);
+  font-size: clamp(11px, 2vw, 1.6vw);
   line-height: 1.55;
   color: var(--sn-text);
   margin: 0;
@@ -129,10 +129,10 @@
 }
  
 .studioNewPage .aboutPill {
-  font-size: clamp(20px, 2.2vw, 38px);
+  font-size: clamp(20px, 3vw, 3vw);
   font-weight: 800;
   text-align: left;
-  line-height: 1.15;
+  line-height: 1.8;
 }
  
 /* founders — 3 cuadrados 1×1 */
@@ -171,6 +171,7 @@
 }
  
 .studioNewPage .founderMeta {
+  position: relative;
   z-index: 2;
 }
 .studioNewPage .founderName {
@@ -261,7 +262,7 @@
 }
  
 .studioNewPage .teamCol h3 {
-  font-size: clamp(10px, 0.85vw, 13px);
+  font-size: clamp(10px, 2vw, 1.6vw);
   font-weight: 900;
   margin: 12px 0 6px;
   text-transform: uppercase;
@@ -271,7 +272,7 @@
  
 .studioNewPage .teamCol ul { list-style: none; padding: 0; margin: 0; }
 .studioNewPage .teamCol li {
-  font-size: clamp(10px, 0.8vw, 12px);
+  font-size: clamp(10px, 2vw, 1.6vw);
   line-height: 1.6;
   color: var(--sn-muted);
 }
@@ -307,20 +308,22 @@
 .studioNewPage .stat {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-start;
 }
 .studioNewPage .statValue {
-  font-size: clamp(36px, 4vw, 58px);
+  font-size: clamp(36px, 11vw, 11vw);
   font-weight: 900;
   line-height: 1;
   margin: 0;
+
 }
  
 .studioNewPage .statLabel {
-  font-size: clamp(12px, 1.1vw, 16px);
+  font-size: clamp(12px, 3vw, 3vw);
   font-weight: 700;
   color: var(--sn-muted);
   margin-top: 4px;
+  margin-left: 30%;
 }
  
 .studioNewPage .mapCanvas {
@@ -357,13 +360,19 @@
 .studioNewPage .contactTop {
   padding-top: 24px;
   padding-bottom: 18px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;     /* centra horizontal */
+  justify-content: center; /* centra vertical (si hay altura) */
+  text-align: center;
 }
  
 .studioNewPage .contactCta {
   display: flex;
   align-items: center;
+  justify-content: center; /* 🔥 clave */
   gap: 12px;
-  font-size: clamp(22px, 2.2vw, 34px);
+  font-size: clamp(22px, 3vw, 3vw);
   font-weight: 800;
 }
  
@@ -382,9 +391,11 @@
 }
  
 .studioNewPage .contactBottom {
-  flex: 1 1 auto;
+ flex: 1 1 auto;
   display: flex;
-  align-items: flex-end;
+  align-items: center;      /* centra vertical */
+  justify-content: center;  /* centra horizontal */
+  width: 100%;
 }
  
 /* helpers */
@@ -502,62 +513,19 @@
 /* -------------------------------
    1) Base motion por sección
 -------------------------------- */
+/* elementos motion — siempre visibles, sin ocultamiento por viewport */
 .studioNewPage .motionSection .motionUp,
 .studioNewPage .motionSection .motionSlideRight,
 .studioNewPage .motionSection .motionCard,
 .studioNewPage .motionSection .motionRevealPhoto,
 .studioNewPage .motionSection .motionRevealText,
 .studioNewPage .motionSection .motionScaleIn {
-  opacity: 0;
-  transition:
-    opacity var(--sn-med) ease,
-    transform var(--sn-med) var(--sn-ease),
-    filter var(--sn-slow) ease;
-  will-change: transform, opacity, filter;
-}
- 
-.studioNewPage .motionSection .motionUp {
-  transform: translateY(34px);
-}
- 
-.studioNewPage .motionSection .motionSlideRight {
-  transform: translateX(34px);
-}
- 
-.studioNewPage .motionSection .motionCard {
-  transform: translateY(28px);
-}
- 
-.studioNewPage .motionSection .motionRevealPhoto {
-  transform: translateY(18px) scale(1.02);
-  filter: saturate(.88) contrast(.96);
-}
- 
-.studioNewPage .motionSection .motionRevealText {
-  transform: translateY(26px);
-}
- 
-.studioNewPage .motionSection .motionScaleIn {
-  transform: scale(.96);
-}
- 
-.studioNewPage .motionSection.is-visible .motionUp,
-.studioNewPage .motionSection.is-visible .motionSlideRight,
-.studioNewPage .motionSection.is-visible .motionCard,
-.studioNewPage .motionSection.is-visible .motionRevealPhoto,
-.studioNewPage .motionSection.is-visible .motionRevealText,
-.studioNewPage .motionSection.is-visible .motionScaleIn {
   opacity: 1;
   transform: none;
   filter: none;
 }
  
-.studioNewPage .motionSection.is-visible .motionCard:nth-child(1) { transition-delay: .06s; }
-.studioNewPage .motionSection.is-visible .motionCard:nth-child(2) { transition-delay: .14s; }
-.studioNewPage .motionSection.is-visible .motionCard:nth-child(3) { transition-delay: .22s; }
- 
-.studioNewPage .motionSection.is-visible .motionRevealPhoto { transition-delay: .08s; }
-.studioNewPage .motionSection.is-visible .motionRevealText  { transition-delay: .18s; }
+
  
 /* -------------------------------
    2) ABOUT: entrada suave
@@ -570,22 +538,11 @@
   overflow: hidden;
 }
  
+/* aboutPill spans — siempre visibles */
 .studioNewPage .aboutPill span {
-  transition:
-    transform .55s var(--sn-ease),
-    opacity .55s ease;
-  transform: translateY(18px);
-  opacity: 0;
-}
- 
-.studioNewPage .motionSection.is-visible .aboutPill span {
-  transform: translateY(0);
   opacity: 1;
+  transform: none;
 }
- 
-.studioNewPage .motionSection.is-visible .aboutPill span:nth-child(1) { transition-delay: .06s; }
-.studioNewPage .motionSection.is-visible .aboutPill span:nth-child(2) { transition-delay: .14s; }
-.studioNewPage .motionSection.is-visible .aboutPill span:nth-child(3) { transition-delay: .22s; }
  
 /* -------------------------------
    3) FOUNDERS hover reveal
@@ -658,12 +615,7 @@
   padding-bottom: 1px;
 }
  
-/* Si no querés que nombre/rol estén siempre visibles,
-   esta regla los pasa a reveal */
-.studioNewPage .founderCard .founderName,
-.studioNewPage .founderCard .founderRole {
-  position: static;
-}
+
  
 /* -------------------------------
    4) TEAM panels
@@ -696,7 +648,7 @@
   transform-origin: center bottom;
   /* Estado inicial: plana, título visible */
   transform: rotateX(0deg);
-  transition: transform 0.9s cubic-bezier(.25, .46, .45, .94);
+  transition: transform 1.4s cubic-bezier(.4, 0, .2, 1);
   will-change: transform;
   z-index: 2;
 }
@@ -723,8 +675,8 @@
   justify-content: center;
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
-  /* Está en el dorso: rotada 180deg en X */
-  transform: rotateX(180deg);
+  /* Está en el dorso: rotada -180deg en X para coincidir con el giro hacia adelante */
+  transform: rotateX(-180deg);
 }
  
 /* Mitad inferior — siempre visible */
@@ -744,7 +696,7 @@
  
 /* Título */
 .studioNewPage .teamFlapFront .teamTitle {
-  font-size: clamp(18px, 2vw, 32px);
+  font-size: clamp(18px, 3vw, 3vw);
   font-weight: 800;
   color: #fff;
   line-height: 1.2;
@@ -756,18 +708,19 @@
 }
  
 /* Ícono en el dorso */
-.studioNewPage .teamFlapBack .teamIcon { width: 72px; height: 72px; }
+.studioNewPage .teamFlapBack .teamIcon { width: 45%; height: 45%; }
 .studioNewPage .teamFlapBack .teamIcon svg { width: 100%; height: 100%; opacity: .9; }
  
-/* TRIGGER — gira 180deg: título desaparece, ícono aparece al pasar 90deg */
+/* TRIGGER — gira -180deg hacia adelante: título desaparece, ícono aparece al pasar 90deg */
 .studioNewPage .team.motionSection.is-visible .teamFlap {
-  transform: rotateX(180deg);
+  transform: rotateX(-180deg);
 }
  
 /* Reset al salir */
+/* al salir del viewport: giro inverso suave */
 .studioNewPage .team.motionSection:not(.is-visible) .teamFlap {
   transform: rotateX(0deg);
-  transition: none;
+  transition: transform 1.4s cubic-bezier(.4, 0, .2, 1);
 }
  
  
@@ -804,30 +757,11 @@
 }
  
 /* entrada de la sección map */
+/* map stats & canvas — siempre visibles */
 .studioNewPage .map.motionSection .mapStats,
 .studioNewPage .map.motionSection .mapCanvas {
-  opacity: 0;
-  transition:
-    opacity var(--sn-med) ease,
-    transform var(--sn-med) var(--sn-ease);
-}
- 
-.studioNewPage .map.motionSection .mapStats {
-  transform: translateX(-24px);
-}
- 
-.studioNewPage .map.motionSection .mapCanvas {
-  transform: translateY(18px);
-}
- 
-.studioNewPage .map.motionSection.is-visible .mapStats,
-.studioNewPage .map.motionSection.is-visible .mapCanvas {
   opacity: 1;
   transform: none;
-}
- 
-.studioNewPage .map.motionSection.is-visible .mapCanvas {
-  transition-delay: .1s;
 }
  
 /* -------------------------------
@@ -982,4 +916,9 @@
     transform .3s ease,
     filter .3s ease;
 }
- 
+ .studioNewPage .contactBottom .desktop-hide,
+.studioNewPage .contactBottom .mobile-hide {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
