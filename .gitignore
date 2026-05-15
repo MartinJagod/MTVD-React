@@ -27,3 +27,7 @@ src/assets/images/Web MTVD Mobile FINALES.ai
 /out
 *.tsbuildinfo
 .env
+
+# package managers: use pnpm only
+/package-lock.json
+/yarn.lock

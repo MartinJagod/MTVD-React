@@ -11,6 +11,7 @@ RutaB2B es una primera versión técnica de una plataforma SaaS B2B para vendedo
 - PostgreSQL
 - React Hook Form
 - Zod
+- pnpm como package manager recomendado
 
 ## Funcionalidades incluidas
 
@@ -26,8 +27,12 @@ RutaB2B es una primera versión técnica de una plataforma SaaS B2B para vendedo
 
 ## Instalación
 
+> Este repo está preparado para pnpm. No uses `npm install`: el proyecto incluye `pnpm-lock.yaml`, `packageManager` y un guard de `preinstall` para evitar mezclar lockfiles/package managers.
+
+
 ```bash
-npm install
+corepack enable
+pnpm install
 ```
 
 ## Variables de entorno
@@ -49,31 +54,31 @@ DATABASE_URL="postgresql://usuario:password@localhost:5432/rutab2b?schema=public
 Generar el cliente Prisma:
 
 ```bash
-npm run prisma:generate
+pnpm prisma:generate
 ```
 
 Crear/aplicar migraciones en desarrollo:
 
 ```bash
-npm run prisma:migrate
+pnpm prisma:migrate
 ```
 
 Cargar datos iniciales:
 
 ```bash
-npm run prisma:seed
+pnpm prisma:seed
 ```
 
 También podés ejecutar el seed con Prisma:
 
 ```bash
-npx prisma db seed
+pnpm prisma db seed
 ```
 
 ## Correr la aplicación
 
 ```bash
-npm run dev
+pnpm dev
 ```
 
 Abrí [http://localhost:3000](http://localhost:3000). La raíz redirige a `/dashboard`.
@@ -98,6 +103,10 @@ Abrí [http://localhost:3000](http://localhost:3000). La raíz redirige a `/dash
 - Cada `OrderItem` guarda el precio aplicado al momento de crear el pedido.
 - El pedido calcula subtotal, IVA y total.
 - Los pedidos `DRAFT` se identifican como editables; los `SENT` quedan bloqueados para edición en esta versión.
+
+## Nota sobre pnpm y Prisma
+
+Con pnpm v10 los scripts de build/postinstall de dependencias pueden quedar bloqueados hasta aprobarlos. En este MVP se ejecuta `pnpm prisma:generate` explícitamente después de configurar `DATABASE_URL`, por lo que no dependemos del postinstall de npm.
 
 ## Próximos pasos sugeridos
 
