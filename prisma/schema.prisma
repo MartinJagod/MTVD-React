@@ -1,0 +1,249 @@
+generator client {
+  provider   = "prisma-client-js"
+  engineType = "client"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserRole {
+  ADMIN
+  COMPANY
+  SELLER
+  CUSTOMER
+}
+
+enum ProductStatus {
+  ACTIVE
+  INACTIVE
+}
+
+enum OrderStatus {
+  DRAFT
+  SENT
+  RECEIVED
+  APPROVED
+  REJECTED
+  PROCESSED
+}
+
+model User {
+  id            String         @id @default(cuid())
+  name          String
+  email         String         @unique
+  role          UserRole
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+  sellerProfile SellerProfile?
+  customer      Customer?
+  companies     Company[]
+}
+
+model Company {
+  id              String          @id @default(cuid())
+  name            String
+  legalName       String
+  taxId           String          @unique
+  logoUrl         String?
+  userId          String?
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+  user            User?           @relation(fields: [userId], references: [id])
+  brands          Brand[]
+  categories      Category[]
+  products        Product[]
+  priceLists      PriceList[]
+  sellerCompanies SellerCompany[]
+  orders          Order[]
+}
+
+model Brand {
+  id        String    @id @default(cuid())
+  name      String
+  companyId String
+  company   Company   @relation(fields: [companyId], references: [id])
+  products  Product[]
+}
+
+model SellerProfile {
+  id              String           @id @default(cuid())
+  userId          String           @unique
+  phone           String?
+  region          String?
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+  user            User             @relation(fields: [userId], references: [id])
+  sellerCompanies SellerCompany[]
+  sellerCustomers SellerCustomer[]
+  orders          Order[]
+}
+
+model Customer {
+  id                 String              @id @default(cuid())
+  name               String
+  legalName          String
+  taxId              String              @unique
+  email              String?
+  phone              String?
+  status             ProductStatus       @default(ACTIVE)
+  userId             String?             @unique
+  createdAt          DateTime            @default(now())
+  updatedAt          DateTime            @updatedAt
+  user               User?               @relation(fields: [userId], references: [id])
+  locations          CustomerLocation[]
+  sellerCustomers    SellerCustomer[]
+  customerPriceLists CustomerPriceList[]
+  orders             Order[]
+}
+
+model CustomerLocation {
+  id         String   @id @default(cuid())
+  customerId String
+  name       String
+  address    String
+  city       String
+  province   String
+  customer   Customer @relation(fields: [customerId], references: [id])
+}
+
+model Category {
+  id        String    @id @default(cuid())
+  name      String
+  companyId String
+  company   Company   @relation(fields: [companyId], references: [id])
+  products  Product[]
+}
+
+model Product {
+  id               String          @id @default(cuid())
+  sku              String
+  name             String
+  shortDescription String
+  imageUrl         String?
+  status           ProductStatus   @default(ACTIVE)
+  vatRate          Decimal         @db.Decimal(5, 2)
+  saleUnit         String
+  minPurchase      Int             @default(1)
+  stock            Int             @default(0)
+  companyId        String
+  categoryId       String
+  brandId          String?
+  createdAt        DateTime        @default(now())
+  updatedAt        DateTime        @updatedAt
+  company          Company         @relation(fields: [companyId], references: [id])
+  category         Category        @relation(fields: [categoryId], references: [id])
+  brand            Brand?          @relation(fields: [brandId], references: [id])
+  images           ProductImage[]
+  priceListItems   PriceListItem[]
+  orderItems       OrderItem[]
+
+  @@unique([companyId, sku])
+}
+
+model ProductImage {
+  id        String  @id @default(cuid())
+  productId String
+  url       String
+  alt       String?
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+}
+
+model PriceList {
+  id                 String              @id @default(cuid())
+  name               String
+  currency           String              @default("ARS")
+  companyId          String
+  active             Boolean             @default(true)
+  company            Company             @relation(fields: [companyId], references: [id])
+  items              PriceListItem[]
+  customerPriceLists CustomerPriceList[]
+}
+
+model PriceListItem {
+  id          String    @id @default(cuid())
+  priceListId String
+  productId   String
+  price       Decimal   @db.Decimal(12, 2)
+  priceList   PriceList @relation(fields: [priceListId], references: [id], onDelete: Cascade)
+  product     Product   @relation(fields: [productId], references: [id])
+
+  @@unique([priceListId, productId])
+}
+
+model SellerCompany {
+  id        String        @id @default(cuid())
+  sellerId  String
+  companyId String
+  seller    SellerProfile @relation(fields: [sellerId], references: [id], onDelete: Cascade)
+  company   Company       @relation(fields: [companyId], references: [id], onDelete: Cascade)
+
+  @@unique([sellerId, companyId])
+}
+
+model SellerCustomer {
+  id         String        @id @default(cuid())
+  sellerId   String
+  customerId String
+  seller     SellerProfile @relation(fields: [sellerId], references: [id], onDelete: Cascade)
+  customer   Customer      @relation(fields: [customerId], references: [id], onDelete: Cascade)
+
+  @@unique([sellerId, customerId])
+}
+
+model CustomerPriceList {
+  id          String    @id @default(cuid())
+  customerId  String
+  priceListId String
+  customer    Customer  @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  priceList   PriceList @relation(fields: [priceListId], references: [id], onDelete: Cascade)
+
+  @@unique([customerId, priceListId])
+}
+
+model Order {
+  id              String               @id @default(cuid())
+  orderNumber     String               @unique
+  status          OrderStatus          @default(DRAFT)
+  sellerId        String
+  customerId      String
+  companyId       String
+  notes           String?
+  subtotal        Decimal              @default(0) @db.Decimal(12, 2)
+  vatTotal        Decimal              @default(0) @db.Decimal(12, 2)
+  total           Decimal              @default(0) @db.Decimal(12, 2)
+  createdAt       DateTime             @default(now())
+  updatedAt       DateTime             @updatedAt
+  sentAt          DateTime?
+  seller          SellerProfile        @relation(fields: [sellerId], references: [id])
+  customer        Customer             @relation(fields: [customerId], references: [id])
+  company         Company              @relation(fields: [companyId], references: [id])
+  items           OrderItem[]
+  statusHistory   OrderStatusHistory[]
+}
+
+model OrderItem {
+  id               String  @id @default(cuid())
+  orderId          String
+  productId        String
+  sku              String
+  name             String
+  quantity         Int
+  unitPrice        Decimal @db.Decimal(12, 2)
+  vatRate          Decimal @db.Decimal(5, 2)
+  lineSubtotal     Decimal @db.Decimal(12, 2)
+  lineVat          Decimal @db.Decimal(12, 2)
+  lineTotal        Decimal @db.Decimal(12, 2)
+  order            Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  product          Product @relation(fields: [productId], references: [id])
+}
+
+model OrderStatusHistory {
+  id        String      @id @default(cuid())
+  orderId   String
+  status    OrderStatus
+  comment   String?
+  createdAt DateTime    @default(now())
+  order     Order       @relation(fields: [orderId], references: [id], onDelete: Cascade)
+}

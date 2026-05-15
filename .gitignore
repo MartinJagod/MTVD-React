@@ -22,3 +22,12 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 src/assets/images/Web MTVD Mobile FINALES.ai
+# Next.js
+/.next
+/out
+*.tsbuildinfo
+.env
+
+# package managers: use pnpm only
+/package-lock.json
+/yarn.lock
