@@ -1,70 +1,109 @@
-# Getting Started with Create React App
+# RutaB2B MVP
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+RutaB2B es una primera versión técnica de una plataforma SaaS B2B para vendedores viajantes y representantes comerciales independientes. El MVP centraliza empresas representadas, clientes, catálogos, listas de precios y el armado básico de Notas de Pedido.
 
-## Available Scripts
+## Stack
 
-In the project directory, you can run:
+- Next.js App Router
+- TypeScript estricto
+- TailwindCSS
+- Prisma ORM
+- PostgreSQL
+- React Hook Form
+- Zod
 
-### `npm start`
+## Funcionalidades incluidas
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+- Autenticación simulada con un vendedor activo y roles preparados: `ADMIN`, `COMPANY`, `SELLER`, `CUSTOMER`.
+- Modelo Prisma para usuarios, empresas, vendedores, clientes, productos, listas de precios y pedidos.
+- Seed con 2 empresas representadas, 2 vendedores, 4 clientes, 4 categorías, 12 productos, 3 listas de precios y relaciones comerciales.
+- Dashboard del vendedor con selector de cliente activo, empresas, accesos rápidos y últimos pedidos.
+- Catálogo por empresa con búsqueda, filtro por categoría, vista de cards y vista de lista rápida.
+- Precio visible según listas asignadas al cliente; productos sin precio muestran “Precio no disponible” y no se pueden agregar.
+- Creación de Nota de Pedido con cálculo de subtotal, IVA y total.
+- Guardado como borrador o marcado como enviada.
+- Listado y detalle de Notas de Pedido con historial de estado.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## Instalación
 
-### `npm test`
+```bash
+npm install
+```
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Variables de entorno
 
-### `npm run build`
+Copiá el archivo de ejemplo y completá la URL de PostgreSQL:
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+```bash
+cp .env.example .env
+```
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+Ejemplo:
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+```env
+DATABASE_URL="postgresql://usuario:password@localhost:5432/rutab2b?schema=public"
+```
 
-### `npm run eject`
+## Comandos Prisma
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+Generar el cliente Prisma:
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+```bash
+npm run prisma:generate
+```
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+Crear/aplicar migraciones en desarrollo:
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+```bash
+npm run prisma:migrate
+```
 
-## Learn More
+Cargar datos iniciales:
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+```bash
+npm run prisma:seed
+```
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+También podés ejecutar el seed con Prisma:
 
-### Code Splitting
+```bash
+npx prisma db seed
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+## Correr la aplicación
 
-### Analyzing the Bundle Size
+```bash
+npm run dev
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+Abrí [http://localhost:3000](http://localhost:3000). La raíz redirige a `/dashboard`.
 
-### Making a Progressive Web App
+## Cómo probar el MVP
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+1. Ejecutá la migración y el seed.
+2. Ingresá a `/dashboard`.
+3. Seleccioná un cliente activo.
+4. Abrí una empresa representada y revisá el catálogo.
+5. Cambiá entre vista catálogo y lista rápida.
+6. Intentá agregar productos sin precio: quedan bloqueados.
+7. Creá una Nota de Pedido desde `/orders/new`.
+8. Guardala como borrador o marcala como enviada.
+9. Revisá el listado en `/orders` y el detalle en `/orders/[orderId]`.
 
-### Advanced Configuration
+## Reglas comerciales implementadas
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+- El precio mostrado sale de una `PriceList` asignada al `Customer` para la `Company` seleccionada.
+- Si el cliente no tiene lista asignada para esa empresa, el producto muestra “Precio no disponible”.
+- No se permite agregar productos sin precio disponible.
+- Cada `OrderItem` guarda el precio aplicado al momento de crear el pedido.
+- El pedido calcula subtotal, IVA y total.
+- Los pedidos `DRAFT` se identifican como editables; los `SENT` quedan bloqueados para edición en esta versión.
 
-### Deployment
+## Próximos pasos sugeridos
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+- Reemplazar auth simulada por NextAuth/Auth.js o proveedor equivalente.
+- Agregar edición real de borradores y persistencia de carrito por vendedor/cliente.
+- Mejorar permisos por rol y visibilidad multiempresa.
+- Agregar importación masiva de productos y precios.
+- Incorporar auditoría operativa, estados intermedios y notificaciones.
+- Preparar integración futura con ERP, facturación, WhatsApp e IA sin acoplarla al dominio actual.
